@@ -32,7 +32,7 @@ public class Camera_Main : MonoBehaviour
         m_cameraHolder.SetPositionAndRotation(m_target.position, m_cameraHolder.rotation);
 
         //Camera Rotation
-        m_currentRotationX = m_target.rotation.eulerAngles.y;
+        m_currentRotationX = m_target.GetComponent<Player_Core>().GetDesiredRotation();
         m_currentRotationY -= Input.GetAxis("Mouse Y");
         m_currentRotationY = Mathf.Clamp(m_currentRotationY, -15, 60);
         m_cameraHolder.transform.rotation = Quaternion.Euler(m_currentRotationY, m_currentRotationX, 0);

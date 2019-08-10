@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Player_Core : MonoBehaviour
 {
-    //Variables
+    //-Variables-
     private Animator m_animator;
     [SerializeField] private float m_movementSpeed = 0.05f;
-    float m_currentRotation = 0;
+    private float m_desiredRotation = 0;
 
-    //Methods
+    //-Methods-
+
 
     // Start is called before the first frame update
     void Start()
@@ -21,10 +22,10 @@ public class Player_Core : MonoBehaviour
     void Update()
     {
         UpdateMovement();
-        UpdateRotation();
+        UpdateDesiredRotation();
     }
 
-    void UpdateMovement()
+    private void UpdateMovement()
     {
         float hVal = Input.GetAxis("Horizontal");
         float vVal = Input.GetAxis("Vertical");
@@ -33,14 +34,19 @@ public class Player_Core : MonoBehaviour
         if (isMoving)
         {
             transform.Translate(new Vector3(hVal, 0, vVal) * m_movementSpeed, Space.Self);
+            transform.rotation = Quaternion.Euler(0, m_desiredRotation, 0);
         }
 
         m_animator.SetBool("AP_isMoving", isMoving);
     }
 
-    void UpdateRotation()
+    private void UpdateDesiredRotation()
     {
-        m_currentRotation += Input.GetAxis("Mouse X");
-        transform.rotation = Quaternion.Euler(0, m_currentRotation, 0);
+        m_desiredRotation += Input.GetAxis("Mouse X");
     }
+
+
+    //Getters
+    public float GetDesiredRotation() { return m_desiredRotation; }
+    
 }
