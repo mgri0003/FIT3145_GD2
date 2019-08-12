@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Camera_Main : MonoBehaviour
 {
     //--pre-declared variables--
@@ -11,6 +12,9 @@ public class Camera_Main : MonoBehaviour
         RIGHT_SIDE,
         MAX
     };
+
+    public const int CAMERA_RANGE_MAX = 40;
+    public const int CAMERA_RANGE_MIN = -15;
 
 
     //--variables--
@@ -37,7 +41,7 @@ public class Camera_Main : MonoBehaviour
         Debug.Assert(m_target != null, "Target Is Null");
         Debug.Assert(m_cameraHolder != null, "Camera Holder Is Null");
 
-        //hide da mouse
+        //hide n lock da mouse (debug stoof)(will need to be somewhere else probs)
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -51,9 +55,9 @@ public class Camera_Main : MonoBehaviour
         m_cameraHolder.SetPositionAndRotation(m_target.position, m_cameraHolder.rotation);
 
         //Camera Rotation
-        m_currentRotationX = m_target.GetComponent<Player_Core>().GetDesiredRotation();
+        m_currentRotationX = m_target.GetComponent<Player_Rotator>().GetDesiredRotation();
         m_currentRotationY -= Input.GetAxis("Mouse Y");
-        m_currentRotationY = Mathf.Clamp(m_currentRotationY, -15, 60);
+        m_currentRotationY = Mathf.Clamp(m_currentRotationY, CAMERA_RANGE_MIN, CAMERA_RANGE_MAX);
         m_cameraHolder.transform.rotation = Quaternion.Euler(m_currentRotationY, m_currentRotationX, 0);
 
         if (Input.GetMouseButtonDown(2))

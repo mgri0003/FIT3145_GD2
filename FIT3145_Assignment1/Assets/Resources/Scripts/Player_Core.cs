@@ -5,9 +5,11 @@ using UnityEngine;
 public class Player_Core : MonoBehaviour
 {
     //-Variables-
-    private Animator m_animator;
     [SerializeField] private float m_movementSpeed = 0.05f;
-    private float m_desiredRotation = 0;
+
+    //Components
+    [HideInInspector] public Animator m_animator;
+    [HideInInspector] public Player_Rotator m_playerRotator;
 
     //-Methods-
 
@@ -15,14 +17,24 @@ public class Player_Core : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_animator = GetComponent<Animator>();
+        SetupComponents();
+        GetComponent<Character_Aimer>().InitBones();
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateMovement();
-        UpdateDesiredRotation();
+        m_playerRotator.UpdateDesiredRotation(Input.GetAxis("Mouse X"));
+    }
+
+    void SetupComponents()
+    {
+        m_animator = GetComponent<Animator>();
+        Debug.Assert(m_animator != null, "Animator Is Null");
+
+        m_playerRotator = GetComponent<Player_Rotator>();
+        Debug.Assert(m_playerRotator != null, "Player Rotator Is Null");
     }
 
     private void UpdateMovement()
@@ -34,19 +46,9 @@ public class Player_Core : MonoBehaviour
         if (isMoving)
         {
             transform.Translate(new Vector3(hVal, 0, vVal) * m_movementSpeed, Space.Self);
-            transform.rotation = Quaternion.Euler(0, m_desiredRotation, 0);
+            m_playerRotator.RefreshPlayerRotation();
         }
 
         m_animator.SetBool("AP_isMoving", isMoving);
     }
-
-    private void UpdateDesiredRotation()
-    {
-        m_desiredRotation += Input.GetAxis("Mouse X");
-    }
-
-
-    //Getters
-    public float GetDesiredRotation() { return m_desiredRotation; }
-    
 }

@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8290247817697547754}
   - component: {fileID: 8290247817697547755}
+  - component: {fileID: 4230743391449152156}
+  - component: {fileID: 736138765452689857}
   - component: {fileID: 8290247817697547751}
   m_Layer: 0
   m_Name: MainPlayer
@@ -46,6 +48,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_movementSpeed: 0.05
+  m_animator: {fileID: 0}
+--- !u!114 &4230743391449152156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8290247817697547750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb29a7581c359d448241a8148af0761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_aimTarget: {fileID: 0}
+--- !u!114 &736138765452689857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8290247817697547750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64ee30f24573164784f9f3ed64baa1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &8290247817697547751
 Animator:
   serializedVersion: 3
