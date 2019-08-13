@@ -10,22 +10,51 @@ public class Player_Core : MonoBehaviour
     //Components
     [HideInInspector] public Animator m_animator;
     [HideInInspector] public Player_Rotator m_playerRotator;
-
+    [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
+    
     //-Methods-
-
 
     // Start is called before the first frame update
     void Start()
     {
-        SetupComponents();
-        GetComponent<Character_Aimer>().InitBones();
+        InitPlayer();
+
+        //Debug
+
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateMovement();
-        m_playerRotator.UpdateDesiredRotation(Input.GetAxis("Mouse X"));
+        UpdatePlayerRotator();
+
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            PrimaryAction();
+        }
+
+        //Debug
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (m_playerWeaponHolder.IsHoldingAnyWeapon())
+            {
+                m_playerWeaponHolder.RemoveWeaponFromHand(EPlayerHand.HAND_RIGHT);
+                m_playerWeaponHolder.RemoveWeaponFromHand(EPlayerHand.HAND_LEFT);
+            }
+            else
+            {
+                m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, WeaponsRepo.SpawnRandomWeapon().GetComponent<Weapon_Base>());
+            }
+        }
+
+    }
+
+    void InitPlayer()
+    {
+        SetupComponents();
+        GetComponent<Character_Aimer>().InitBones();
+        m_playerWeaponHolder.Init();
     }
 
     void SetupComponents()
@@ -35,6 +64,9 @@ public class Player_Core : MonoBehaviour
 
         m_playerRotator = GetComponent<Player_Rotator>();
         Debug.Assert(m_playerRotator != null, "Player Rotator Is Null");
+
+        m_playerWeaponHolder = GetComponent<Player_WeaponHolder>();
+        Debug.Assert(m_playerWeaponHolder != null, "Player Weapon Holder Is Null");
     }
 
     private void UpdateMovement()
@@ -50,5 +82,23 @@ public class Player_Core : MonoBehaviour
         }
 
         m_animator.SetBool("AP_isMoving", isMoving);
+    }
+
+    private void UpdatePlayerRotator()
+    {
+        m_playerRotator.UpdateDesiredRotation(Input.GetAxis("Mouse X"));
+    }
+
+    private void PrimaryAction()
+    {
+        if(GetComponent<Player_WeaponHolder>().IsHoldingAnyWeapon())
+        {
+            m_animator.Play("Attack_MeleeWeapon");
+        }
+    }
+
+    private void SendMeleeAttack()
+    {
+        Debug.Log("SendMeleeAttack()");
     }
 }

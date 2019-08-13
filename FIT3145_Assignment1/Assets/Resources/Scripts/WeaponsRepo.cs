@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponsRepo : MonoBehaviour
 {
-    private List<GameObject> m_weapons = new List<GameObject>();
+    private static List<GameObject> m_weapons = new List<GameObject>();
 
     private void Start()
     {
@@ -28,5 +28,38 @@ public class WeaponsRepo : MonoBehaviour
         {
             Debug.Log("WeaponsRepo: Loaded " + m_weapons.Count + " Weapons");
         }
+    }
+
+    public static GameObject GetWeapon(uint index)
+    {
+        Debug.Assert(index < m_weapons.Count, "Invalid Index");
+        if(index < m_weapons.Count)
+        {
+            return m_weapons[(int)index];
+        }
+
+        return null;
+    }
+
+    public static GameObject GetRandomWeapon()
+    {
+        return GetWeapon((uint)Random.Range(0, m_weapons.Count));
+    }
+
+    public static GameObject SpawnWeapon(uint index)
+    {
+        GameObject weaponToSpawn = GetWeapon(index);
+        Debug.Assert(weaponToSpawn, "Can't Spawn Weapon, Weapon Is Null");
+        if (weaponToSpawn)
+        {
+            return Instantiate(weaponToSpawn);
+        }
+
+        return null;
+    }
+
+    public static GameObject SpawnRandomWeapon()
+    {
+        return SpawnWeapon((uint)Random.Range(0, m_weapons.Count));
     }
 }

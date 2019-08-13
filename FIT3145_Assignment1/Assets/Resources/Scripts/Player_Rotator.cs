@@ -17,7 +17,7 @@ public class Player_Rotator : MonoBehaviour
         PlayerRotationFixer();
     }
 
-    public void UpdateDesiredRotation(float rotationVal)
+    public void UpdateDesiredRotation(in float rotationVal)
     {
         m_desiredRotation += rotationVal;
         if (m_desiredRotation > 360)

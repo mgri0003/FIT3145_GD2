@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c0dd61f35f6ed145be4889863c68ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_name: Test Swordy
   m_damage: 1
 --- !u!1001 &4605725863646336509
 PrefabInstance:
@@ -60,17 +61,17 @@ PrefabInstance:
     - target: {fileID: 2910509370619084813, guid: 475203e425506f446b0deb57708228b8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.71017766
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2910509370619084813, guid: 475203e425506f446b0deb57708228b8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8908001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2910509370619084813, guid: 475203e425506f446b0deb57708228b8,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.6967365
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2910509370619084813, guid: 475203e425506f446b0deb57708228b8,
         type: 3}

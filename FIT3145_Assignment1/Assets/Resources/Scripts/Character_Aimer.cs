@@ -28,7 +28,7 @@ public class Character_Aimer : MonoBehaviour
             Vector3 posToLook = m_aimTarget.transform.position;
 
             m_chestBone.LookAt(posToLook);
-            m_chestBone.rotation = m_chestBone.rotation * Quaternion.Euler(new Vector3());
+            m_chestBone.rotation = m_chestBone.rotation;
         }
     }
 
