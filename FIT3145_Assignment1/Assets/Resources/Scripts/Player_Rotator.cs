@@ -10,11 +10,12 @@ public class Player_Rotator : MonoBehaviour
 
     //constants
     public const float PLAYER_ROTATION_MAX = 50;
+    public const float PLAYER_ROTATION_SPEED = 8;
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        PlayerRotationFixer();
+        SmoothRotatePlayer();
     }
 
     public void UpdateDesiredRotation(in float rotationVal)
@@ -30,20 +31,22 @@ public class Player_Rotator : MonoBehaviour
         }
     }
 
-    public void RefreshPlayerRotation()
+    public void RefreshCurrentPlayerRotation()
     {
-        transform.rotation = Quaternion.Euler(0, m_desiredRotation, 0);
         m_currentRotation = m_desiredRotation;
     }
 
-    private void PlayerRotationFixer()
+    private void SmoothRotatePlayer()
     {
+        //smoothly rotate player
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, m_currentRotation, 0), PLAYER_ROTATION_SPEED * Time.deltaTime);
+
+        //if player looks too much without rotating (force a rotation)
         if (Mathf.Abs(m_desiredRotation - m_currentRotation) > PLAYER_ROTATION_MAX)
         {
-            RefreshPlayerRotation();
+            RefreshCurrentPlayerRotation();
         }
     }
-
 
     //Getters
     public float GetDesiredRotation() { return m_desiredRotation; }

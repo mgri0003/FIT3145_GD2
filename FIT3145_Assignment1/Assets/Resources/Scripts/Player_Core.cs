@@ -78,7 +78,7 @@ public class Player_Core : MonoBehaviour
         if (isMoving)
         {
             transform.Translate(new Vector3(hVal, 0, vVal) * m_movementSpeed, Space.Self);
-            m_playerRotator.RefreshPlayerRotation();
+            m_playerRotator.RefreshCurrentPlayerRotation();
         }
 
         m_animator.SetBool("AP_isMoving", isMoving);
