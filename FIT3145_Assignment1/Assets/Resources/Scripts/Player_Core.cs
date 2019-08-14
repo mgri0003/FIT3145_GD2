@@ -11,6 +11,9 @@ public class Player_Core : MonoBehaviour
     [HideInInspector] public Animator m_animator;
     [HideInInspector] public Player_Rotator m_playerRotator;
     [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
+
+    //Melee
+    [SerializeField] private Hitbox m_MeleeHitbox; 
     
     //-Methods-
 
@@ -99,6 +102,17 @@ public class Player_Core : MonoBehaviour
 
     private void SendMeleeAttack()
     {
-        Debug.Log("SendMeleeAttack()");
+        //Debug.Log("SendMeleeAttack()");
+        Debug.Assert(m_MeleeHitbox, "Hitbox unassigned!?!?/");
+        GameObject goHit = m_MeleeHitbox.GetFirstGameObjectCollided();
+        if (goHit)
+        {
+            //boop em forward
+            goHit.GetComponent<Rigidbody>().AddForce(transform.forward * 200.0f);
+        }
+        else
+        {
+            //ya missed
+        }
     }
 }

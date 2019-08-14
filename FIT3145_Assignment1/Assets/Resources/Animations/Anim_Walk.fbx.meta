@@ -26,7 +26,9 @@ ModelImporter:
       improve retargeting quality.\n\t'Character1_LeftLeg' has translation animation
       that will be discarded.\n\t'Character1_RightLeg' has translation animation that
       will be discarded.\n"
-    animationRetargetingWarnings: 
+    animationRetargetingWarnings: "\nRetargeting quality report for clip 'Take 001':\n\tLeftFoot
+      average orientation error 0.3 deg and maximum orientation error 1.0 deg at time
+      0:50 (62.5%) Frame 50\n"
     animationDoRetargetingWarnings: 1
     importAnimatedCustomProperties: 0
     importConstraints: 0
@@ -56,7 +58,7 @@ ModelImporter:
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
