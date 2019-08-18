@@ -68,6 +68,9 @@ public class Player_WeaponHolder : MonoBehaviour
             //set the current weapon on the hand
             m_currentWeapons[(int)hand] = weapon;
             m_currentWeapons[(int)hand].transform.localPosition = new Vector3(0, 0, 0);
+
+            //set the current weapons rotation to point towards the aim target
+            m_currentWeapons[(int)hand].transform.LookAt(GetComponent<Character_Aimer>().GetAimTarget());
         }
     }
 
@@ -85,5 +88,10 @@ public class Player_WeaponHolder : MonoBehaviour
             m_currentWeapons[(int)hand] = null;
         }
 
+    }
+
+    public Weapon_Base GetWeaponInHand(in EPlayerHand hand)
+    {
+        return m_currentWeapons[(int)hand];
     }
 }

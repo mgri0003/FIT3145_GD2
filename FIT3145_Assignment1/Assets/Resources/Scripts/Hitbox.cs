@@ -25,4 +25,9 @@ public class Hitbox : MonoBehaviour
 
         return null;
     }
+
+    public List<GameObject> GetAllGameObjectsCollided()
+    {
+        return m_collidingObjects;
+    }
 }

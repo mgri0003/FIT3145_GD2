@@ -6,7 +6,7 @@ using UnityEngine;
 public class Camera_Main : MonoBehaviour
 {
     //--pre-declared variables--
-    enum ECamera_ViewMode
+    private enum ECamera_ViewMode
     {
         LEFT_SIDE,
         RIGHT_SIDE,
@@ -22,17 +22,27 @@ public class Camera_Main : MonoBehaviour
     [SerializeField] private Transform m_cameraHolder = null;
     private float m_currentRotationX;
     private float m_currentRotationY;
-    const float m_currentZoom = 2.5f;
-    //const float m_currentHeight = 1.5f;
     private ECamera_ViewMode m_cameraViewMode = ECamera_ViewMode.RIGHT_SIDE;
-
     const float CameraView_LeftSideX    = -1;
     const float CameraView_RightSideX   = 1;
+    static Camera_Main m_mainInstance = null;
 
 
     //--methods--
+    public static Camera_Main GetMainCamera()
+    {
+        Debug.Assert(m_mainInstance, "Main Camera Variable Not Initialised?");
+        return m_mainInstance;
+    }
 
-    
+    private void Awake()
+    {
+        Debug.Assert(m_mainInstance == null, "Main Camera Variable Is Already Initialised?!?!?");
+        if (m_mainInstance == null)
+        {
+            m_mainInstance = this;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -98,4 +108,5 @@ public class Camera_Main : MonoBehaviour
             break;
         }
     }
+
 }

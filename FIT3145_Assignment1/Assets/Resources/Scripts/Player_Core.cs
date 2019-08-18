@@ -13,7 +13,7 @@ public class Player_Core : MonoBehaviour
     [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
 
     //Melee
-    [SerializeField] private Hitbox m_MeleeHitbox; 
+    [SerializeField] private Hitbox m_MeleeHitbox = null; 
     
     //-Methods-
 
@@ -94,10 +94,30 @@ public class Player_Core : MonoBehaviour
 
     private void PrimaryAction()
     {
-        if(GetComponent<Player_WeaponHolder>().IsHoldingAnyWeapon())
+        Player_WeaponHolder m_playerWeaponHolder = GetComponent<Player_WeaponHolder>();
+        if(m_playerWeaponHolder)
         {
-            m_animator.Play("Attack_MeleeWeapon");
+            if (m_playerWeaponHolder.IsHoldingAnyWeapon())
+            {
+                Weapon_Base weapon = m_playerWeaponHolder.GetWeaponInHand(EPlayerHand.HAND_RIGHT);
+                switch (weapon.GetWeaponType())
+                {
+                    case EWeapon_Type.MELEE:
+                    {
+                        UseMeleeWeapon(weapon);
+                    }
+                    break;
+                    case EWeapon_Type.RANGED:
+                    {
+                        UseRangedWeapon(weapon);
+                    }
+                    break;
+                }
+
+
+            }
         }
+
     }
 
     private void SendMeleeAttack()
@@ -114,5 +134,14 @@ public class Player_Core : MonoBehaviour
         {
             //ya missed
         }
+    }
+
+    private void UseMeleeWeapon(in Weapon_Base weaponToUse)
+    {
+        m_animator.Play("Attack_MeleeWeapon");
+    }
+    private void UseRangedWeapon(in Weapon_Base weaponToUse)
+    {
+        weaponToUse.Use();
     }
 }

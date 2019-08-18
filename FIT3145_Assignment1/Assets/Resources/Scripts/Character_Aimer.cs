@@ -36,4 +36,9 @@ public class Character_Aimer : MonoBehaviour
     {
         m_aimTarget = newAimTarget;
     }
+
+    public Transform GetAimTarget()
+    {
+        return m_aimTarget;
+    }
 }

@@ -4,20 +4,33 @@ using UnityEngine;
 
 public class Weapon_Ranged : Weapon_Base
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    //--Variables--
+    [SerializeField] private GameObject m_projectile = null;
+    [SerializeField] private Transform m_firingTransform = null;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //stats
+    [SerializeField] private float m_projectileSpeed = 0;
 
+    //--Methods--
     public override void Use()
     {
-        throw new System.NotImplementedException();
+        Debug.Assert(m_projectile, "Ranged Weapon Does Not Have A Projectile!?!?");
+        if(m_projectile)
+        {
+            //create the projectile GameObject
+            GameObject newProjectileGO = Instantiate(m_projectile, m_firingTransform.position, m_firingTransform.rotation);
+            Debug.Assert(newProjectileGO, "Failed to instantiate Projectile???");
+            if(newProjectileGO)
+            {
+                //get the projectile class and initialise it!
+                Weapon_Projectile projectile = newProjectileGO.GetComponent<Weapon_Projectile>();
+                Debug.Assert(projectile, "Projectile Objects Does not have projectile Component???");
+                if (projectile)
+                {
+                    //initialse the projectile (and off it goes!)
+                    projectile.Init(GetWeaponDamage(), m_projectileSpeed, Camera_Main.GetMainCamera().transform.forward);
+                }
+            }
+        }
     }
 }
