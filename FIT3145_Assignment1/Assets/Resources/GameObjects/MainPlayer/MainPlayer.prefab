@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 4230743391449152156}
   - component: {fileID: 736138765452689857}
   - component: {fileID: 3019553838894725184}
+  - component: {fileID: 4685081720522478469}
   - component: {fileID: 8290247817697547751}
   - component: {fileID: 5971946301436982603}
   m_Layer: 0
@@ -111,6 +112,7 @@ MonoBehaviour:
   m_animator: {fileID: 0}
   m_playerRotator: {fileID: 0}
   m_playerWeaponHolder: {fileID: 0}
+  m_characterStats: {fileID: 0}
   m_MeleeHitbox: {fileID: 3607192714479792860}
 --- !u!114 &4230743391449152156
 MonoBehaviour:
@@ -149,6 +151,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 439585057771e0d4f852b94fb9104688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4685081720522478469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8290247817697547750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 980bff9d3a6313f4a953ea3c79715589, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_health: 100
 --- !u!95 &8290247817697547751
 Animator:
   serializedVersion: 3

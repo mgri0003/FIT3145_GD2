@@ -11,13 +11,10 @@ public class Player_Core : MonoBehaviour
     [HideInInspector] public Animator m_animator;
     [HideInInspector] public Player_Rotator m_playerRotator;
     [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
+    [HideInInspector] public Character_Stats m_characterStats;
 
     //Melee
     [SerializeField] private Hitbox m_MeleeHitbox = null;
-
-    //Player Stats
-    private const float m_MAXHEALTH = 100;
-    [SerializeField] float m_health = m_MAXHEALTH;
     
     //-Methods-
 
@@ -73,6 +70,9 @@ public class Player_Core : MonoBehaviour
 
         m_playerWeaponHolder = GetComponent<Player_WeaponHolder>();
         Debug.Assert(m_playerWeaponHolder != null, "Player Weapon Holder Is Null");
+
+        m_characterStats = GetComponent<Character_Stats>();
+        Debug.Assert(m_characterStats != null, "Character Stats Holder Is Null");
     }
 
     private void UpdateMovement()
