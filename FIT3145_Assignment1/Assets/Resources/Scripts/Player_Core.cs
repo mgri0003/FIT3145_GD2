@@ -90,6 +90,17 @@ public class Player_Core : MonoBehaviour
         m_animator.SetBool("AP_isMoving", isMoving);
     }
 
+    public void SubtleMove()
+    {
+        //If your not in the middle of a transition
+        //If your not already in the Move State
+        if (!m_animator.IsInTransition(0) && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("Move"))
+        {
+            //play the move state sublty :P
+            m_animator.CrossFade("Move", 0.05f);
+        }
+    }
+
     private void UpdatePlayerRotator()
     {
         m_playerRotator.UpdateDesiredRotation(Input.GetAxis("Mouse X"));
@@ -139,7 +150,7 @@ public class Player_Core : MonoBehaviour
 
     private void UseMeleeWeapon(in Weapon_Base weaponToUse)
     {
-        m_animator.Play("Attack_MeleeWeapon");
+        m_animator.Play("Attack_MeleeWeapon", 1);
     }
     private void UseRangedWeapon(in Weapon_Base weaponToUse)
     {

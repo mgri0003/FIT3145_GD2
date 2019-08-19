@@ -15,13 +15,18 @@ public class Weapon_Ranged : Weapon_Base
     //--Methods--
     public override void Use()
     {
+        FireSingleProjectile();
+    }
+
+    private void FireSingleProjectile()
+    {
         Debug.Assert(m_projectile, "Ranged Weapon Does Not Have A Projectile!?!?");
-        if(m_projectile)
+        if (m_projectile)
         {
             //create the projectile GameObject
             GameObject newProjectileGO = Instantiate(m_projectile, m_firingTransform.position, m_firingTransform.rotation);
             Debug.Assert(newProjectileGO, "Failed to instantiate Projectile???");
-            if(newProjectileGO)
+            if (newProjectileGO)
             {
                 //get the projectile class and initialise it!
                 Weapon_Projectile projectile = newProjectileGO.GetComponent<Weapon_Projectile>();
