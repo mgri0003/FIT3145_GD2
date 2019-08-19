@@ -136,4 +136,15 @@ public class Player_WeaponHolder : MonoBehaviour
     {
         return m_currentWeapons[(int)hand];
     }
+
+    public void ReloadRangedWeapons()
+    {
+        for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
+        {
+            if (IsHoldingWeaponInHandOfType((EPlayerHand)i, EWeapon_Type.RANGED))
+            {
+                ((Weapon_Ranged)GetWeaponInHand((EPlayerHand)i)).Reload();
+            }
+        }
+    }
 }

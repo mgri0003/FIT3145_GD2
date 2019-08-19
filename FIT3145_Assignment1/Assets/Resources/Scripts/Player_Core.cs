@@ -37,8 +37,14 @@ public class Player_Core : MonoBehaviour
             PrimaryAction();
         }
 
-        //Debug
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            //Reload
+            m_playerWeaponHolder.ReloadRangedWeapons();
+        }
+
+            //Debug
+            if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (m_playerWeaponHolder.IsHoldingAnyWeapon())
             {

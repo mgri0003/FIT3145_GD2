@@ -9,13 +9,27 @@ public class Weapon_Ranged : Weapon_Base
     [SerializeField] private Transform m_firingTransform = null;
     [SerializeField] private Vector3 m_lookAtPos = Vector3.zero;
 
-    //stats
+    //Base stats
     [SerializeField] private float m_projectileSpeed = 0;
+    [SerializeField] private uint m_clipSize = 1;
+    [SerializeField] private float m_maxReloadTime = 1;
+
+
+    //current stats
+    private uint m_currentAmmo = 0;
+    private float m_currentReloadTime = -1;
+
 
     //--Methods--
     public override void Use()
     {
-        FireSingleProjectile();
+        if(!IsReloading())
+        {
+            if (m_currentAmmo > 0)
+            {
+                FireSingleProjectile();
+            }
+        }
     }
 
     private void FireSingleProjectile()
@@ -37,6 +51,48 @@ public class Weapon_Ranged : Weapon_Base
                     Vector3 firingDir = m_lookAtPos - m_firingTransform.position;
                     projectile.Init(GetWeaponDamage(), m_projectileSpeed, firingDir.normalized);
                 }
+            }
+        }
+
+        //reduce ammo by 1
+        --m_currentAmmo;
+    }
+
+    void Start()
+    {
+        m_currentAmmo = m_clipSize;
+    }
+    void Update()
+    {
+        UpdateCurrentReload();
+    }
+
+    public bool IsReloading()
+    {
+        return m_currentReloadTime != -1;
+    }
+
+    public void Reload()
+    {
+        if(!IsReloading())
+        {        
+            //Start reloading!
+            m_currentReloadTime = m_maxReloadTime;
+        }
+    }
+
+    private void UpdateCurrentReload()
+    {
+        if (IsReloading())
+        {
+            m_currentReloadTime -= Time.deltaTime;
+            m_currentReloadTime = Mathf.Clamp(m_currentReloadTime, 0, m_maxReloadTime);
+
+            if (m_currentReloadTime == 0)
+            {
+                //reload complete
+                m_currentAmmo = m_clipSize;
+                m_currentReloadTime = -1;
             }
         }
     }
