@@ -15,6 +15,8 @@ public class Player_Core : MonoBehaviour
 
     //Melee
     [SerializeField] private Hitbox m_MeleeHitbox = null;
+
+    //Camera
     
     //-Methods-
 
@@ -22,9 +24,6 @@ public class Player_Core : MonoBehaviour
     void Start()
     {
         InitPlayer();
-
-        //Debug
-
     }
 
     // Update is called once per frame
@@ -56,9 +55,10 @@ public class Player_Core : MonoBehaviour
     void InitPlayer()
     {
         SetupComponents();
-        GetComponent<Character_Aimer>().InitBones();
         m_playerWeaponHolder.Init();
+        GetComponent<Character_Aimer>().Init(Camera_Main.GetMainCamera().GetAimTarget());
     }
+
 
     void SetupComponents()
     {
@@ -74,7 +74,7 @@ public class Player_Core : MonoBehaviour
         m_characterStats = GetComponent<Character_Stats>();
         Debug.Assert(m_characterStats != null, "Character Stats Holder Is Null");
     }
-
+    
     private void UpdateMovement()
     {
         float hVal = Input.GetAxis("Horizontal");

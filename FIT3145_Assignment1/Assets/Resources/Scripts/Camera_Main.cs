@@ -18,14 +18,16 @@ public class Camera_Main : MonoBehaviour
 
 
     //--variables--
-    [SerializeField] private Transform m_target = null;
+    private Transform m_target = null; //The transform that the camera holder will follow
     [SerializeField] private Transform m_cameraHolder = null;
+    [SerializeField] private Transform m_aimTarget = null; //The invisible object the player will be aiming at
     private float m_currentRotationX;
     private float m_currentRotationY;
     private ECamera_ViewMode m_cameraViewMode = ECamera_ViewMode.RIGHT_SIDE;
     const float CameraView_LeftSideX    = -1;
     const float CameraView_RightSideX   = 1;
     static Camera_Main m_mainInstance = null;
+
 
 
     //--methods--
@@ -48,8 +50,8 @@ public class Camera_Main : MonoBehaviour
     void Start()
     {
         //error check references!
-        Debug.Assert(m_target != null, "Target Is Null");
         Debug.Assert(m_cameraHolder != null, "Camera Holder Is Null");
+        Debug.Assert(m_aimTarget != null, "Aim Target Is NULL?!?!?");
 
         //hide n lock da mouse (debug stoof)(will need to be somewhere else probs)
         Cursor.visible = false;
@@ -62,17 +64,20 @@ public class Camera_Main : MonoBehaviour
     void Update()
     {
         //Camera Position
-        m_cameraHolder.SetPositionAndRotation(m_target.position, m_cameraHolder.rotation);
-
-        //Camera Rotation
-        m_currentRotationX = m_target.GetComponent<Player_Rotator>().GetDesiredRotation();
-        m_currentRotationY -= Input.GetAxis("Mouse Y");
-        m_currentRotationY = Mathf.Clamp(m_currentRotationY, CAMERA_RANGE_MIN, CAMERA_RANGE_MAX);
-        m_cameraHolder.transform.rotation = Quaternion.Euler(m_currentRotationY, m_currentRotationX, 0);
-
-        if (Input.GetMouseButtonDown(2))
+        if(m_target)
         {
-            CycleCameraViewMode();
+            m_cameraHolder.SetPositionAndRotation(m_target.position, m_cameraHolder.rotation);
+
+            //Camera Rotation
+            m_currentRotationX = m_target.GetComponent<Player_Rotator>().GetDesiredRotation();
+            m_currentRotationY -= Input.GetAxis("Mouse Y");
+            m_currentRotationY = Mathf.Clamp(m_currentRotationY, CAMERA_RANGE_MIN, CAMERA_RANGE_MAX);
+            m_cameraHolder.transform.rotation = Quaternion.Euler(m_currentRotationY, m_currentRotationX, 0);
+
+            if (Input.GetMouseButtonDown(2))
+            {
+                CycleCameraViewMode();
+            }
         }
     }
 
@@ -107,6 +112,16 @@ public class Camera_Main : MonoBehaviour
             };
             break;
         }
+    }
+
+    public Transform GetAimTarget()
+    {
+        return m_aimTarget;
+    }
+
+    public void SetTarget(Transform newTarget)
+    {
+        m_target = newTarget;
     }
 
 }

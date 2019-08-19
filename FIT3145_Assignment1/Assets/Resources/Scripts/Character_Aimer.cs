@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Character_Aimer : MonoBehaviour
 {
-    bool m_bonesHaveInit = false;
-    Transform m_chestBone;
-    [SerializeField] private Transform m_aimTarget;
+    bool m_hasInit = false;
+    private Transform m_chestBone;
+    private Transform m_aimTarget;
 
-    public void InitBones()
+    public void Init(in Transform newAimTarget)
     {
         m_chestBone = GetComponent<Player_Core>().m_animator.GetBoneTransform(HumanBodyBones.Chest);
 
@@ -18,12 +18,14 @@ public class Character_Aimer : MonoBehaviour
             return;
         }
 
-        m_bonesHaveInit = true;
+        SetAimTarget(newAimTarget);
+
+        m_hasInit = true;
     }
 
     private void LateUpdate()
     {
-        if(m_bonesHaveInit)
+        if(m_hasInit)
         {
             Vector3 posToLook = m_aimTarget.transform.position;
 
@@ -32,7 +34,7 @@ public class Character_Aimer : MonoBehaviour
         }
     }
 
-    void SetAimTarget(Transform newAimTarget)
+    public void SetAimTarget(Transform newAimTarget)
     {
         m_aimTarget = newAimTarget;
     }

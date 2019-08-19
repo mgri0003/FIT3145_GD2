@@ -100,6 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_target: {fileID: 0}
   m_cameraHolder: {fileID: 405175911192032854}
+  m_aimTarget: {fileID: 405175911226569913}
 --- !u!1 &405175911008649307
 GameObject:
   m_ObjectHideFlags: 0
