@@ -7,6 +7,7 @@ public class Weapon_Ranged : Weapon_Base
     //--Variables--
     [SerializeField] private GameObject m_projectile = null;
     [SerializeField] private Transform m_firingTransform = null;
+    [SerializeField] private Vector3 m_lookAtPos = Vector3.zero;
 
     //stats
     [SerializeField] private float m_projectileSpeed = 0;
@@ -28,9 +29,15 @@ public class Weapon_Ranged : Weapon_Base
                 if (projectile)
                 {
                     //initialse the projectile (and off it goes!)
-                    projectile.Init(GetWeaponDamage(), m_projectileSpeed, Camera_Main.GetMainCamera().transform.forward);
+                    Vector3 firingDir = m_lookAtPos - m_firingTransform.position;
+                    projectile.Init(GetWeaponDamage(), m_projectileSpeed, firingDir.normalized);
                 }
             }
         }
+    }
+
+    public void SetWeaponLookAt(Vector3 newAim)
+    {
+        m_lookAtPos = newAim;
     }
 }

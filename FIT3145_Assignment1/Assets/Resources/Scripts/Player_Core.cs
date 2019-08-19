@@ -13,7 +13,11 @@ public class Player_Core : MonoBehaviour
     [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
 
     //Melee
-    [SerializeField] private Hitbox m_MeleeHitbox = null; 
+    [SerializeField] private Hitbox m_MeleeHitbox = null;
+
+    //Player Stats
+    private const float m_MAXHEALTH = 100;
+    [SerializeField] float m_health = m_MAXHEALTH;
     
     //-Methods-
 
@@ -50,7 +54,6 @@ public class Player_Core : MonoBehaviour
                 m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, WeaponsRepo.SpawnRandomWeapon().GetComponent<Weapon_Base>());
             }
         }
-
     }
 
     void InitPlayer()
@@ -113,8 +116,6 @@ public class Player_Core : MonoBehaviour
                     }
                     break;
                 }
-
-
             }
         }
 
@@ -142,6 +143,7 @@ public class Player_Core : MonoBehaviour
     }
     private void UseRangedWeapon(in Weapon_Base weaponToUse)
     {
+        m_playerWeaponHolder.UpdateRangedWeaponAim();
         weaponToUse.Use();
     }
 }
