@@ -34,6 +34,7 @@ public class Player_Rotator : MonoBehaviour
     public void RefreshCurrentPlayerRotation()
     {
         m_currentRotation = m_desiredRotation;
+        GetComponent<Player_Core>().SubtleMove();
     }
 
     private void SmoothRotatePlayer()

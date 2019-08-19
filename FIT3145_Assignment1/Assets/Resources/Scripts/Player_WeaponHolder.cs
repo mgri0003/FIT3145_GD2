@@ -26,7 +26,7 @@ public class Player_WeaponHolder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void Init()
@@ -34,6 +34,33 @@ public class Player_WeaponHolder : MonoBehaviour
         //Setup Hand Bones
         m_handTransforms[(int)EPlayerHand.HAND_RIGHT] = GetComponent<Player_Core>().m_animator.GetBoneTransform(HumanBodyBones.RightHand);
         m_handTransforms[(int)EPlayerHand.HAND_LEFT] = GetComponent<Player_Core>().m_animator.GetBoneTransform(HumanBodyBones.LeftHand);
+    }
+
+    public void UpdateRangedWeaponAim()
+    {
+        RaycastHit rayHit;
+        Physics.Raycast(Camera_Main.GetMainCamera().transform.position, Camera_Main.GetMainCamera().transform.forward, out rayHit);
+        for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
+        {
+            if (IsHoldingWeaponInHandOfType((EPlayerHand)i, EWeapon_Type.RANGED))
+            {
+                Vector3 lookAtPosition = Vector3.zero;
+                //if a target is hit by the raycast
+                if (rayHit.transform)
+                {
+                    //set the lookAt position to the position of the raycast hit.
+                    lookAtPosition = rayHit.point;
+                }
+                else
+                {
+                    //default the look at pos to the normal aim target position;
+                    lookAtPosition = GetComponent<Character_Aimer>().GetAimTarget().position;
+                }
+
+                //set the ranged weapon's look at pos
+                ((Weapon_Ranged)GetWeaponInHand((EPlayerHand)i)).SetWeaponLookAt(lookAtPosition);
+            }
+        }
     }
 
     public bool IsHoldingWeaponInHand(in EPlayerHand hand)
@@ -49,6 +76,21 @@ public class Player_WeaponHolder : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool IsHoldingWeaponInHandOfType(in EPlayerHand hand, in EWeapon_Type weaponType)
+    {
+        bool retVal = false;
+
+        if (IsHoldingWeaponInHand(hand))
+        {
+            if(GetWeaponInHand(hand).GetWeaponType() == weaponType)
+            {
+                retVal = true;
+            }
+        }
+
+        return retVal;
     }
 
     public bool IsHoldingAnyWeapon()
