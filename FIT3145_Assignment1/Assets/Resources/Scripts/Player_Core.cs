@@ -160,6 +160,7 @@ public class Player_Core : MonoBehaviour
     }
     private void UseRangedWeapon(in Weapon_Base weaponToUse)
     {
+        m_animator.Play("Attack_RangedWeapon", 1, 0.0f);
         m_playerWeaponHolder.UpdateRangedWeaponAim();
         weaponToUse.Use();
     }
