@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -351,6 +351,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abba7b278af8b6d4a80e17eeda3265b8, type: 3}
+--- !u!1 &351417314 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 405175910686585915, guid: ef19d7f802804a145a46a78b0f77ba01,
+    type: 3}
+  m_PrefabInstance: {fileID: 1314679683}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &351417320
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351417314}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &518872963
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,7 +460,7 @@ Transform:
   m_GameObject: {fileID: 518872963}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 5.17, y: 0.43, z: -0.43}
-  m_LocalScale: {x: 8.5096, y: 1, z: 1}
+  m_LocalScale: {x: 8.5096, y: 3.6012, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -600,6 +622,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 405175911226569912, guid: ef19d7f802804a145a46a78b0f77ba01,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 405175911008649311, guid: ef19d7f802804a145a46a78b0f77ba01,
+        type: 3}
+      propertyPath: m_PixelPerfect
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef19d7f802804a145a46a78b0f77ba01, type: 3}

@@ -26,7 +26,10 @@ public class Camera_Main : MonoBehaviour
     private ECamera_ViewMode m_cameraViewMode = ECamera_ViewMode.RIGHT_SIDE;
     const float CameraView_SideX    = 0.6f;
     static Camera_Main m_mainInstance = null;
-
+    private float m_currentCameraZ = m_CAMERA_LIMIT_Z_MIN;
+    private const float m_CAMERA_LIMIT_Z_MIN = -2.5f;
+    private const float m_CAMERA_LIMIT_Z_MAX = -0.8f;
+    private const float m_CAMERA_Z_RANGE = 2.5f;
 
 
     //--methods--
@@ -77,6 +80,10 @@ public class Camera_Main : MonoBehaviour
             {
                 CycleCameraViewMode();
             }
+
+
+            //Collisions
+            UpdateCollision();
         }
     }
 
@@ -123,4 +130,20 @@ public class Camera_Main : MonoBehaviour
         m_target = newTarget;
     }
 
+    void UpdateCollision()
+    {
+        RaycastHit rayHit;
+        bool isColliding = Physics.Linecast(m_cameraHolder.position, m_cameraHolder.position + -m_cameraHolder.forward * m_CAMERA_Z_RANGE, out rayHit);
+        Debug.DrawLine(m_cameraHolder.position, m_cameraHolder.position + -m_cameraHolder.forward * m_CAMERA_Z_RANGE);
+        if (isColliding && !rayHit.transform.root.CompareTag("Character"))
+        {
+            m_currentCameraZ += 0.1f;
+        }
+        else if (!isColliding)
+        {
+            m_currentCameraZ -= 0.1f;
+        }
+        m_currentCameraZ = Mathf.Clamp(m_currentCameraZ, m_CAMERA_LIMIT_Z_MIN, m_CAMERA_LIMIT_Z_MAX);
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, m_currentCameraZ);
+    }
 }

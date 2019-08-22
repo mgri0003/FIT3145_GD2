@@ -98,7 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7077662fd4659245bec31132013df1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_target: {fileID: 0}
   m_cameraHolder: {fileID: 405175911192032854}
   m_aimTarget: {fileID: 405175911226569913}
 --- !u!1 &405175911008649307
