@@ -24,8 +24,7 @@ public class Camera_Main : MonoBehaviour
     private float m_currentRotationX;
     private float m_currentRotationY;
     private ECamera_ViewMode m_cameraViewMode = ECamera_ViewMode.RIGHT_SIDE;
-    const float CameraView_LeftSideX    = -1;
-    const float CameraView_RightSideX   = 1;
+    const float CameraView_SideX    = 0.6f;
     static Camera_Main m_mainInstance = null;
 
 
@@ -102,13 +101,13 @@ public class Camera_Main : MonoBehaviour
         {
             case ECamera_ViewMode.LEFT_SIDE:
             {
-                transform.localPosition = new Vector3(CameraView_LeftSideX, transform.localPosition.y , transform.localPosition.z);
+                transform.localPosition = new Vector3(-CameraView_SideX, transform.localPosition.y , transform.localPosition.z);
             };
             break;
 
             case ECamera_ViewMode.RIGHT_SIDE:
             {
-                transform.localPosition = new Vector3(CameraView_RightSideX, transform.localPosition.y, transform.localPosition.z);
+                transform.localPosition = new Vector3(CameraView_SideX, transform.localPosition.y, transform.localPosition.z);
             };
             break;
         }

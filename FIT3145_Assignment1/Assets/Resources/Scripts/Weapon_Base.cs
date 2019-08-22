@@ -18,7 +18,7 @@ public abstract class Weapon_Base : MonoBehaviour
     [SerializeField] private EWeapon_Type m_weaponType = EWeapon_Type.NONE;
 
     //--methods--
-    public abstract void Use();
+    public abstract bool Use();
 
 
     //Getters

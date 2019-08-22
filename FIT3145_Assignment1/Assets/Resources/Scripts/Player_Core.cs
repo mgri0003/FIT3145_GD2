@@ -43,8 +43,8 @@ public class Player_Core : MonoBehaviour
             m_playerWeaponHolder.ReloadRangedWeapons();
         }
 
-            //Debug
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+        //Debug
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (m_playerWeaponHolder.IsHoldingAnyWeapon())
             {
@@ -53,9 +53,22 @@ public class Player_Core : MonoBehaviour
             }
             else
             {
-                m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, WeaponsRepo.SpawnRandomWeapon().GetComponent<Weapon_Base>());
+                m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, WeaponsRepo.SpawnWeapon(0).GetComponent<Weapon_Base>());
             }
         }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            if (m_playerWeaponHolder.IsHoldingAnyWeapon())
+            {
+                m_playerWeaponHolder.RemoveWeaponFromHand(EPlayerHand.HAND_RIGHT);
+                m_playerWeaponHolder.RemoveWeaponFromHand(EPlayerHand.HAND_LEFT);
+            }
+            else
+            {
+                m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, WeaponsRepo.SpawnWeapon(1).GetComponent<Weapon_Base>());
+            }
+        }
+
     }
 
     void InitPlayer()
@@ -160,8 +173,10 @@ public class Player_Core : MonoBehaviour
     }
     private void UseRangedWeapon(in Weapon_Base weaponToUse)
     {
-        m_animator.Play("Attack_RangedWeapon", 1, 0.0f);
         m_playerWeaponHolder.UpdateRangedWeaponAim();
-        weaponToUse.Use();
+        if(weaponToUse.Use())
+        {
+            m_animator.Play("Attack_RangedWeapon", 1, 0.0f);
+        }
     }
 }

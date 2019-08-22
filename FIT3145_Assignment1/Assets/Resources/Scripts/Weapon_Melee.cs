@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Weapon_Melee : Weapon_Base
 {
-    public override void Use()
+    public override bool Use()
     {
         throw new System.NotImplementedException();
     }

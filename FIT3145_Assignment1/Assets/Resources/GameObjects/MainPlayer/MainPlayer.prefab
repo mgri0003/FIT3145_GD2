@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 4685081720522478469}
   - component: {fileID: 8290247817697547751}
   - component: {fileID: 5971946301436982603}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MainPlayer
   m_TagString: Character
   m_Icon: {fileID: 0}
@@ -126,7 +126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb29a7581c359d448241a8148af0761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_aimTarget: {fileID: 0}
 --- !u!114 &736138765452689857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +150,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 439585057771e0d4f852b94fb9104688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_aimMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &4685081720522478469
 MonoBehaviour:
   m_ObjectHideFlags: 0

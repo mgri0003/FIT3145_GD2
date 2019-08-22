@@ -21,15 +21,18 @@ public class Weapon_Ranged : Weapon_Base
 
 
     //--Methods--
-    public override void Use()
+    public override bool Use()
     {
         if(!IsReloading())
         {
             if (m_currentAmmo > 0)
             {
                 FireSingleProjectile();
+                return true;
             }
         }
+
+        return false;
     }
 
     private void FireSingleProjectile()

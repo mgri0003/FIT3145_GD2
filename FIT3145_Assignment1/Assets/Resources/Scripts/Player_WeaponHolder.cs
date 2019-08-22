@@ -14,6 +14,8 @@ public class Player_WeaponHolder : MonoBehaviour
     //--Variables--
     private Transform[] m_handTransforms = new Transform[(int)EPlayerHand.MAX];
     private Weapon_Base[] m_currentWeapons = new Weapon_Base[(int)EPlayerHand.MAX];
+    [SerializeField] private LayerMask m_aimMask;
+    private const float m_MINIMUM_AIM_RANGE = 6.0f;
 
     //--Methods--
 
@@ -39,14 +41,14 @@ public class Player_WeaponHolder : MonoBehaviour
     public void UpdateRangedWeaponAim()
     {
         RaycastHit rayHit;
-        Physics.Raycast(Camera_Main.GetMainCamera().transform.position, Camera_Main.GetMainCamera().transform.forward, out rayHit);
+        Physics.Raycast(Camera_Main.GetMainCamera().transform.position, Camera_Main.GetMainCamera().transform.forward, out rayHit, 100.0f, m_aimMask);
         for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
         {
             if (IsHoldingWeaponInHandOfType((EPlayerHand)i, EWeapon_Type.RANGED))
             {
                 Vector3 lookAtPosition = Vector3.zero;
                 //if a target is hit by the raycast
-                if (rayHit.transform)
+                if (rayHit.transform && rayHit.transform.root != transform.root && rayHit.distance > m_MINIMUM_AIM_RANGE)
                 {
                     //set the lookAt position to the position of the raycast hit.
                     lookAtPosition = rayHit.point;
