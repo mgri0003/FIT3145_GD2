@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_name: Test Ranged Weapon
-  m_damage: 1
+  m_damage: 10
   m_weaponType: 1
   m_projectile: {fileID: 604645328828819334, guid: 66a13259f93288a4e8682c05d9763072,
     type: 3}

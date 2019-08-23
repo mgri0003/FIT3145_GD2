@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_name: Test Melee Weapon
-  m_damage: 1
+  m_damage: 50
   m_weaponType: 0
 --- !u!1001 &4605725863646336509
 PrefabInstance:

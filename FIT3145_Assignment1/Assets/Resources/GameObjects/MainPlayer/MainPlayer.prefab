@@ -108,11 +108,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b7cc3f9d810e140919ae3ff08d162e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_movementSpeed: 0.05
   m_animator: {fileID: 0}
+  m_characterStats: {fileID: 0}
+  m_movementSpeed: 0.05
   m_playerRotator: {fileID: 0}
   m_playerWeaponHolder: {fileID: 0}
-  m_characterStats: {fileID: 0}
   m_MeleeHitbox: {fileID: 3607192714479792860}
 --- !u!114 &4230743391449152156
 MonoBehaviour:

@@ -40,7 +40,7 @@ public class Weapon_Projectile : MonoBehaviour
 
             UpdateLifetime();
 
-            CheckCollissions();
+            CheckCollisions();
         }
     }
 
@@ -56,7 +56,7 @@ public class Weapon_Projectile : MonoBehaviour
         }
     }
 
-    private void CheckCollissions()
+    private void CheckCollisions()
     {
         List<GameObject> gameObjectsHit = m_hitbox.GetAllGameObjectsCollided();
         if (gameObjectsHit.Count > 0)
@@ -66,7 +66,7 @@ public class Weapon_Projectile : MonoBehaviour
                 if (go.tag == "Character")
                 {
                     //boop em forward
-                    go.GetComponent<Rigidbody>().AddForce(transform.forward * 100.0f);
+                    go.GetComponent<Character_Core>().ReceiveHit(m_damage);
 
                     DestroySelf();
                     break;

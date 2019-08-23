@@ -2,28 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Core : MonoBehaviour
+public class Player_Core : Character_Core
 {
     //-Variables-
     [SerializeField] private float m_movementSpeed = 0.05f;
 
     //Components
-    [HideInInspector] public Animator m_animator;
     [HideInInspector] public Player_Rotator m_playerRotator;
     [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
-    [HideInInspector] public Character_Stats m_characterStats;
 
     //Melee
     [SerializeField] private Hitbox m_MeleeHitbox = null;
 
     //Camera
-    
+
     //-Methods-
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnGUI()
     {
+        GUI.Box(new Rect(0, 0, 100, 30), "Health: " + m_characterStats.GetHealth());
+    }
+
+    // Start is called before the first frame update
+    protected override void Start()
+    {
+        base.Start();
+
         InitPlayer();
+    }
+
+    protected override void SetupComponents()
+    {
+        base.SetupComponents();
+
+        m_playerRotator = GetComponent<Player_Rotator>();
+        Debug.Assert(m_playerRotator != null, "Player Rotator Is Null");
+
+        m_playerWeaponHolder = GetComponent<Player_WeaponHolder>();
+        Debug.Assert(m_playerWeaponHolder != null, "Player Weapon Holder Is Null");
     }
 
     // Update is called once per frame
@@ -73,25 +89,8 @@ public class Player_Core : MonoBehaviour
 
     void InitPlayer()
     {
-        SetupComponents();
         m_playerWeaponHolder.Init();
         GetComponent<Character_Aimer>().Init(Camera_Main.GetMainCamera().GetAimTarget());
-    }
-
-
-    void SetupComponents()
-    {
-        m_animator = GetComponent<Animator>();
-        Debug.Assert(m_animator != null, "Animator Is Null");
-
-        m_playerRotator = GetComponent<Player_Rotator>();
-        Debug.Assert(m_playerRotator != null, "Player Rotator Is Null");
-
-        m_playerWeaponHolder = GetComponent<Player_WeaponHolder>();
-        Debug.Assert(m_playerWeaponHolder != null, "Player Weapon Holder Is Null");
-
-        m_characterStats = GetComponent<Character_Stats>();
-        Debug.Assert(m_characterStats != null, "Character Stats Holder Is Null");
     }
     
     private void UpdateMovement()
@@ -156,14 +155,27 @@ public class Player_Core : MonoBehaviour
         //Debug.Log("SendMeleeAttack()");
         Debug.Assert(m_MeleeHitbox, "Hitbox unassigned!?!?/");
         GameObject goHit = m_MeleeHitbox.GetFirstGameObjectCollided();
-        if (goHit)
+        if (goHit && goHit.CompareTag("Character"))
         {
-            //boop em forward
-            goHit.GetComponent<Rigidbody>().AddForce(transform.forward * 200.0f);
-        }
-        else
-        {
-            //ya missed
+            Weapon_Melee meleeWeaponR = null;
+            Weapon_Melee meleeWeaponL = null;
+
+            if (m_playerWeaponHolder.IsHoldingWeaponInHandOfType(EPlayerHand.HAND_RIGHT, EWeapon_Type.MELEE))
+            {
+                meleeWeaponR = (Weapon_Melee)m_playerWeaponHolder.GetWeaponInHand(EPlayerHand.HAND_RIGHT);
+            }
+            if (m_playerWeaponHolder.IsHoldingWeaponInHandOfType(EPlayerHand.HAND_LEFT, EWeapon_Type.MELEE))
+            {
+                meleeWeaponL = (Weapon_Melee)m_playerWeaponHolder.GetWeaponInHand(EPlayerHand.HAND_LEFT);
+            }
+            if (meleeWeaponR)
+            {
+                meleeWeaponR.SendAttack(goHit.GetComponent<Character_Core>());
+            }
+            if (meleeWeaponL)
+            {
+                meleeWeaponL.SendAttack(goHit.GetComponent<Character_Core>());
+            }
         }
     }
 

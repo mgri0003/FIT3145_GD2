@@ -8,4 +8,9 @@ public class Weapon_Melee : Weapon_Base
     {
         throw new System.NotImplementedException();
     }
+
+    public void SendAttack(Character_Core characterToHit)
+    {
+        characterToHit.ReceiveHit(GetWeaponDamage());
+    }
 }
