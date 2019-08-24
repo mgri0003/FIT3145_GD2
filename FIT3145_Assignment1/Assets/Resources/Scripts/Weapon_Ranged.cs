@@ -10,26 +10,26 @@ public class Weapon_Ranged : Weapon_Base
     [SerializeField] private Vector3 m_lookAtPos = Vector3.zero;
 
     //Base stats
-    [SerializeField] private float m_projectileSpeed = 0;
+    [SerializeField] private float m_projectileSpeed = 1.0f;
     [SerializeField] private uint m_clipSize = 1;
-    [SerializeField] private float m_maxReloadTime = 1;
+    [SerializeField] private float m_maxReloadTime = 1.0f;
+    [SerializeField] private float m_maxFireRateCooldown = 1.0f;
 
 
     //current stats
     private uint m_currentAmmo = 0;
-    private float m_currentReloadTime = -1;
+    private float m_currentReloadTime = -1.0f;
+    private float m_currentFireRateCooldown = 0.0f;
 
 
     //--Methods--
     public override bool Use()
     {
-        if(!IsReloading())
+        if(CanFire())
         {
-            if (m_currentAmmo > 0)
-            {
-                FireSingleProjectile();
-                return true;
-            }
+            FireSingleProjectile();
+            ResetFireRateCooldown();
+            return true;
         }
 
         return false;
@@ -65,10 +65,18 @@ public class Weapon_Ranged : Weapon_Base
     {
         m_currentAmmo = m_clipSize;
     }
+
     void Update()
     {
+        UpdateFireRateCooldown();
         UpdateCurrentReload();
     }
+
+    public void SetWeaponLookAt(Vector3 newAim)
+    {
+        m_lookAtPos = newAim;
+    }
+
 
     public bool IsReloading()
     {
@@ -100,14 +108,34 @@ public class Weapon_Ranged : Weapon_Base
         }
     }
 
-    public void SetWeaponLookAt(Vector3 newAim)
+    private bool CanFire()
     {
-        m_lookAtPos = newAim;
+        return !IsReloading() && IsFireRateCooldownComplete() && m_currentAmmo > 0;
     }
 
+    private void UpdateFireRateCooldown()
+    {
+        if(!IsFireRateCooldownComplete())
+        {
+            m_currentFireRateCooldown -= Time.deltaTime;
+            m_currentFireRateCooldown = Mathf.Clamp(m_currentFireRateCooldown, 0, m_maxFireRateCooldown);
+        }
+    }
+
+    private bool IsFireRateCooldownComplete()
+    {
+        return m_currentFireRateCooldown == 0;
+    }
+
+    protected void ResetFireRateCooldown()
+    {
+        m_currentFireRateCooldown = m_maxFireRateCooldown;
+    }
 
     //Getters
     public float GetClipSize() { return m_clipSize; }
     public float GetCurrentAmmo() { return m_currentAmmo; }
     public float GetCurrentReloadTime() { return m_currentReloadTime; }
+    public float GetCurrentFireRateCooldown() { return m_currentFireRateCooldown; }
+    public float GetMaxFireRateCooldown() { return m_maxFireRateCooldown; }
 }
