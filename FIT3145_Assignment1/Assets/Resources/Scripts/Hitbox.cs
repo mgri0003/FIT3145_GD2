@@ -8,12 +8,18 @@ public class Hitbox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        m_collidingObjects.Add(other.gameObject);
+        if(other.CompareTag("Character"))
+        {
+            m_collidingObjects.Add(other.gameObject);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        m_collidingObjects.Remove(other.gameObject);
+        if (other.CompareTag("Character"))
+        {
+            m_collidingObjects.Remove(other.gameObject);
+        }
     }
 
     public GameObject GetFirstGameObjectCollided()

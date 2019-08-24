@@ -5,14 +5,10 @@ using UnityEngine;
 public class Player_Core : Character_Core
 {
     //-Variables-
-    [SerializeField] private float m_movementSpeed = 0.05f;
 
     //Components
     [HideInInspector] public Player_Rotator m_playerRotator;
     [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
-
-    //Melee
-    [SerializeField] private Hitbox m_MeleeHitbox = null;
 
     //Camera
 
@@ -125,7 +121,7 @@ public class Player_Core : Character_Core
     void InitPlayer()
     {
         m_playerWeaponHolder.Init();
-        GetComponent<Character_Aimer>().Init(Camera_Main.GetMainCamera().GetAimTarget());
+        m_characterAimer.Init(Camera_Main.GetMainCamera().GetAimTarget());
     }
     
     private void UpdateMovement()
@@ -136,7 +132,7 @@ public class Player_Core : Character_Core
 
         if (isMoving)
         {
-            transform.Translate(new Vector3(hVal, 0, vVal) * m_movementSpeed, Space.Self);
+            MoveCharacter(new Vector3(hVal, 0, vVal), Space.Self);
             m_playerRotator.RefreshCurrentPlayerRotation();
         }
 
@@ -189,14 +185,12 @@ public class Player_Core : Character_Core
         }
     }
 
-    private void SendMeleeAttack(in int AE_handIndex)
+    protected override void SendMeleeAttack(in int AE_handIndex)
     {
-        //Debug.Log("SendMeleeAttack()" + handIndex);
-        Debug.Assert(m_MeleeHitbox, "Hitbox unassigned!?!?/");
         GameObject goHit = m_MeleeHitbox.GetFirstGameObjectCollided();
         if (goHit && goHit.CompareTag("Character"))
         {
-            EPlayerHand hand = AE_handIndex == 1? EPlayerHand.HAND_LEFT : EPlayerHand.HAND_RIGHT;
+            EPlayerHand hand = AE_handIndex == 1 ? EPlayerHand.HAND_LEFT : EPlayerHand.HAND_RIGHT;
             Weapon_Melee meleeWeapon = null;
 
             if (m_playerWeaponHolder.IsHoldingWeaponInHandOfType(hand, EWeapon_Type.MELEE))
