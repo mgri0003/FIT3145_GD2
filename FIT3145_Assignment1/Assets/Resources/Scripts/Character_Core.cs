@@ -6,6 +6,7 @@ public class Character_Core : MonoBehaviour
 {
     [HideInInspector] public Animator m_animator;
     [HideInInspector] public Character_Stats m_characterStats;
+    [HideInInspector] public Rigidbody m_rigidbody;
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -21,6 +22,9 @@ public class Character_Core : MonoBehaviour
 
     protected virtual void SetupComponents()
     {
+        m_rigidbody = GetComponent<Rigidbody>();
+        Debug.Assert(m_rigidbody != null, "Rigidbody Is Null");
+
         m_animator = GetComponent<Animator>();
         Debug.Assert(m_animator != null, "Animator Is Null");
 
