@@ -15,7 +15,7 @@ public class Player_WeaponHolder : MonoBehaviour
     private Transform[] m_handTransforms = new Transform[(int)EPlayerHand.MAX];
     private Weapon_Base[] m_currentWeapons = new Weapon_Base[(int)EPlayerHand.MAX];
     [SerializeField] private LayerMask m_aimMask;
-    private const float m_MINIMUM_AIM_RANGE = 6.0f;
+    private const float m_MINIMUM_AIM_RANGE = 2.0f;
 
     //--Methods--
 
@@ -115,10 +115,13 @@ public class Player_WeaponHolder : MonoBehaviour
 
             //set the current weapons rotation to point towards the aim target
             m_currentWeapons[(int)hand].transform.LookAt(GetComponent<Character_Aimer>().GetAimTarget());
+
+            //disable physics for weapon when in hand
+            m_currentWeapons[(int)hand].SetPhysicsActive(false);
         }
     }
 
-    public void RemoveWeaponFromHand(in EPlayerHand hand)
+    public void DetachWeaponFromHand(in EPlayerHand hand)
     {
         Debug.Assert(hand == EPlayerHand.HAND_RIGHT || hand == EPlayerHand.HAND_LEFT, "Invalid Hand Type Passed In");
 
@@ -127,6 +130,9 @@ public class Player_WeaponHolder : MonoBehaviour
         {
             //remove parent
             m_currentWeapons[(int)hand].transform.SetParent(null);
+
+            //enable physics for weapon when in hand
+            m_currentWeapons[(int)hand].SetPhysicsActive(true);
 
             //remove weapon from current weapons
             m_currentWeapons[(int)hand] = null;

@@ -114,7 +114,7 @@ public class Player_Core : Character_Core
     {
         if (m_playerWeaponHolder.IsHoldingWeaponInHand(hand))
         {
-            m_playerWeaponHolder.RemoveWeaponFromHand(hand);
+            m_playerWeaponHolder.DetachWeaponFromHand(hand);
         }
         else
         {
