@@ -21,6 +21,33 @@ public class Player_Core : Character_Core
     private void OnGUI()
     {
         GUI.Box(new Rect(0, 0, 100, 30), "Health: " + m_characterStats.GetHealth());
+
+        UI_DisplayWeaponForHand(EPlayerHand.HAND_RIGHT);
+        UI_DisplayWeaponForHand(EPlayerHand.HAND_LEFT);
+    }
+    private void UI_DisplayWeaponForHand(in EPlayerHand hand)
+    {
+        bool isRightLeftHand = (hand == EPlayerHand.HAND_RIGHT);
+
+        string handDisplay = isRightLeftHand ? "Right Hand: " : "Left Hand: ";
+        string weaponDisplay = "Empty";
+        Weapon_Base weapon = m_playerWeaponHolder.GetWeaponInHand(hand);
+        if (weapon)
+        {
+            weaponDisplay = weapon.GetWeaponName();
+            if (weapon.GetWeaponType() == EWeapon_Type.RANGED)
+            {
+                if (((Weapon_Ranged)weapon).IsReloading())
+                {
+                    weaponDisplay += "| Reloading!";
+                }
+                else
+                {
+                    weaponDisplay += "| Ammo(" + ((Weapon_Ranged)weapon).GetCurrentAmmo() + ")";
+                }
+            }
+        }
+        GUI.Box(new Rect(0, isRightLeftHand ? 30 : 60, 300, 30), handDisplay + weaponDisplay);
     }
 
     // Start is called before the first frame update
@@ -52,6 +79,10 @@ public class Player_Core : Character_Core
         {
             PrimaryAction();
         }
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            SecondaryAction();
+        }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -62,29 +93,33 @@ public class Player_Core : Character_Core
         //Debug
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (m_playerWeaponHolder.IsHoldingAnyWeapon())
-            {
-                m_playerWeaponHolder.RemoveWeaponFromHand(EPlayerHand.HAND_RIGHT);
-                m_playerWeaponHolder.RemoveWeaponFromHand(EPlayerHand.HAND_LEFT);
-            }
-            else
-            {
-                m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, WeaponsRepo.SpawnWeapon(0).GetComponent<Weapon_Base>());
-            }
+            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_RIGHT, 0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (m_playerWeaponHolder.IsHoldingAnyWeapon())
-            {
-                m_playerWeaponHolder.RemoveWeaponFromHand(EPlayerHand.HAND_RIGHT);
-                m_playerWeaponHolder.RemoveWeaponFromHand(EPlayerHand.HAND_LEFT);
-            }
-            else
-            {
-                m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, WeaponsRepo.SpawnWeapon(1).GetComponent<Weapon_Base>());
-            }
+            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_LEFT, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_RIGHT, 1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_LEFT, 1);
         }
 
+    }
+
+    public void DEBUG_SpawnWeaponInHand(in EPlayerHand hand, in uint weaponID)
+    {
+        if (m_playerWeaponHolder.IsHoldingWeaponInHand(hand))
+        {
+            m_playerWeaponHolder.RemoveWeaponFromHand(hand);
+        }
+        else
+        {
+            m_playerWeaponHolder.AttachWeaponToHand(hand, WeaponsRepo.SpawnWeapon(weaponID).GetComponent<Weapon_Base>());
+        }
     }
 
     void InitPlayer()
@@ -126,69 +161,69 @@ public class Player_Core : Character_Core
 
     private void PrimaryAction()
     {
-        Player_WeaponHolder m_playerWeaponHolder = GetComponent<Player_WeaponHolder>();
-        if(m_playerWeaponHolder)
-        {
-            if (m_playerWeaponHolder.IsHoldingAnyWeapon())
-            {
-                Weapon_Base weapon = m_playerWeaponHolder.GetWeaponInHand(EPlayerHand.HAND_RIGHT);
-                switch (weapon.GetWeaponType())
-                {
-                    case EWeapon_Type.MELEE:
-                    {
-                        UseMeleeWeapon(weapon);
-                    }
-                    break;
-                    case EWeapon_Type.RANGED:
-                    {
-                        UseRangedWeapon(weapon);
-                    }
-                    break;
-                }
-            }
-        }
-
+        ExecuteHandAction(EPlayerHand.HAND_RIGHT);
+    }
+    private void SecondaryAction()
+    {
+        ExecuteHandAction(EPlayerHand.HAND_LEFT);
     }
 
-    private void SendMeleeAttack()
+    private void ExecuteHandAction(in EPlayerHand hand)
     {
-        //Debug.Log("SendMeleeAttack()");
+        if (m_playerWeaponHolder.IsHoldingWeaponInHand(hand))
+        {
+            Weapon_Base weapon = m_playerWeaponHolder.GetWeaponInHand(hand);
+            switch (weapon.GetWeaponType())
+            {
+                case EWeapon_Type.MELEE:
+                {
+                    UseMeleeWeapon(weapon, hand);
+                }
+                break;
+                case EWeapon_Type.RANGED:
+                {
+                    UseRangedWeapon(weapon, hand);
+                }
+                break;
+            }
+        }
+    }
+
+    private void SendMeleeAttack(in int AE_handIndex)
+    {
+        //Debug.Log("SendMeleeAttack()" + handIndex);
         Debug.Assert(m_MeleeHitbox, "Hitbox unassigned!?!?/");
         GameObject goHit = m_MeleeHitbox.GetFirstGameObjectCollided();
         if (goHit && goHit.CompareTag("Character"))
         {
-            Weapon_Melee meleeWeaponR = null;
-            Weapon_Melee meleeWeaponL = null;
+            EPlayerHand hand = AE_handIndex == 1? EPlayerHand.HAND_LEFT : EPlayerHand.HAND_RIGHT;
+            Weapon_Melee meleeWeapon = null;
 
-            if (m_playerWeaponHolder.IsHoldingWeaponInHandOfType(EPlayerHand.HAND_RIGHT, EWeapon_Type.MELEE))
+            if (m_playerWeaponHolder.IsHoldingWeaponInHandOfType(hand, EWeapon_Type.MELEE))
             {
-                meleeWeaponR = (Weapon_Melee)m_playerWeaponHolder.GetWeaponInHand(EPlayerHand.HAND_RIGHT);
-            }
-            if (m_playerWeaponHolder.IsHoldingWeaponInHandOfType(EPlayerHand.HAND_LEFT, EWeapon_Type.MELEE))
-            {
-                meleeWeaponL = (Weapon_Melee)m_playerWeaponHolder.GetWeaponInHand(EPlayerHand.HAND_LEFT);
-            }
-            if (meleeWeaponR)
-            {
-                meleeWeaponR.SendAttack(goHit.GetComponent<Character_Core>());
-            }
-            if (meleeWeaponL)
-            {
-                meleeWeaponL.SendAttack(goHit.GetComponent<Character_Core>());
+                meleeWeapon = (Weapon_Melee)m_playerWeaponHolder.GetWeaponInHand(hand);
+
+                if (meleeWeapon)
+                {
+                    meleeWeapon.SendAttack(goHit.GetComponent<Character_Core>());
+                }
             }
         }
     }
 
-    private void UseMeleeWeapon(in Weapon_Base weaponToUse)
+    private void UseMeleeWeapon(in Weapon_Base weaponToUse, in EPlayerHand hand)
     {
-        m_animator.Play("Attack_MeleeWeapon", 1);
+        uint animLayer = hand == EPlayerHand.HAND_RIGHT ? 1u : 2u;
+        m_animator.Play("Attack_MeleeWeapon", (int)animLayer);
     }
-    private void UseRangedWeapon(in Weapon_Base weaponToUse)
+    private void UseRangedWeapon(in Weapon_Base weaponToUse, in EPlayerHand hand)
     {
+        uint animLayer = hand == EPlayerHand.HAND_RIGHT ? 1u : 2u;
+
         m_playerWeaponHolder.UpdateRangedWeaponAim();
         if(weaponToUse.Use())
         {
-            m_animator.Play("Attack_RangedWeapon", 1, 0.0f);
+            m_animator.Play("Attack_RangedWeapon", (int)animLayer, 0.0f);
         }
     }
 }

@@ -104,4 +104,10 @@ public class Weapon_Ranged : Weapon_Base
     {
         m_lookAtPos = newAim;
     }
+
+
+    //Getters
+    public float GetClipSize() { return m_clipSize; }
+    public float GetCurrentAmmo() { return m_currentAmmo; }
+    public float GetCurrentReloadTime() { return m_currentReloadTime; }
 }

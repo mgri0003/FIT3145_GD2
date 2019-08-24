@@ -30,17 +30,26 @@ public class Character_Core : MonoBehaviour
 
     public void ReceiveHit(float damage)
     {
-        //deal damage to health
-        m_characterStats.AddHealth(-damage);
-
-        if(m_characterStats.GetHealth() == 0)
+        //only recieve hits if your alive :P
+        if(!IsDead())
         {
-            Die();
+            //deal damage to health
+            m_characterStats.AddHealth(-damage);
+
+            if (m_characterStats.GetHealth() == 0)
+            {
+                Die();
+            }
         }
     }
 
     protected virtual void Die()
     {
         Debug.Log(transform.name + " has died");
+    }
+
+    public bool IsDead()
+    {
+        return (m_characterStats.GetHealth() == 0);
     }
 }
