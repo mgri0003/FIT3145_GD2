@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 4685081720522478469}
   - component: {fileID: 8290247817697547751}
   - component: {fileID: 5971946301436982603}
+  - component: {fileID: -4310203420299965838}
   m_Layer: 8
   m_Name: MainPlayer
   m_TagString: Character
@@ -198,6 +199,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 1.7, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &-4310203420299965838
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8290247817697547750}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1001 &2091451032264490120
 PrefabInstance:
   m_ObjectHideFlags: 0
