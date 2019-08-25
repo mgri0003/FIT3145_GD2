@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum EUIScreen
 {
@@ -18,9 +19,16 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
     EUIScreen m_currentUIScreen = EUIScreen.NONE;
 
     //--Methods--//
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         DisableAllScreens();
+
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            GoToUIScreen(EUIScreen.MAINMENU);
+        }
     }
 
     public void GoToUIScreen(in EUIScreen newScreen)

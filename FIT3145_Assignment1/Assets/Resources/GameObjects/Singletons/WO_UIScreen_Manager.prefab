@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1360521869317483741}
+  - component: {fileID: 4818935315320662572}
   m_Layer: 0
   m_Name: UIScreen_Screen2
   m_TagString: Untagged
@@ -30,6 +31,18 @@ Transform:
   m_Father: {fileID: 8065321389955084711}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4818935315320662572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819683890753846084}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49b17bd5efc3f9d44909d36b2a0addf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5428206241345635263
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +135,7 @@ MonoBehaviour:
   m_UIScreens:
   - {fileID: 2993814990216183329}
   - {fileID: 5423200517278380393}
-  - {fileID: 0}
+  - {fileID: 4818935315320662572}
 --- !u!1 &7661829542579116133
 GameObject:
   m_ObjectHideFlags: 0

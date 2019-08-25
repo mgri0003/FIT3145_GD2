@@ -2,18 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponsRepo : MonoBehaviour
+public class WeaponsRepo : Singleton<WeaponsRepo>
 {
     private static List<GameObject> m_weapons = new List<GameObject>();
     private static List<GameObject> m_projectiles = new List<GameObject>();
 
     private void Start()
-    {
-        //this allows this object to exist even when the level transitions
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private void Awake()
     {
         LoadAllWeapons();
         LoadAllProjectiles();

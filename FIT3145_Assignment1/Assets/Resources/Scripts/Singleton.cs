@@ -20,4 +20,9 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             return m_instance;
         }
     }
+
+    protected virtual void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 }

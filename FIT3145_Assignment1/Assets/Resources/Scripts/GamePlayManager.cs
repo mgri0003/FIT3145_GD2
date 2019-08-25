@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GamePlayManager : Singleton<GamePlayManager>
 {
@@ -21,7 +22,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Start is called before the first frame update
     void Start()
     {
-        SetupInGame();
+        //debug call as GamePlayManager would of already been created in a previous scene :P
+        if (SceneManager.GetActiveScene().name == "Game")
+        {
+            SetupInGame();
+        }
     }
 
     // Update is called once per frame
@@ -37,6 +42,14 @@ public class GamePlayManager : Singleton<GamePlayManager>
             {
                 UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.DEBUGMENU);
             }
+        }
+    }
+
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Game")
+        {
+            GamePlayManager.Instance.SetupInGame();
         }
     }
 
