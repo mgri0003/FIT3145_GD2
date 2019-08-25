@@ -29,9 +29,7 @@ public class Character_Aimer : MonoBehaviour
         if(m_hasInit && IsEnabled())
         {
             Vector3 posToLook = m_aimTarget.transform.position;
-
             m_chestBone.LookAt(posToLook);
-            m_chestBone.rotation = m_chestBone.rotation;
         }
     }
 

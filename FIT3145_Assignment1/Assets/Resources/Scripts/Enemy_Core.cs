@@ -23,14 +23,17 @@ public class Enemy_Core : Character_Core
     {
         if(!IsDead())
         {
+            bool isMoving = false;
+
             if(m_targetCharacter)
             {
-                if(Vector3.Distance(transform.position, m_targetCharacter.transform.position) < m_minDistanceToMove)
+                if(IsCloseEnoughToAct())
                 {
                     //look at player
+                    m_characterAimer.SetEnabled(true);
                     transform.LookAt(m_targetCharacter.transform);
 
-                    if (Vector3.Distance(transform.position, m_targetCharacter.transform.position) < m_minDistanceToAttack)
+                    if (IsCloseEnoughToAttack())
                     {
                         m_animator.Play("Attack_MeleeWeapon", 1);
                     }
@@ -38,9 +41,16 @@ public class Enemy_Core : Character_Core
                     {
                         Vector3 vecToTarget = (m_targetCharacter.transform.position - transform.position);
                         MoveCharacter(vecToTarget, Space.World);
+                        isMoving = true;
                     }
                 }
+                else
+                {
+                    m_characterAimer.SetEnabled(false);
+                }
             }
+
+            m_animator.SetBool("AP_isMoving", isMoving);
         }
     }
 
@@ -58,4 +68,13 @@ public class Enemy_Core : Character_Core
         }
     }
 
+    public bool IsCloseEnoughToAct()
+    {
+        return Vector3.Distance(transform.position, m_targetCharacter.transform.position) < m_minDistanceToMove;
+    }
+
+    public bool IsCloseEnoughToAttack()
+    {
+        return Vector3.Distance(transform.position, m_targetCharacter.transform.position) < m_minDistanceToAttack;
+    }
 }
