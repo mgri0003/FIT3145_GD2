@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GamePlayManager : MonoBehaviour
+public class GamePlayManager : Singleton<GamePlayManager>
 {
     //--Variables--//
-
     private Transform m_spawnPoint = null;
     private Transform m_enemySpawnPoint = null;
 
-    //Spawnables
+    //Spawnables (Do not change values in these objects)
     [SerializeField] private GameObject m_spawnable_mainPlayer = null;
     [SerializeField] private GameObject m_spawnable_enemy = null;
 
@@ -22,23 +21,46 @@ public class GamePlayManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetupSpawnPoints();
-        SpawnPlayer();
-        SpawnEnemy();
+        SetupInGame();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            if(UIScreen_Manager.Instance.GetCurrentUIScreen() == EUIScreen.DEBUGMENU)
+            {
+                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAMEHUD);
+            }
+            else
+            {
+                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.DEBUGMENU);
+            }
+        }
+    }
+
+    public void SetupInGame()
+    {
+        SetupSpawnPoints();
+        SpawnPlayer();
+        SpawnEnemy();
+
+        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAMEHUD);
     }
 
     void SpawnPlayer()
     {
         m_current_mainPlayer = Instantiate(m_spawnable_mainPlayer, m_spawnPoint.position, Quaternion.Euler(0, 0, 0));
+        Debug.Assert(m_current_mainPlayer, "Player Failed to Instantiate?!!??!");
+        if (m_current_mainPlayer)
+        {
+            //set name
+            m_current_mainPlayer.name = "MainPlayer";
 
-        //Setup Camera vars for player
-        Camera_Main.GetMainCamera().SetTarget(m_current_mainPlayer.transform);
+            //Setup Camera vars for player
+            Camera_Main.GetMainCamera().SetTarget(m_current_mainPlayer.transform);
+        }
     }
 
     void SpawnEnemy()
@@ -77,5 +99,10 @@ public class GamePlayManager : MonoBehaviour
         {
             m_enemySpawnPoint = spawn.transform;
         }
+    }
+
+    public Player_Core GetCurrentPlayer()
+    {
+        return m_current_mainPlayer.GetComponent<Player_Core>();
     }
 }

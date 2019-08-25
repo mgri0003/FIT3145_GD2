@@ -21,10 +21,10 @@ public class Enemy_Core : Character_Core
 
     private void Update()
     {
-        if(!IsDead())
-        {
-            bool isMoving = false;
+        bool isMoving = false;
 
+        if (!IsDead())
+        {
             if(m_targetCharacter)
             {
                 if(IsCloseEnoughToAct())
@@ -49,9 +49,10 @@ public class Enemy_Core : Character_Core
                     m_characterAimer.SetEnabled(false);
                 }
             }
-
-            m_animator.SetBool("AP_isMoving", isMoving);
         }
+
+        //Update anim vars
+        m_animator.SetBool("AP_isMoving", isMoving);
     }
 
     public void SetTargetCharacter(in Character_Core targetCharacter)

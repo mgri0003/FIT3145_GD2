@@ -14,38 +14,6 @@ public class Player_Core : Character_Core
 
     //-Methods-
 
-    private void OnGUI()
-    {
-        GUI.Box(new Rect(0, 0, 100, 30), "Health: " + m_characterStats.GetHealth());
-
-        UI_DisplayWeaponForHand(EPlayerHand.HAND_RIGHT);
-        UI_DisplayWeaponForHand(EPlayerHand.HAND_LEFT);
-    }
-    private void UI_DisplayWeaponForHand(in EPlayerHand hand)
-    {
-        bool isRightLeftHand = (hand == EPlayerHand.HAND_RIGHT);
-
-        string handDisplay = isRightLeftHand ? "Right Hand: " : "Left Hand: ";
-        string weaponDisplay = "Empty";
-        Weapon_Base weapon = m_playerWeaponHolder.GetWeaponInHand(hand);
-        if (weapon)
-        {
-            weaponDisplay = weapon.GetWeaponName();
-            if (weapon.GetWeaponType() == EWeapon_Type.RANGED)
-            {
-                if (((Weapon_Ranged)weapon).IsReloading())
-                {
-                    weaponDisplay += "| Reloading!";
-                }
-                else
-                {
-                    weaponDisplay += "| Ammo(" + ((Weapon_Ranged)weapon).GetCurrentAmmo() + ")";
-                }
-            }
-        }
-        GUI.Box(new Rect(0, isRightLeftHand ? 30 : 60, 300, 30), handDisplay + weaponDisplay);
-    }
-
     // Start is called before the first frame update
     protected override void Start()
     {
