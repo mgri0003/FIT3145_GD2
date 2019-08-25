@@ -18,7 +18,7 @@ public class Player_Rotator : MonoBehaviour
         SmoothRotatePlayer();
     }
 
-    public void UpdateDesiredRotation(in float rotationVal)
+    public void AddDesiredRotation(in float rotationVal)
     {
         m_desiredRotation += rotationVal;
         if (m_desiredRotation > 360)

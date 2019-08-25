@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 736138765452689857}
   - component: {fileID: 3019553838894725184}
   - component: {fileID: 4685081720522478469}
+  - component: {fileID: -1889737827967805000}
   - component: {fileID: 8290247817697547751}
   - component: {fileID: 5971946301436982603}
   - component: {fileID: -4310203420299965838}
@@ -112,10 +113,10 @@ MonoBehaviour:
   m_animator: {fileID: 0}
   m_characterStats: {fileID: 0}
   m_rigidbody: {fileID: 0}
-  m_movementSpeed: 0.05
+  m_characterAimer: {fileID: 0}
+  m_MeleeHitbox: {fileID: 3607192714479792860}
   m_playerRotator: {fileID: 0}
   m_playerWeaponHolder: {fileID: 0}
-  m_MeleeHitbox: {fileID: 3607192714479792860}
 --- !u!114 &4230743391449152156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,6 +169,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_health: 100
+  m_movementSpeed: 0.05
+--- !u!114 &-1889737827967805000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8290247817697547750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 773530e716c0f69408edf37b1589a0d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &8290247817697547751
 Animator:
   serializedVersion: 3

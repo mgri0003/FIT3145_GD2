@@ -72,15 +72,8 @@ public class Camera_Main : MonoBehaviour
 
             //Camera Rotation
             m_currentRotationX = m_target.GetComponent<Player_Rotator>().GetDesiredRotation();
-            m_currentRotationY -= Input.GetAxis("Mouse Y");
             m_currentRotationY = Mathf.Clamp(m_currentRotationY, CAMERA_RANGE_MIN, CAMERA_RANGE_MAX);
             m_cameraHolder.transform.rotation = Quaternion.Euler(m_currentRotationY, m_currentRotationX, 0);
-
-            if (Input.GetMouseButtonDown(2))
-            {
-                CycleCameraViewMode();
-            }
-
 
             //Collisions
             UpdateCollision();
@@ -88,7 +81,7 @@ public class Camera_Main : MonoBehaviour
     }
 
 
-    void CycleCameraViewMode()
+    public void CycleCameraViewMode()
     {
         if((int)m_cameraViewMode < (int)ECamera_ViewMode.MAX - 1)
         {
@@ -145,5 +138,10 @@ public class Camera_Main : MonoBehaviour
         }
         m_currentCameraZ = Mathf.Clamp(m_currentCameraZ, m_CAMERA_LIMIT_Z_MIN, m_CAMERA_LIMIT_Z_MAX);
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, m_currentCameraZ);
+    }
+
+    public void MinusCurrentRotationY(in float rotY)
+    {
+        m_currentRotationY -= rotY;
     }
 }

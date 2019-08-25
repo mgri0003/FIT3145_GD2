@@ -57,21 +57,4 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
     {
         return m_currentUIScreen;
     }
-
-    public void FindPlayerForUIScreens()
-    {
-        Player_Core player = null;
-        GameObject playerGO = GameObject.Find("MainPlayer");
-        Debug.Assert(playerGO, "UIScreen_Manager | FindPlayerForUIScreens() | Player was not found!");
-        if (playerGO)
-        {
-            player = playerGO.GetComponent<Player_Core>();
-        }
-
-        if(player)
-        {
-            //Assign player ref to uiscreens
-
-        }
-    }
 }

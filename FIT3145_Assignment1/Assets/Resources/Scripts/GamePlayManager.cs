@@ -27,7 +27,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P))
+        if(Input.GetKeyDown(KeyCode.X))
         {
             if(UIScreen_Manager.Instance.GetCurrentUIScreen() == EUIScreen.DEBUGMENU)
             {
@@ -47,6 +47,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
         SpawnEnemy();
 
         UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAMEHUD);
+
+        m_current_mainPlayer.GetComponent<Player_Controller>().SetEnableInput(true);
     }
 
     void SpawnPlayer()

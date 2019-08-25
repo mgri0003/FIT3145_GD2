@@ -5,6 +5,8 @@ using UnityEngine;
 public class Player_Core : Character_Core
 {
     //-Variables-
+    private float m_movementValueHorizontal = 0.0f;
+    private float m_movementValueVertical = 0.0f;
 
     //Components
     [HideInInspector] public Player_Rotator m_playerRotator;
@@ -37,53 +39,6 @@ public class Player_Core : Character_Core
     void Update()
     {
         UpdateMovement();
-        UpdatePlayerRotator();
-
-        if(Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            PrimaryAction();
-        }
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            SecondaryAction();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            //Reload
-            m_playerWeaponHolder.ReloadRangedWeapons();
-        }
-
-        //Debug
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_RIGHT, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_LEFT, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_RIGHT, 1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_LEFT, 1);
-        }
-
-    }
-
-    public void DEBUG_SpawnWeaponInHand(in EPlayerHand hand, in uint weaponID)
-    {
-        if (m_playerWeaponHolder.IsHoldingWeaponInHand(hand))
-        {
-            m_playerWeaponHolder.DetachWeaponFromHand(hand);
-        }
-        else
-        {
-            m_playerWeaponHolder.AttachWeaponToHand(hand, WeaponsRepo.SpawnWeapon(weaponID).GetComponent<Weapon_Base>());
-        }
     }
 
     void InitPlayer()
@@ -91,20 +46,19 @@ public class Player_Core : Character_Core
         m_playerWeaponHolder.Init();
         m_characterAimer.Init(Camera_Main.GetMainCamera().GetAimTarget());
     }
-    
+
     private void UpdateMovement()
     {
-        float hVal = Input.GetAxis("Horizontal");
-        float vVal = Input.GetAxis("Vertical");
-        bool isMoving = (hVal != 0 || vVal != 0);
+        bool isMoving = (m_movementValueHorizontal != 0 || m_movementValueVertical != 0);
 
         if (isMoving)
         {
-            MoveCharacter(new Vector3(hVal, 0, vVal), Space.Self);
+            MoveCharacter(new Vector3(m_movementValueHorizontal, 0, m_movementValueVertical), Space.Self);
             m_playerRotator.RefreshCurrentPlayerRotation();
         }
 
         m_animator.SetBool("AP_isMoving", isMoving);
+        ResetMovementValues();
     }
 
     public void SubtleMove()
@@ -118,16 +72,23 @@ public class Player_Core : Character_Core
         }
     }
 
-    private void UpdatePlayerRotator()
+    public void SetMovementValues(in float horizontal, in float vertical)
     {
-        m_playerRotator.UpdateDesiredRotation(Input.GetAxis("Mouse X"));
+        m_movementValueHorizontal = horizontal;
+        m_movementValueVertical = vertical;
     }
 
-    private void PrimaryAction()
+    public void ResetMovementValues()
+    {
+        m_movementValueHorizontal = 0;
+        m_movementValueVertical = 0;
+    }
+
+    public void PrimaryAction()
     {
         ExecuteHandAction(EPlayerHand.HAND_RIGHT);
     }
-    private void SecondaryAction()
+    public void SecondaryAction()
     {
         ExecuteHandAction(EPlayerHand.HAND_LEFT);
     }
