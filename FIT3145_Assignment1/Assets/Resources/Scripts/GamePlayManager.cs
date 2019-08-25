@@ -47,10 +47,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "Game")
-        {
-            GamePlayManager.Instance.SetupInGame();
-        }
+        GamePlayManager.Instance.SetupInGame();
+        SceneManager.sceneLoaded -= GamePlayManager.Instance.OnSceneLoaded;
     }
 
     public void SetupInGame()

@@ -25,6 +25,7 @@ public class UIScreen_MainMenu : UIScreenBase
         if (GUI.Button(new Rect((Screen.width / 2) - 125, Screen.height / 2 + 40, 250, 40), "Go To Bridge_Hub Scene"))
         {
             SceneManager.LoadScene("Bridge_HUB");
+            SceneManager.sceneLoaded += GamePlayManager.Instance.OnSceneLoaded;
         }
     }
 
