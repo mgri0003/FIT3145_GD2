@@ -2,19 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public struct Stat
 {
-    Stat(string name, float current, float max)
-    {
-        m_name = name;
-        m_current = current;
-        m_max = max;
-    }
-
     //Getters
     public string GetName() { return m_name; }
     public float GetCurrent() { return m_current; }
     public float GetMax() { return m_max; }
+    public float GetMin() { return m_min; }
 
     //Setters
     public void SetName(string newName)
@@ -23,22 +18,51 @@ public struct Stat
     }
     public void SetCurrent(float value)
     {
-        if (m_max != -1)
-        {
-            value = Mathf.Clamp(m_current, 0, m_max);
-        }
+        value = Mathf.Clamp(value, GetMin(), GetMax() != -1 ? GetMax() : value);
         m_current = value;
     }
     public void SetMax(float value)
     {
-        m_current = value;
+        m_max = value;
     }
+    public void SetMin(float value)
+    {
+        m_min = value;
+    }
+
 
     //Adders
     public void AddCurrent(float value) { SetCurrent(value + GetCurrent()); }
     public void AddMax(float value) { SetMax(value + GetMax()); }
+    public void AddMin(float value) { SetMin(value + GetMin()); }
 
-    private float m_current;
-    private float m_max;
-    private string m_name;
+    //Other
+    public void SetAll(string name, float current, float max, float min)
+    {
+        SetName(name);
+        SetMax(max);
+        SetMin(min);
+        SetCurrent(current);
+    }
+    public void SetNameAndDefaultParams(string name)
+    {
+        SetAll(name, 0, -1, 0);
+    }
+    public void ResetCurrent()
+    {
+        if(GetMax() != -1)
+        {
+            SetCurrent(GetMax());
+        }
+        else
+        {
+            SetCurrent(GetMin());
+        }
+    }
+
+    //--Variables--//
+    [SerializeField] private float m_current;
+    [SerializeField] private float m_max;
+    [SerializeField] private float m_min;
+    [SerializeField] private string m_name;
 }

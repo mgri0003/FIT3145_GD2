@@ -44,7 +44,7 @@ public class Player_WeaponHolder : MonoBehaviour
         Physics.Raycast(Camera_Main.GetMainCamera().transform.position, Camera_Main.GetMainCamera().transform.forward, out rayHit, 100.0f, m_aimMask);
         for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
         {
-            if (IsHoldingWeaponInHandOfType((EPlayerHand)i, EWeapon_Type.RANGED))
+            if (IsHoldingWeaponInHandOfType((EPlayerHand)i, EWeaponType.RANGED))
             {
                 Vector3 lookAtPosition = Vector3.zero;
                 //if a target is hit by the raycast
@@ -80,7 +80,7 @@ public class Player_WeaponHolder : MonoBehaviour
         return false;
     }
 
-    public bool IsHoldingWeaponInHandOfType(in EPlayerHand hand, in EWeapon_Type weaponType)
+    public bool IsHoldingWeaponInHandOfType(in EPlayerHand hand, in EWeaponType weaponType)
     {
         bool retVal = false;
 
@@ -149,7 +149,7 @@ public class Player_WeaponHolder : MonoBehaviour
     {
         for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
         {
-            if (IsHoldingWeaponInHandOfType((EPlayerHand)i, EWeapon_Type.RANGED))
+            if (IsHoldingWeaponInHandOfType((EPlayerHand)i, EWeaponType.RANGED))
             {
                 ((Weapon_Ranged)GetWeaponInHand((EPlayerHand)i)).Reload();
             }

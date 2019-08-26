@@ -2,6 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EWeaponStat_Ranged
+{
+    PROJECTILE_SPEED = EWeaponStat.MAX,
+    AMMO,
+    RELOAD_TIME,
+    FIRE_RATE_COOLDOWN,
+
+    MAX
+}
+
 public class Weapon_Ranged : Weapon_Base
 {
     //--Variables--
@@ -9,20 +19,22 @@ public class Weapon_Ranged : Weapon_Base
     [SerializeField] private Transform m_firingTransform = null;
     [SerializeField] private Vector3 m_lookAtPos = Vector3.zero;
 
-    //Base stats
-    [SerializeField] private float m_projectileSpeed = 1.0f;
-    [SerializeField] private uint m_clipSize = 1;
-    [SerializeField] private float m_maxReloadTime = 1.0f;
-    [SerializeField] private float m_maxFireRateCooldown = 1.0f;
-
-
-    //current stats
-    private uint m_currentAmmo = 0;
-    private float m_currentReloadTime = -1.0f;
-    private float m_currentFireRateCooldown = 0.0f;
-
-
     //--Methods--
+    Weapon_Ranged()
+    {
+        m_weaponBaseStats = new Stat[(int)EWeaponStat_Ranged.MAX];
+        InitWeaponStats();
+    }
+
+    protected override void InitWeaponStats()
+    {
+        base.InitWeaponStats();
+        m_weaponBaseStats[(int)EWeaponStat_Ranged.PROJECTILE_SPEED].SetNameAndDefaultParams("Projectile Speed");
+        m_weaponBaseStats[(int)EWeaponStat_Ranged.AMMO].SetNameAndDefaultParams("Ammo");
+        m_weaponBaseStats[(int)EWeaponStat_Ranged.RELOAD_TIME].SetAll("Reload Time", 0, 0, -1);
+        m_weaponBaseStats[(int)EWeaponStat_Ranged.FIRE_RATE_COOLDOWN].SetNameAndDefaultParams("Fire Rate");
+    }
+
     public override bool Use()
     {
         if(CanFire())
@@ -52,18 +64,18 @@ public class Weapon_Ranged : Weapon_Base
                 {
                     //initialse the projectile (and off it goes!)
                     Vector3 firingDir = m_lookAtPos - m_firingTransform.position;
-                    projectile.Init(GetWeaponDamage(), m_projectileSpeed, firingDir.normalized);
+                    projectile.Init(AccessWeaponStat((int)EWeaponStat.DAMAGE).GetCurrent(), AccessWeaponStat((int)EWeaponStat_Ranged.PROJECTILE_SPEED).GetCurrent(), firingDir.normalized);
                 }
             }
         }
 
         //reduce ammo by 1
-        --m_currentAmmo;
+        AccessWeaponStat((int)EWeaponStat_Ranged.AMMO).AddCurrent(-1);
     }
 
     void Start()
     {
-        m_currentAmmo = m_clipSize;
+        AccessWeaponStat((int)EWeaponStat_Ranged.AMMO).ResetCurrent();
     }
 
     void Update()
@@ -80,15 +92,15 @@ public class Weapon_Ranged : Weapon_Base
 
     public bool IsReloading()
     {
-        return m_currentReloadTime != -1;
+        return AccessWeaponStat((int)EWeaponStat_Ranged.RELOAD_TIME).GetCurrent() != -1;
     }
 
     public void Reload()
     {
         if(!IsReloading())
-        {        
+        {
             //Start reloading!
-            m_currentReloadTime = m_maxReloadTime;
+            AccessWeaponStat((int)EWeaponStat_Ranged.RELOAD_TIME).ResetCurrent();
         }
     }
 
@@ -96,46 +108,44 @@ public class Weapon_Ranged : Weapon_Base
     {
         if (IsReloading())
         {
-            m_currentReloadTime -= Time.deltaTime;
-            m_currentReloadTime = Mathf.Clamp(m_currentReloadTime, 0, m_maxReloadTime);
+            AccessWeaponStat((int)EWeaponStat_Ranged.RELOAD_TIME).AddCurrent(-Time.deltaTime);
+            if(AccessWeaponStat((int)EWeaponStat_Ranged.RELOAD_TIME).GetCurrent() < 0)
+            {
+                AccessWeaponStat((int)EWeaponStat_Ranged.RELOAD_TIME).SetCurrent(0);
+            }
 
-            if (m_currentReloadTime == 0)
+            if (AccessWeaponStat((int)EWeaponStat_Ranged.RELOAD_TIME).GetCurrent() == 0)
             {
                 //reload complete
-                m_currentAmmo = m_clipSize;
-                m_currentReloadTime = -1;
+                //reset ammo back to full
+                AccessWeaponStat((int)EWeaponStat_Ranged.AMMO).ResetCurrent();
+
+                //set reload time to complete (-1)
+                AccessWeaponStat((int)EWeaponStat_Ranged.RELOAD_TIME).SetCurrent(-1);
             }
         }
     }
 
     private bool CanFire()
     {
-        return !IsReloading() && IsFireRateCooldownComplete() && m_currentAmmo > 0;
+        return !IsReloading() && IsFireRateCooldownComplete() && AccessWeaponStat((int)EWeaponStat_Ranged.AMMO).GetCurrent() > 0;
     }
 
     private void UpdateFireRateCooldown()
     {
         if(!IsFireRateCooldownComplete())
         {
-            m_currentFireRateCooldown -= Time.deltaTime;
-            m_currentFireRateCooldown = Mathf.Clamp(m_currentFireRateCooldown, 0, m_maxFireRateCooldown);
+            AccessWeaponStat((int)EWeaponStat_Ranged.FIRE_RATE_COOLDOWN).AddCurrent(-Time.deltaTime);
         }
     }
 
     private bool IsFireRateCooldownComplete()
     {
-        return m_currentFireRateCooldown == 0;
+        return AccessWeaponStat((int)EWeaponStat_Ranged.FIRE_RATE_COOLDOWN).GetCurrent() == 0;
     }
 
     protected void ResetFireRateCooldown()
     {
-        m_currentFireRateCooldown = m_maxFireRateCooldown;
+        AccessWeaponStat((int)EWeaponStat_Ranged.FIRE_RATE_COOLDOWN).ResetCurrent();
     }
-
-    //Getters
-    public float GetClipSize() { return m_clipSize; }
-    public float GetCurrentAmmo() { return m_currentAmmo; }
-    public float GetCurrentReloadTime() { return m_currentReloadTime; }
-    public float GetCurrentFireRateCooldown() { return m_currentFireRateCooldown; }
-    public float GetMaxFireRateCooldown() { return m_maxFireRateCooldown; }
 }

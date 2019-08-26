@@ -43,7 +43,7 @@ public class UIScreen_InGameHud : UIScreenBase
         if (weapon)
         {
             weaponDisplay = weapon.GetWeaponName();
-            if (weapon.GetWeaponType() == EWeapon_Type.RANGED)
+            if (weapon.GetWeaponType() == EWeaponType.RANGED)
             {
                 if (((Weapon_Ranged)weapon).IsReloading())
                 {
@@ -51,7 +51,7 @@ public class UIScreen_InGameHud : UIScreenBase
                 }
                 else
                 {
-                    weaponDisplay += "| Ammo(" + ((Weapon_Ranged)weapon).GetCurrentAmmo() + ")";
+                    weaponDisplay += "| Ammo(" + ((Weapon_Ranged)weapon).AccessWeaponStat((int)EWeaponStat_Ranged.AMMO).GetCurrent() + ")";
                 }
             }
         }

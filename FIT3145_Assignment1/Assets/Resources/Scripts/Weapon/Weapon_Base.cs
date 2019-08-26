@@ -2,19 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EWeapon_Type
+public enum EWeaponType
 {
     MELEE,
     RANGED,
     NONE,
     MAX
 }
+
+public enum EWeaponStat
+{
+    DAMAGE,
+    MAX
+}
+
 public abstract class Weapon_Base : MonoBehaviour
 {
     //--Variables--
     [SerializeField] private string m_name = "Default_Weapon";
-    [SerializeField] private float m_damage = 1;
-    [SerializeField] private EWeapon_Type m_weaponType = EWeapon_Type.NONE;
+    [SerializeField] protected Stat[] m_weaponBaseStats = new Stat[(int)EWeaponStat.MAX];
+    [SerializeField] private EWeaponType m_weaponType = EWeaponType.NONE;
 
     [SerializeField] private Rigidbody m_physicsRigidbody = null;
     [SerializeField] private BoxCollider m_physicsCollider = null;
@@ -22,11 +29,19 @@ public abstract class Weapon_Base : MonoBehaviour
     //--methods--
     public abstract bool Use();
 
-
     //Getters
     public string GetWeaponName() { return m_name; }
-    public float GetWeaponDamage() { return m_damage; }
-    public EWeapon_Type GetWeaponType() { return m_weaponType; }
+    public EWeaponType GetWeaponType() { return m_weaponType; }
+    public ref Stat AccessWeaponStat(int statIndex)
+    {
+        Debug.Assert(statIndex >= 0 && statIndex < m_weaponBaseStats.Length, "Incorrect Stat Index");
+        return ref m_weaponBaseStats[statIndex];
+    }
+
+    protected virtual void InitWeaponStats()
+    {
+        m_weaponBaseStats[(int)EWeaponStat.DAMAGE].SetNameAndDefaultParams("Damage");
+    }
 
     public void SetPhysicsActive(bool enablePhysics)
     {

@@ -47,7 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_name: Test Melee Weapon
-  m_damage: 50
+  m_weaponBaseStats:
+  - m_current: 20
+    m_max: -1
+    m_min: 0
+    m_name: Damage
   m_weaponType: 0
   m_physicsRigidbody: {fileID: -4255810572145031668}
   m_physicsCollider: {fileID: -8007725881098290701}

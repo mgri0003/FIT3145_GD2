@@ -78,7 +78,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_name: Test Ranged Weapon
-  m_damage: 10
+  m_weaponBaseStats:
+  - m_current: 10
+    m_max: -1
+    m_min: 0
+    m_name: Damage
+  - m_current: 10
+    m_max: -1
+    m_min: 0
+    m_name: Projectile Speed
+  - m_current: 0
+    m_max: 5
+    m_min: 0
+    m_name: Ammo
+  - m_current: 0
+    m_max: 1
+    m_min: -1
+    m_name: Reload Time
+  - m_current: 0
+    m_max: 0.3
+    m_min: 0
+    m_name: Fire Rate
   m_weaponType: 1
   m_physicsRigidbody: {fileID: 1295313564781236068}
   m_physicsCollider: {fileID: 5961892357635601912}
@@ -86,10 +106,6 @@ MonoBehaviour:
     type: 3}
   m_firingTransform: {fileID: 9044369817375108693}
   m_lookAtPos: {x: 0, y: 0, z: 0}
-  m_projectileSpeed: 10
-  m_clipSize: 5
-  m_maxReloadTime: 1
-  m_maxFireRateCooldown: 0.3
 --- !u!54 &1295313564781236068
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Weapon_Melee : Weapon_Base
 {
+    //--Methods--
+    Weapon_Melee()
+    {
+        InitWeaponStats();
+    }
+
     public override bool Use()
     {
         throw new System.NotImplementedException();
@@ -11,6 +17,6 @@ public class Weapon_Melee : Weapon_Base
 
     public void SendAttack(Character_Core characterToHit)
     {
-        characterToHit.ReceiveHit(GetWeaponDamage());
+        characterToHit.ReceiveHit(AccessWeaponStat((int)EWeaponStat.DAMAGE).GetCurrent());
     }
 }

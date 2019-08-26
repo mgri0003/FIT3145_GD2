@@ -100,12 +100,12 @@ public class Player_Core : Character_Core
             Weapon_Base weapon = m_playerWeaponHolder.GetWeaponInHand(hand);
             switch (weapon.GetWeaponType())
             {
-                case EWeapon_Type.MELEE:
+                case EWeaponType.MELEE:
                 {
                     UseMeleeWeapon(weapon, hand);
                 }
                 break;
-                case EWeapon_Type.RANGED:
+                case EWeaponType.RANGED:
                 {
                     UseRangedWeapon(weapon, hand);
                 }
@@ -122,7 +122,7 @@ public class Player_Core : Character_Core
             EPlayerHand hand = AE_handIndex == 1 ? EPlayerHand.HAND_LEFT : EPlayerHand.HAND_RIGHT;
             Weapon_Melee meleeWeapon = null;
 
-            if (m_playerWeaponHolder.IsHoldingWeaponInHandOfType(hand, EWeapon_Type.MELEE))
+            if (m_playerWeaponHolder.IsHoldingWeaponInHandOfType(hand, EWeaponType.MELEE))
             {
                 meleeWeapon = (Weapon_Melee)m_playerWeaponHolder.GetWeaponInHand(hand);
 
