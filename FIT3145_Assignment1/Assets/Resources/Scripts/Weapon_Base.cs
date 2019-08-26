@@ -9,7 +9,6 @@ public enum EWeapon_Type
     NONE,
     MAX
 }
-
 public abstract class Weapon_Base : MonoBehaviour
 {
     //--Variables--
