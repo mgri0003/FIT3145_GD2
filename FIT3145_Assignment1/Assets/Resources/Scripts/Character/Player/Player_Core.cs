@@ -11,8 +11,9 @@ public class Player_Core : Character_Core
     //Components
     [HideInInspector] public Player_Rotator m_playerRotator;
     [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
+    [HideInInspector] public Player_Inventory m_playerInventory;
+    [SerializeField] public Hitbox m_playerItemPickupArea;
 
-    //Camera
 
     //-Methods-
 
@@ -33,6 +34,11 @@ public class Player_Core : Character_Core
 
         m_playerWeaponHolder = GetComponent<Player_WeaponHolder>();
         Debug.Assert(m_playerWeaponHolder != null, "Player Weapon Holder Is Null");
+
+        m_playerInventory = GetComponent<Player_Inventory>();
+        Debug.Assert(m_playerInventory != null, "Player Inventory Is Null");
+
+        Debug.Assert(m_playerItemPickupArea != null, "Player Item Pickup Are Is Null");
     }
 
     // Update is called once per frame
@@ -147,6 +153,20 @@ public class Player_Core : Character_Core
         if(weaponToUse.Use())
         {
             m_animator.Play("Attack_RangedWeapon", (int)animLayer, 0.0f);
+        }
+    }
+
+    public bool IsItemNearby()
+    {
+        return m_playerItemPickupArea.IsColliding();
+    }
+    
+    public void PickupNearbyItems()
+    {
+        if(IsItemNearby())
+        {
+            //add items to inventory
+            m_playerInventory.AddItemsToInventory(m_playerItemPickupArea.GetAllGameObjectsCollided());
         }
     }
 }

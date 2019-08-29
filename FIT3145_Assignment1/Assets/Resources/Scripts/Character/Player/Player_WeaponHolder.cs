@@ -100,25 +100,33 @@ public class Player_WeaponHolder : MonoBehaviour
         return IsHoldingWeaponInHand(EPlayerHand.HAND_RIGHT) || IsHoldingWeaponInHand(EPlayerHand.HAND_LEFT);
     }
 
-    public void AttachWeaponToHand(in EPlayerHand hand, in Weapon_Base weapon)
+    public bool AttachWeaponToHand(in EPlayerHand hand, in Weapon_Base weapon)
     {
         Debug.Assert(hand == EPlayerHand.HAND_RIGHT || hand == EPlayerHand.HAND_LEFT, "Invalid Hand Type Passed In");
         Debug.Assert(weapon, "Weapon Can't be Null!");
-        if(weapon)
+
+        if(!IsHoldingWeaponInHand(hand))
         {
-            //parent the weapon to the hand
-            weapon.transform.SetParent(m_handTransforms[(int)hand]);
-            
-            //set the current weapon on the hand
-            m_currentWeapons[(int)hand] = weapon;
-            m_currentWeapons[(int)hand].transform.localPosition = new Vector3(0, 0, 0);
+            if (weapon)
+            {
+                //parent the weapon to the hand
+                weapon.transform.SetParent(m_handTransforms[(int)hand]);
 
-            //set the current weapons rotation to point towards the aim target
-            m_currentWeapons[(int)hand].transform.LookAt(GetComponent<Character_Aimer>().GetAimTarget());
+                //set the current weapon on the hand
+                m_currentWeapons[(int)hand] = weapon;
+                m_currentWeapons[(int)hand].transform.localPosition = new Vector3(0, 0, 0);
 
-            //disable physics for weapon when in hand
-            m_currentWeapons[(int)hand].SetPhysicsActive(false);
+                //set the current weapons rotation to point towards the aim target
+                m_currentWeapons[(int)hand].transform.LookAt(GetComponent<Character_Aimer>().GetAimTarget());
+
+                //disable physics for weapon when in hand
+                m_currentWeapons[(int)hand].SetPhysicsActive(false);
+
+                return true;
+            }
         }
+
+        return false;
     }
 
     public void DetachWeaponFromHand(in EPlayerHand hand)

@@ -4,11 +4,26 @@ using UnityEngine;
 
 public class Hitbox : MonoBehaviour
 {
+    [SerializeField] private List<string> m_collidingTags = new List<string>();
     private List<GameObject> m_collidingObjects = new List<GameObject>();
+
+    private bool DoesColliderHasTags(in Collider col)
+    {
+        bool hasTag = false;
+        foreach(string tg in m_collidingTags)
+        {
+            if(col.CompareTag(tg))
+            {
+                hasTag = true;
+            }
+        }
+
+        return hasTag;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Character"))
+        if(DoesColliderHasTags(other))
         {
             m_collidingObjects.Add(other.gameObject);
         }
@@ -16,7 +31,7 @@ public class Hitbox : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Character"))
+        if(DoesColliderHasTags(other))
         {
             m_collidingObjects.Remove(other.gameObject);
         }
@@ -35,5 +50,15 @@ public class Hitbox : MonoBehaviour
     public List<GameObject> GetAllGameObjectsCollided()
     {
         return m_collidingObjects;
+    }
+
+    public bool IsColliding()
+    {
+        return m_collidingObjects.Count > 0;
+    }
+
+    public void ClearCollidingObjects()
+    {
+        m_collidingObjects.Clear();
     }
 }

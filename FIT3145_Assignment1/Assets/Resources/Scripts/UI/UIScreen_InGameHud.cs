@@ -31,6 +31,15 @@ public class UIScreen_InGameHud : UIScreenBase
 
         UI_DisplayWeaponForHand(EPlayerHand.HAND_RIGHT);
         UI_DisplayWeaponForHand(EPlayerHand.HAND_LEFT);
+        UI_DisplayPickupable();
+    }
+
+    private void UI_DisplayPickupable()
+    {
+        if (m_player.IsItemNearby())
+        {
+            GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Pick Nearby Item By Pressing 'E'");
+        }
     }
 
     private void UI_DisplayWeaponForHand(in EPlayerHand hand)
@@ -42,7 +51,7 @@ public class UIScreen_InGameHud : UIScreenBase
         Weapon_Base weapon = m_player.m_playerWeaponHolder.GetWeaponInHand(hand);
         if (weapon)
         {
-            weaponDisplay = weapon.GetWeaponName();
+            weaponDisplay = weapon.GetItemName();
             if (weapon.GetWeaponType() == EWeaponType.RANGED)
             {
                 if (((Weapon_Ranged)weapon).IsReloading())

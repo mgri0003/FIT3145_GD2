@@ -33,6 +33,12 @@ public class Player_Controller : MonoBehaviour
                 m_player.m_playerWeaponHolder.ReloadRangedWeapons();
             }
 
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                //Reload
+                m_player.PickupNearbyItems();
+            }
+
             m_player.SetMovementValues(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             m_player.m_playerRotator.AddDesiredRotation(Input.GetAxis("Mouse X"));
             Camera_Main.GetMainCamera().MinusCurrentRotationY(Input.GetAxis("Mouse Y"));

@@ -16,10 +16,9 @@ public enum EWeaponStat
     MAX
 }
 
-public abstract class Weapon_Base : MonoBehaviour
+public abstract class Weapon_Base : Item
 {
     //--Variables--
-    [SerializeField] private string m_name = "Default_Weapon";
     [SerializeField] protected Stat[] m_weaponBaseStats = new Stat[(int)EWeaponStat.MAX];
     [SerializeField] private EWeaponType m_weaponType = EWeaponType.NONE;
 
@@ -30,7 +29,6 @@ public abstract class Weapon_Base : MonoBehaviour
     public abstract bool Use();
 
     //Getters
-    public string GetWeaponName() { return m_name; }
     public EWeaponType GetWeaponType() { return m_weaponType; }
     public ref Stat AccessWeaponStat(int statIndex)
     {

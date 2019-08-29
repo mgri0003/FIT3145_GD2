@@ -48,6 +48,24 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
             }
         }
         m_currentUIScreen = screenToEnable;
+
+        //disable Cursor Visibilty & Lock State based on screen
+        switch(m_currentUIScreen)
+        {
+            case EUIScreen.INGAMEHUD:
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            break;
+
+            default:
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            break;
+        }
     }
 
     private void DisableAllScreens()

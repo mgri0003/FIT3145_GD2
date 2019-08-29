@@ -12,9 +12,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
     //Spawnables (Do not change values in these objects)
     [SerializeField] private GameObject m_spawnable_mainPlayer = null;
     [SerializeField] private GameObject m_spawnable_enemy = null;
+    [SerializeField] private GameObject m_spawnable_inventoryZone = null;
 
     //InGame GameObjects
     private GameObject m_current_mainPlayer;
+    private GameObject m_current_inventoryZone;
 
 
     //--Methods--//
@@ -22,11 +24,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Start is called before the first frame update
     void Start()
     {
-        //debug call as GamePlayManager would of already been created in a previous scene :P
-        if (SceneManager.GetActiveScene().name == "Game")
-        {
-            SetupInGame();
-        }
+        Debug.Assert(m_spawnable_mainPlayer, "Main Player Is Null");
+        Debug.Assert(m_spawnable_enemy, "Enemy Is Null");
+        Debug.Assert(m_spawnable_inventoryZone, "Inventory Zone Is Null");
     }
 
     // Update is called once per frame
@@ -53,6 +53,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void SetupInGame()
     {
+        SpawnInventoryZone();
         SetupSpawnPoints();
         SpawnPlayer();
         SpawnEnemy();
@@ -117,5 +118,16 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public Player_Core GetCurrentPlayer()
     {
         return m_current_mainPlayer.GetComponent<Player_Core>();
+    }
+
+    public void SpawnInventoryZone()
+    {
+        m_current_inventoryZone = Instantiate(m_spawnable_inventoryZone, new Vector3(0, 1000 ,0), Quaternion.Euler(0, 0, 0));
+    }
+
+    public Vector3 GetInventoryZonePosition()
+    {
+        Debug.Assert(m_current_inventoryZone, "Inventory Zone not created!?!?!");
+        return m_current_inventoryZone.transform.position;
     }
 }

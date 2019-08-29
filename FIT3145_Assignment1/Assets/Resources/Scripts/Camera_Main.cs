@@ -55,10 +55,6 @@ public class Camera_Main : MonoBehaviour
         Debug.Assert(m_cameraHolder != null, "Camera Holder Is Null");
         Debug.Assert(m_aimTarget != null, "Aim Target Is NULL?!?!?");
 
-        //hide n lock da mouse (debug stoof)(will need to be somewhere else probs)
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-
         RefreshCameraViewMode();
     }
 
