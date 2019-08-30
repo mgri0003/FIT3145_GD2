@@ -6,13 +6,22 @@ public class WeaponsRepo : Singleton<WeaponsRepo>
 {
     private static List<GameObject> m_weapons = new List<GameObject>();
     private static List<GameObject> m_projectiles = new List<GameObject>();
+    bool m_loadedContent = false;
 
-    private void Start()
+    public void LoadAllContent()
     {
-        LoadAllWeapons();
-        LoadAllProjectiles();
+        if(!IsContentLoaded())
+        {
+            m_loadedContent = true;
+            LoadAllWeapons();
+            LoadAllProjectiles();
+        }
     }
 
+    public bool IsContentLoaded()
+    {
+        return m_loadedContent;
+    }
 
     //==============WEAPON==============//
 

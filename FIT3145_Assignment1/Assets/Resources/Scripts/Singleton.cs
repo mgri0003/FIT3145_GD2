@@ -23,6 +23,17 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        Object[] objs = FindObjectsOfType(typeof(T));
+        if(objs.Length > 1)
+        {
+            //Debug.Log("Singleton Destroyed (one already exists)");
+            Destroy(gameObject);
+        }
+        else
+        {
+            DontDestroyOnLoad(gameObject);
+            //Debug.Log("Singleton Awake()");
+        }
+
     }
 }

@@ -78,4 +78,10 @@ public class Enemy_Core : Character_Core
     {
         return Vector3.Distance(transform.position, m_targetCharacter.transform.position) < m_minDistanceToAttack;
     }
+
+    protected override void Die()
+    {
+        gameObject.SetActive(false);
+        base.Die();
+    }
 }

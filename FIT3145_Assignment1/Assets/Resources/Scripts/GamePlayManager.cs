@@ -48,19 +48,25 @@ public class GamePlayManager : Singleton<GamePlayManager>
                     UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.DEBUGMENU);
                 }
             }
+
+            if(m_current_mainPlayer.GetComponent<Player_Core>().IsDead())
+            {
+                EndGame();
+            }
         }
     }
 
-    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public void OnSceneLoadedToGameplay(Scene scene, LoadSceneMode mode)
     {
         GamePlayManager.Instance.SetupInGame();
-        SceneManager.sceneLoaded -= GamePlayManager.Instance.OnSceneLoaded;
+        SceneManager.sceneLoaded -= GamePlayManager.Instance.OnSceneLoadedToGameplay;
     }
 
     public void SetupInGame()
     {
         m_gameplayActive = true;
 
+        WeaponsRepo.Instance.LoadAllContent();
         SpawnInventoryZone();
         SetupSpawnPoints();
         SpawnPlayer();
@@ -74,6 +80,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public void EndGame()
     {
         m_gameplayActive = false;
+        SceneManager.LoadScene("MainMenu");
+        m_current_mainPlayer = null;
+        m_current_inventoryZone = null;
+        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.MAINMENU);
     }
 
     public bool IsGameplayActive()
