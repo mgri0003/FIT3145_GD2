@@ -23,7 +23,7 @@ public struct Stat
     }
     public void SetMax(float value)
     {
-        value = Mathf.Clamp(value, 0 /*GetMin()*/, value);
+        value = Mathf.Clamp(value, -1 /*GetMin()*/, value);
         m_max = value;
     }
     //public void SetMin(float value)
@@ -31,7 +31,6 @@ public struct Stat
     //    value = Mathf.Clamp(value, 0, GetMax());
     //    m_min = value;
     //}
-
 
     //Adders
     public void AddCurrent(float value) { SetCurrent(value + GetCurrent()); }

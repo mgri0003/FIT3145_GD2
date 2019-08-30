@@ -27,7 +27,7 @@ public class UIScreen_InGameHud : UIScreenBase
 
     protected override void OnGUI()
     {
-        GUI.Box(new Rect(0, 0, 100, 30), "Health: " + m_player.m_characterStats.GetHealth());
+        GUI.Box(new Rect(0, 0, 100, 30), "Health: " + m_player.m_characterStats.AccessHealthStat().GetCurrent());
 
         UI_DisplayWeaponForHand(EPlayerHand.HAND_RIGHT);
         UI_DisplayWeaponForHand(EPlayerHand.HAND_LEFT);

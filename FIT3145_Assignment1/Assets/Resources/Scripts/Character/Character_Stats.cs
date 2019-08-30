@@ -5,25 +5,23 @@ using UnityEngine;
 public class Character_Stats : MonoBehaviour
 {
     private const float m_MAXHEALTH = 100;
-    [SerializeField] private float m_health = m_MAXHEALTH;
+    private const float m_BASEMOVEMENTSPEED = 0.05f;
+    [SerializeField] private Stat m_health;
+    [SerializeField] private Stat m_movementSpeed;
 
-    [SerializeField] private float m_movementSpeed = 0.05f;
+    Character_Stats()
+    {
+        InitStats();
+    }
+
+    private void InitStats()
+    {
+        m_health.SetAll("Health", m_MAXHEALTH, m_MAXHEALTH);
+        m_movementSpeed.SetAll("Movement Speed", m_BASEMOVEMENTSPEED, -1);
+    }
 
     //Health
-    public float GetHealth() { return m_health; }
-    public void SetHealth(float newVal)
-    {
-        m_health = newVal;
-        m_health = Mathf.Clamp(m_health, 0, m_MAXHEALTH);
-    }
-    public void AddHealth(float newVal) { SetHealth(GetHealth() + newVal); }
-
-    //Movement Speed
-    public float GetMovementSpeed() { return m_movementSpeed; }
-    public void SetMovementSpeed(float newVal)
-    {
-        m_movementSpeed = newVal;
-    }
-    public void AddMovementSpeed(float newVal) { SetMovementSpeed(GetMovementSpeed() + newVal); }
+    public ref Stat AccessHealthStat() { return ref m_health; }
+    public ref Stat AccessMovementSpeedStat() { return ref m_movementSpeed; }
 
 }

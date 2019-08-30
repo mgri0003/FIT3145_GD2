@@ -37,7 +37,7 @@ public abstract class Character_Core : MonoBehaviour
     public void MoveCharacter(Vector3 dir, Space spaceType)
     {
         dir.Normalize();
-        transform.Translate(dir * m_characterStats.GetMovementSpeed(), spaceType);
+        transform.Translate(dir * m_characterStats.AccessMovementSpeedStat().GetCurrent(), spaceType);
     }
 
     public void ReceiveHit(float damage)
@@ -46,9 +46,9 @@ public abstract class Character_Core : MonoBehaviour
         if(!IsDead())
         {
             //deal damage to health
-            m_characterStats.AddHealth(-damage);
+            m_characterStats.AccessHealthStat().AddCurrent(-damage);
 
-            if (m_characterStats.GetHealth() == 0)
+            if (m_characterStats.AccessHealthStat().GetCurrent() == 0)
             {
                 Die();
             }
@@ -68,7 +68,7 @@ public abstract class Character_Core : MonoBehaviour
 
     public bool IsDead()
     {
-        return (m_characterStats.GetHealth() == 0);
+        return (m_characterStats.AccessHealthStat().GetCurrent() == 0);
     }
 
     protected abstract void SendMeleeAttack(in int AE_handIndex);
