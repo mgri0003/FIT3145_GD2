@@ -167,6 +167,7 @@ public class Player_Core : Character_Core
         {
             //add items to inventory
             m_playerInventory.AddItemsToInventory(m_playerItemPickupArea.GetAllGameObjectsCollided());
+            m_playerItemPickupArea.ClearCollidingObjects();
         }
     }
 }

@@ -13,7 +13,7 @@ public class Player_Inventory : MonoBehaviour
         return ref m_inventory;
     }
 
-    public void AddItemToInventory(GameObject newItem, bool forceClearColliding = true)
+    public void AddItemToInventory(GameObject newItem)
     {
         m_inventory.Add(newItem);
 
@@ -21,23 +21,18 @@ public class Player_Inventory : MonoBehaviour
         newItem.transform.position = GamePlayManager.Instance.GetInventoryZonePosition() + new Vector3(0, 5, 0);
 
         //disable item physics
-        if (newItem.GetComponent<Weapon_Base>())
+        if (newItem.GetComponent<Item>())
         {
-            newItem.GetComponent<Weapon_Base>().SetPhysicsActive(false);
-        }
-
-        if(forceClearColliding)
-        {
-            GetComponent<Player_Core>().m_playerItemPickupArea.ClearCollidingObjects();
+            newItem.GetComponent<Item>().SetPhysicsActive(false);
         }
     }
 
-    public void AddItemsToInventory(List<GameObject> newItems, bool forceClearColliding = true)
+    public void AddItemsToInventory(List<GameObject> newItems)
     {
         //move newly picked up items to inventory zone
-        foreach (GameObject go in m_inventory)
+        for(int i = 0; i < newItems.Count; ++i)
         {
-            AddItemToInventory(go, forceClearColliding);
+            AddItemToInventory(newItems[i]);
         }
     }
 

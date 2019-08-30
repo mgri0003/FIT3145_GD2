@@ -23,7 +23,7 @@ public class UIScreen_DebugMenu : UIScreenBase
         UI_DisplayHands();
     }
 
-    public void UI_DisplayHands()
+    private void UI_DisplayHands()
     {
         for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
         {
@@ -40,30 +40,37 @@ public class UIScreen_DebugMenu : UIScreenBase
                 if(GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.IsHoldingWeaponInHand((EPlayerHand)i))
                 {
                     GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.DetachWeaponFromHand((EPlayerHand)i);
-                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AddItemToInventory(weapon.gameObject, false);
+                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AddItemToInventory(weapon.gameObject);
                 }
             }
         }
+    }
+
+    private bool UI_DisplayInventoryElement(in GameObject item, in float x, in float y)
+    {
+        if (GUI.Button(new Rect(x, y, 200, 60), item.GetComponent<Item>().GetItemName()))
+        {
+            if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, item.GetComponent<Weapon_Base>()))
+            {
+                GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(item);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void UI_DisplayInventory()
     {
-        int i = 0;
-        foreach (GameObject go in GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AccessInventoryList())
+        List<GameObject> items = GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AccessInventoryList();
+
+        for (int i = 0; i < items.Count; ++i)
         {
-            if(GUI.Button(new Rect(Screen.width - 300, 100 + (i * 60), 200, 60), go.GetComponent<Item>().GetItemName()))
-            {
-                if(GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, go.GetComponent<Weapon_Base>()))
-                {
-                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(go);
-                }
-                break;
-            }
-            ++i;
+            UI_DisplayInventoryElement(items[i], Screen.width - 300, 100 + (i * 60));
         }
     }
 
-    public void DEBUG_UI_DisplaySpawnOptions()
+    private void DEBUG_UI_DisplaySpawnOptions()
     {
         if (GUI.Button(new Rect(100, 50, 250, 40), "Spawn Melee Weapon In Left Hand"))
         {
