@@ -7,7 +7,7 @@ public class Weapon_Melee : Weapon_Base
     //--Methods--
     Weapon_Melee()
     {
-        InitWeaponStats();
+        Constructor_InitWeaponStats();
     }
 
     public override bool Use()

@@ -48,12 +48,22 @@ public class UIScreen_DebugMenu : UIScreenBase
 
     private bool UI_DisplayInventoryElement(in GameObject item, in float x, in float y)
     {
-        if (GUI.Button(new Rect(x, y, 200, 60), item.GetComponent<Item>().GetItemName()))
+        const float width = 250;
+        const float height = 60;
+
+        //display item
+        GUI.Box(new Rect(x, y, width, height), item.GetComponent<Item>().GetItemName());
+
+        //display Hand equips
+        for (int i = 0; i < (int)EPlayerHand.MAX; ++i)
         {
-            if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, item.GetComponent<Weapon_Base>()))
+            if (GUI.Button(new Rect((x + width/2) - (width/2 * i), y + (height/2), width/2, height/2), ((EPlayerHand)i) == EPlayerHand.HAND_RIGHT ? "Equip Right Hand" : "Equip Left Hand"))
             {
-                GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(item);
-                return true;
+                if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(((EPlayerHand)i), item.GetComponent<Weapon_Base>()))
+                {
+                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(item);
+                    return true;
+                }
             }
         }
 

@@ -33,7 +33,7 @@ public abstract class Weapon_Base : Item
         return ref m_weaponBaseStats[statIndex];
     }
 
-    protected virtual void InitWeaponStats()
+    protected virtual void Constructor_InitWeaponStats()
     {
         m_weaponBaseStats[(int)EWeaponStat.DAMAGE].SetNameAndDefaultParams("Damage");
     }

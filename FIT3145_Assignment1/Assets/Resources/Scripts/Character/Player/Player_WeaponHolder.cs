@@ -36,6 +36,8 @@ public class Player_WeaponHolder : MonoBehaviour
         //Setup Hand Bones
         m_handTransforms[(int)EPlayerHand.HAND_RIGHT] = GetComponent<Player_Core>().m_animator.GetBoneTransform(HumanBodyBones.RightHand);
         m_handTransforms[(int)EPlayerHand.HAND_LEFT] = GetComponent<Player_Core>().m_animator.GetBoneTransform(HumanBodyBones.LeftHand);
+        Debug.Assert(m_handTransforms[(int)EPlayerHand.HAND_RIGHT], "Missing Right Hand Bone!!?!?");
+        Debug.Assert(m_handTransforms[(int)EPlayerHand.HAND_LEFT], "Missing Left Hand Bone!!?!?");
     }
 
     public void UpdateRangedWeaponAim()

@@ -9,7 +9,7 @@ public struct Stat
     public string GetName() { return m_name; }
     public float GetCurrent() { return m_current; }
     public float GetMax() { return m_max; }
-    public float GetMin() { return m_min; }
+    //public float GetMin() { return m_min; }
 
     //Setters
     public void SetName(string newName)
@@ -18,35 +18,37 @@ public struct Stat
     }
     public void SetCurrent(float value)
     {
-        value = Mathf.Clamp(value, GetMin(), GetMax() != -1 ? GetMax() : value);
+        value = Mathf.Clamp(value, 0 /*GetMin()*/, GetMax() != -1 ? GetMax() : value);
         m_current = value;
     }
     public void SetMax(float value)
     {
+        value = Mathf.Clamp(value, 0 /*GetMin()*/, value);
         m_max = value;
     }
-    public void SetMin(float value)
-    {
-        m_min = value;
-    }
+    //public void SetMin(float value)
+    //{
+    //    value = Mathf.Clamp(value, 0, GetMax());
+    //    m_min = value;
+    //}
 
 
     //Adders
     public void AddCurrent(float value) { SetCurrent(value + GetCurrent()); }
     public void AddMax(float value) { SetMax(value + GetMax()); }
-    public void AddMin(float value) { SetMin(value + GetMin()); }
+    //public void AddMin(float value) { SetMin(value + GetMin()); }
 
     //Other
-    public void SetAll(string name, float current, float max, float min)
+    public void SetAll(string name, float current, float max/*, float min*/)
     {
         SetName(name);
         SetMax(max);
-        SetMin(min);
+        //SetMin(min);
         SetCurrent(current);
     }
     public void SetNameAndDefaultParams(string name)
     {
-        SetAll(name, 0, -1, 0);
+        SetAll(name, 0, -1);
     }
     public void ResetCurrent()
     {
@@ -56,13 +58,15 @@ public struct Stat
         }
         else
         {
-            SetCurrent(GetMin());
+            SetCurrent(0/*GetMin()*/);
         }
     }
 
     //--Variables--//
+    private string m_name;
     [SerializeField] private float m_current;
     [SerializeField] private float m_max;
-    [SerializeField] private float m_min;
-    [SerializeField] private string m_name;
+    //[SerializeField] private float m_min;
+
+
 }

@@ -18,6 +18,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
     private GameObject m_current_mainPlayer;
     private GameObject m_current_inventoryZone;
 
+    //states
+    private bool m_gameplayActive = false;
+
 
     //--Methods--//
 
@@ -32,15 +35,18 @@ public class GamePlayManager : Singleton<GamePlayManager>
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.X))
+        if(IsGameplayActive())
         {
-            if(UIScreen_Manager.Instance.GetCurrentUIScreen() == EUIScreen.DEBUGMENU)
+            if (Input.GetKeyDown(KeyCode.X))
             {
-                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAMEHUD);
-            }
-            else
-            {
-                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.DEBUGMENU);
+                if (UIScreen_Manager.Instance.GetCurrentUIScreen() == EUIScreen.DEBUGMENU)
+                {
+                    UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAMEHUD);
+                }
+                else
+                {
+                    UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.DEBUGMENU);
+                }
             }
         }
     }
@@ -53,6 +59,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void SetupInGame()
     {
+        m_gameplayActive = true;
+
         SpawnInventoryZone();
         SetupSpawnPoints();
         SpawnPlayer();
@@ -61,6 +69,16 @@ public class GamePlayManager : Singleton<GamePlayManager>
         UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAMEHUD);
 
         m_current_mainPlayer.GetComponent<Player_Controller>().SetEnableInput(true);
+    }
+
+    public void EndGame()
+    {
+        m_gameplayActive = false;
+    }
+
+    public bool IsGameplayActive()
+    {
+        return m_gameplayActive;
     }
 
     void SpawnPlayer()

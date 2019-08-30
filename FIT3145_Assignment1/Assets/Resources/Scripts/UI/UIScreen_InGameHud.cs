@@ -60,7 +60,7 @@ public class UIScreen_InGameHud : UIScreenBase
                 }
                 else
                 {
-                    weaponDisplay += "| Ammo(" + ((Weapon_Ranged)weapon).AccessWeaponStat((int)EWeaponStat_Ranged.AMMO).GetCurrent() + ")";
+                    weaponDisplay += "| Ammo(" + ((Weapon_Ranged)weapon).GetCurrentAmmo() + ")";
                 }
             }
         }
