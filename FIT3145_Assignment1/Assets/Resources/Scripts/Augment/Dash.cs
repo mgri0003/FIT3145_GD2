@@ -7,9 +7,15 @@ public class Dash : Augment
     private Vector3 m_dashValue = new Vector3(0, 0, 0);
     private const float m_dashStrength = 10;
 
-    protected override void AugmentAbility()
+    protected override bool AugmentAbility()
     {
-        m_dashValue = m_player.GetDirectionInput().normalized;
+        if (m_player.GetDirectionInput().magnitude != 0)
+        {
+            m_dashValue = m_player.GetDirectionInput().normalized;
+            return true;
+        }
+
+        return false;
     }
 
     protected override void AugmentUpdate()

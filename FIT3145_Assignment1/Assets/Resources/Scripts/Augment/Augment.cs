@@ -28,12 +28,14 @@ public abstract class Augment : Item
     {
         if(m_cooldown == 0)
         {
-            m_cooldown = m_maxCooldown;
-            AugmentAbility();
+            if(AugmentAbility())
+            {
+                m_cooldown = m_maxCooldown;
+            }
         }
     }
     protected abstract void AugmentUpdate();
-    protected abstract void AugmentAbility();
+    protected abstract bool AugmentAbility();
     public void SetPlayer(Player_Core player) { m_player = player; }
     public float GetCooldown() { return m_cooldown; }
 }
