@@ -35,7 +35,7 @@ public class Hitbox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(DoesColliderHasTags(other))
+        if(DoesColliderHasTags(other) || m_collidingTags.Count == 0)
         {
             m_collidingObjects.Add(other.gameObject);
         }
@@ -43,7 +43,7 @@ public class Hitbox : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (DoesColliderHasTags(other))
+        if (DoesColliderHasTags(other) || m_collidingTags.Count == 0)
         {
             m_collidingObjects.Remove(other.gameObject);
         }

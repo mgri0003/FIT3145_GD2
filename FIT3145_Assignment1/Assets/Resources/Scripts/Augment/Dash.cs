@@ -5,7 +5,7 @@ using UnityEngine;
 public class Dash : Augment
 {
     private Vector3 m_dashValue = new Vector3(0, 0, 0);
-    private const float m_dashStrength = 10;
+    private const float m_dashStrength = 16;
 
     protected override bool AugmentAbility()
     {

@@ -14,7 +14,7 @@ public class Camera_Main : MonoBehaviour
     };
 
     public const int CAMERA_RANGE_MAX = 40;
-    public const int CAMERA_RANGE_MIN = -15;
+    public const int CAMERA_RANGE_MIN = -45;
 
 
     //--variables--

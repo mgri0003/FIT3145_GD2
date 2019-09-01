@@ -76,7 +76,6 @@ public class Weapon_Projectile : MonoBehaviour
                 if (go.tag == "Character")
                 {
                     go.GetComponent<Character_Core>().ReceiveHit(m_damage, m_projectileEffects);
-
                     DestroySelf();
                     break;
                 }

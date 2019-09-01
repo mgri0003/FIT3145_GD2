@@ -18,7 +18,7 @@ public class UIScreen_DebugMenu : UIScreenBase
 
     protected override void OnGUI()
     {
-        DEBUG_UI_DisplaySpawnOptions();
+        //DEBUG_UI_DisplaySpawnOptions();
         UI_DisplayInventory();
         UI_DisplayHands();
     }
