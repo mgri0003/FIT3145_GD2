@@ -32,7 +32,12 @@ public struct UpgradePath
         if (CanUpgrade())
         {
             UpgradeSegment miniUpgrade = m_upgradesSegments[m_currentUpgradeIndex];
-            m_parentWeapon.AccessWeaponStat(miniUpgrade.StatToImprove).AddCurrent(miniUpgrade.Value);
+
+            if(miniUpgrade.StatToImprove != EWeaponStat.MAX)
+            {
+                m_parentWeapon.AccessWeaponStat(miniUpgrade.StatToImprove).AddCurrent(miniUpgrade.Value);
+            }
+
             if(miniUpgrade.SlotUnlock)
             {
                 m_parentWeapon.IncreaseUpgradeLimit();

@@ -29,6 +29,8 @@ public abstract class Weapon_Base : Item
     [SerializeField] private UpgradePath m_upgradePath;
     protected List<Upgrade> m_currentUpgrades = new List<Upgrade>();
     private uint m_upgradeLimit = 1;
+    private const uint m_totalUpgradeLimit = 3;
+    [SerializeField] private Transform[] m_upgradeVisualLocations = new Transform[m_totalUpgradeLimit];
 
     //--methods--
     protected Weapon_Base()
@@ -73,13 +75,21 @@ public abstract class Weapon_Base : Item
 
     public void AddUpgrade(Upgrade newUpgrade)
     {
-        m_currentUpgrades.Add(newUpgrade);
-        newUpgrade.SetParentWeapon(this);
-        newUpgrade.OnUpgradeAttached();
+        if(CanAddUpgrade())
+        {
+            m_currentUpgrades.Add(newUpgrade);
+            newUpgrade.SetParentWeapon(this);
+            newUpgrade.OnUpgradeAttached();
+
+            newUpgrade.transform.parent = transform;
+            newUpgrade.transform.localPosition = m_upgradeVisualLocations[m_currentUpgrades.Count - 1].localPosition;
+            newUpgrade.transform.rotation = transform.rotation;
+        }
     }
     public void RemoveUpgrade(Upgrade upgradeToRemove)
     {
         m_currentUpgrades.Remove(upgradeToRemove);
+        upgradeToRemove.transform.parent = null;
     }
 
     public List<Effect> GetOnHitEffectsFromUpgrades()
