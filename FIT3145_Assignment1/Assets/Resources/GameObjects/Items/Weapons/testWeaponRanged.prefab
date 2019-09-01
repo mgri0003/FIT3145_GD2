@@ -80,23 +80,46 @@ MonoBehaviour:
   m_physicsRigidbody: {fileID: 1295313564781236068}
   m_physicsCollider: {fileID: 5961892357635601912}
   m_name: Test Ranged Weapon
-  m_weaponBaseStats:
-  - m_name: Damage
-    m_current: 10
+  m_itemType: 0
+  m_weaponStats:
+  - m_current: 10
     m_max: -1
-  - m_name: Projectile Speed
-    m_current: 10
+  - m_current: 8
     m_max: -1
-  - m_name: Clip Size
-    m_current: 5
+  - m_current: 5
     m_max: -1
-  - m_name: Reload Time
-    m_current: 1
+  - m_current: 1
     m_max: -1
-  - m_name: Fire Rate
-    m_current: 0.3
+  - m_current: 0.3
     m_max: -1
   m_weaponType: 1
+  m_upgradePath:
+    m_upgradesSegments:
+    - StatToImprove: 2
+      Value: 2
+      ScrapCost: 10
+      SlotUnlock: 0
+    - StatToImprove: 0
+      Value: 5
+      ScrapCost: 20
+      SlotUnlock: 0
+    - StatToImprove: 2
+      Value: 3
+      ScrapCost: 40
+      SlotUnlock: 0
+    - StatToImprove: 4
+      Value: -0.1
+      ScrapCost: 60
+      SlotUnlock: 0
+    - StatToImprove: 0
+      Value: 10
+      ScrapCost: 80
+      SlotUnlock: 0
+    - StatToImprove: 5
+      Value: 0
+      ScrapCost: 200
+      SlotUnlock: 1
+  m_currentUpgrades: []
   m_projectile: {fileID: 604645328828819334, guid: 66a13259f93288a4e8682c05d9763072,
     type: 3}
   m_firingTransform: {fileID: 9044369817375108693}

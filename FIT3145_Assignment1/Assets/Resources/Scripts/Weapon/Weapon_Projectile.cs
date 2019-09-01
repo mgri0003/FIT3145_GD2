@@ -12,6 +12,7 @@ public class Weapon_Projectile : MonoBehaviour
     private const float PROJECTILE_LIFETIME = 5;
     private float m_currentLifeTime = PROJECTILE_LIFETIME;
     [SerializeField] private Hitbox m_hitbox = null;
+    private List<Effect> m_projectileEffects = new List<Effect>();
 
     //--Methods--
 
@@ -23,10 +24,19 @@ public class Weapon_Projectile : MonoBehaviour
         m_hasInit = true;
     }
 
+    public void AddProjectileEffect(Effect projEffect)
+    {
+        m_projectileEffects.Add(projEffect);
+    }
+    public void AddProjectileEffects(List<Effect> projEffects)
+    {
+        m_projectileEffects.AddRange(projEffects);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Assert(m_hasInit, "Projectile Not Initialsed!!!");
+        Debug.Assert(m_hasInit, "Projectile Not Initialised!!!");
         Debug.Assert(m_hitbox, "Projectile Hitbox unassigned!?!?/");
     }
 
@@ -65,8 +75,7 @@ public class Weapon_Projectile : MonoBehaviour
             {
                 if (go.tag == "Character")
                 {
-                    //boop em forward
-                    go.GetComponent<Character_Core>().ReceiveHit(m_damage);
+                    go.GetComponent<Character_Core>().ReceiveHit(m_damage, m_projectileEffects);
 
                     DestroySelf();
                     break;

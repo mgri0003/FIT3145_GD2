@@ -2,16 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EWeaponStat_Ranged
-{
-    PROJECTILE_SPEED = EWeaponStat.MAX,
-    CLIP_SIZE,
-    RELOAD_TIME,
-    FIRE_RATE_COOLDOWN,
-
-    MAX
-}
-
 public class Weapon_Ranged : Weapon_Base
 {
     //--Variables--
@@ -25,20 +15,6 @@ public class Weapon_Ranged : Weapon_Base
     float m_currentFireRateCooldown = 0;
 
     //--Methods--
-    Weapon_Ranged()
-    {
-        m_weaponBaseStats = new Stat[(int)EWeaponStat_Ranged.MAX];
-        Constructor_InitWeaponStats();
-    }
-
-    protected override void Constructor_InitWeaponStats()
-    {
-        base.Constructor_InitWeaponStats();
-        m_weaponBaseStats[(int)EWeaponStat_Ranged.PROJECTILE_SPEED].SetNameAndDefaultParams("Projectile Speed");
-        m_weaponBaseStats[(int)EWeaponStat_Ranged.CLIP_SIZE].SetNameAndDefaultParams("Clip Size");
-        m_weaponBaseStats[(int)EWeaponStat_Ranged.RELOAD_TIME].SetNameAndDefaultParams("Reload Time");
-        m_weaponBaseStats[(int)EWeaponStat_Ranged.FIRE_RATE_COOLDOWN].SetNameAndDefaultParams("Fire Rate");
-    }
 
     public override bool Use()
     {
@@ -67,9 +43,10 @@ public class Weapon_Ranged : Weapon_Base
                 Debug.Assert(projectile, "Projectile Objects Does not have projectile Component???");
                 if (projectile)
                 {
-                    //initialse the projectile (and off it goes!)
+                    //initialise the projectile (and off it goes!)
                     Vector3 firingDir = m_lookAtPos - m_firingTransform.position;
-                    projectile.Init(AccessWeaponStat((int)EWeaponStat.DAMAGE).GetCurrent(), AccessWeaponStat((int)EWeaponStat_Ranged.PROJECTILE_SPEED).GetCurrent(), firingDir.normalized);
+                    projectile.Init(AccessWeaponStat((int)EWeaponStat.ALL_DAMAGE).GetCurrent(), AccessWeaponStat(EWeaponStat.RANGED_PROJECTILE_SPEED).GetCurrent(), firingDir.normalized);
+                    projectile.AddProjectileEffects(GetOnHitEffectsFromUpgrades());
                 }
             }
         }
@@ -80,7 +57,7 @@ public class Weapon_Ranged : Weapon_Base
 
     void Start()
     {
-        m_currentAmmo = (uint)AccessWeaponStat((int)EWeaponStat_Ranged.CLIP_SIZE).GetCurrent();
+        m_currentAmmo = (uint)AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent();
     }
 
     void Update()
@@ -105,7 +82,7 @@ public class Weapon_Ranged : Weapon_Base
         if(!IsReloading())
         {
             //Start reloading!
-            m_currentReloadTime = AccessWeaponStat((int)EWeaponStat_Ranged.RELOAD_TIME).GetCurrent();
+            m_currentReloadTime = AccessWeaponStat(EWeaponStat.RANGED_RELOAD_TIME).GetCurrent();
         }
     }
 
@@ -114,13 +91,13 @@ public class Weapon_Ranged : Weapon_Base
         if (IsReloading())
         {
             m_currentReloadTime -= Time.deltaTime;
-            m_currentReloadTime = Mathf.Clamp(m_currentReloadTime, 0, AccessWeaponStat((int)EWeaponStat_Ranged.RELOAD_TIME).GetCurrent());
+            m_currentReloadTime = Mathf.Clamp(m_currentReloadTime, 0, AccessWeaponStat(EWeaponStat.RANGED_RELOAD_TIME).GetCurrent());
 
             if (m_currentReloadTime == 0)
             {
                 //reload complete
                 //reset ammo back to full
-                m_currentAmmo = (uint)AccessWeaponStat((int)EWeaponStat_Ranged.CLIP_SIZE).GetCurrent();
+                m_currentAmmo = (uint)AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent();
 
                 //set reload time to complete (-1)
                 m_currentReloadTime = -1;
@@ -138,7 +115,7 @@ public class Weapon_Ranged : Weapon_Base
         if(!IsFireRateCooldownComplete())
         {
             m_currentFireRateCooldown -= Time.deltaTime;
-            m_currentFireRateCooldown = Mathf.Clamp(m_currentFireRateCooldown, 0, AccessWeaponStat((int)EWeaponStat_Ranged.FIRE_RATE_COOLDOWN).GetCurrent());
+            m_currentFireRateCooldown = Mathf.Clamp(m_currentFireRateCooldown, 0, AccessWeaponStat(EWeaponStat.RANGED_FIRE_RATE_COOLDOWN).GetCurrent());
         }
     }
 
@@ -149,7 +126,7 @@ public class Weapon_Ranged : Weapon_Base
 
     protected void ResetFireRateCooldown()
     {
-        m_currentFireRateCooldown = AccessWeaponStat((int)EWeaponStat_Ranged.FIRE_RATE_COOLDOWN).GetCurrent();
+        m_currentFireRateCooldown = AccessWeaponStat(EWeaponStat.RANGED_FIRE_RATE_COOLDOWN).GetCurrent();
     }
 
     public uint GetCurrentAmmo()

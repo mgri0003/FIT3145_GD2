@@ -46,6 +46,24 @@ public class UIScreen_DebugMenu : UIScreenBase
         }
     }
 
+    private void UI_DisplayInventoryElement_Upgrade(in Upgrade upgrade, in float x, in float y, float width, float height)
+    {
+        for (int i = 0; i < (int)EPlayerHand.MAX; ++i)
+        {
+            if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.IsHoldingWeaponInHand(((EPlayerHand)i)))
+            {
+                if(GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)i).CanAddUpgrade())
+                {
+                    if (GUI.Button(new Rect((x + width / 2) - (width / 2 * i), y + (height / 2), width / 2, height / 2), ((EPlayerHand)i) == EPlayerHand.HAND_RIGHT ? "Attach To R Weapon" : "Attach To L Weapon"))
+                    {
+                        GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)i).AddUpgrade(upgrade);
+                        GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(upgrade);
+                    }
+                }
+            }
+        }
+    }
+
     private void UI_DisplayInventoryElement_Augment(in Item item, in float x, in float y, float width, float height)
     {
         if (GUI.Button(new Rect(x, y + (height / 2), width, height / 2), "Equip to Spacebar"))
@@ -55,16 +73,20 @@ public class UIScreen_DebugMenu : UIScreenBase
         }
     }
 
-    private void UI_DisplayInventoryElement_Weapon(in Item item, in float x, in float y, float width, float height)
+    private void UI_DisplayInventoryElement_Weapon(in Weapon_Base weapon, in float x, in float y, float width, float height)
     {
         for (int i = 0; i < (int)EPlayerHand.MAX; ++i)
         {
             if (GUI.Button(new Rect((x + width / 2) - (width / 2 * i), y + (height / 2), width / 2, height / 2), ((EPlayerHand)i) == EPlayerHand.HAND_RIGHT ? "Equip Right Hand" : "Equip Left Hand"))
             {
-                if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(((EPlayerHand)i), item.GetComponent<Weapon_Base>()))
+                if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(((EPlayerHand)i), weapon))
                 {
-                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(item);
+                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(weapon);
                 }
+            }
+            if (GUI.Button(new Rect((x + width), y, 80, height), "Upgrade (" + weapon.GetUpgradePath().GetCurrentUpgradeIndex() + ")"))
+            {
+                weapon.UpgradeWeapon();
             }
         }
     }
@@ -80,9 +102,9 @@ public class UIScreen_DebugMenu : UIScreenBase
         //display Hand equips (For Weapons)
         switch(item.GetItemType())
         {
-            case EItemType.UPGRADE:
+            case EItemType.WEAPON:
             {
-                UI_DisplayInventoryElement_Weapon(item, x, y, width, height);
+                UI_DisplayInventoryElement_Weapon(item as Weapon_Base, x, y, width, height);
             }
             break;
             case EItemType.AUGMENT:
@@ -90,7 +112,11 @@ public class UIScreen_DebugMenu : UIScreenBase
                 UI_DisplayInventoryElement_Augment(item, x, y, width, height);
             }
             break;
-
+            case EItemType.UPGRADE:
+            {
+                UI_DisplayInventoryElement_Upgrade(item as Upgrade, x, y, width, height);
+            }
+            break;
         }
 
     }
@@ -101,7 +127,7 @@ public class UIScreen_DebugMenu : UIScreenBase
 
         for (int i = 0; i < items.Count; ++i)
         {
-            UI_DisplayInventoryElement(items[i], Screen.width - 300, 100 + (i * 60));
+            UI_DisplayInventoryElement(items[i], Screen.width - 400, 100 + (i * 60));
         }
     }
 

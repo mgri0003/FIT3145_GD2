@@ -5,18 +5,18 @@ using UnityEngine;
 public class Weapon_Melee : Weapon_Base
 {
     //--Methods--
-    Weapon_Melee()
-    {
-        Constructor_InitWeaponStats();
-    }
-
     public override bool Use()
     {
-        throw new System.NotImplementedException();
+        foreach (Upgrade up in m_currentUpgrades)
+        {
+            up.OnUpgradeWeaponUsed();
+        }
+
+        return true;
     }
 
     public void SendAttack(Character_Core characterToHit)
     {
-        characterToHit.ReceiveHit(AccessWeaponStat((int)EWeaponStat.DAMAGE).GetCurrent());
+        characterToHit.ReceiveHit(AccessWeaponStat((int)EWeaponStat.ALL_DAMAGE).GetCurrent(), GetOnHitEffectsFromUpgrades());
     }
 }

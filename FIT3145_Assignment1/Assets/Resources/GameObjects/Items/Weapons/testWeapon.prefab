@@ -46,15 +46,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c0dd61f35f6ed145be4889863c68ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_name: Test Melee Weapon
-  m_weaponBaseStats:
-  - m_current: 20
-    m_max: -1
-    m_min: 0
-    m_name: Damage
-  m_weaponType: 0
   m_physicsRigidbody: {fileID: -4255810572145031668}
   m_physicsCollider: {fileID: -8007725881098290701}
+  m_name: Test Melee Weapon
+  m_itemType: 0
+  m_weaponStats:
+  - m_current: 30
+    m_max: -1
+  - m_current: 0
+    m_max: -1
+  - m_current: 0
+    m_max: -1
+  - m_current: 0
+    m_max: -1
+  - m_current: 0
+    m_max: -1
+  m_weaponType: 0
+  m_upgradePath:
+    m_upgradesSegments:
+    - StatToImprove: 0
+      Value: 10
+      ScrapCost: 20
+      SlotUnlock: 0
+    - StatToImprove: 0
+      Value: 20
+      ScrapCost: 100
+      SlotUnlock: 1
+    - StatToImprove: 0
+      Value: 40
+      ScrapCost: 300
+      SlotUnlock: 1
 --- !u!54 &-4255810572145031668
 Rigidbody:
   m_ObjectHideFlags: 0
