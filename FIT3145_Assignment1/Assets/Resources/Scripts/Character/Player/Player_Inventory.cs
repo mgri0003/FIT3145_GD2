@@ -5,15 +5,15 @@ using UnityEngine;
 public class Player_Inventory : MonoBehaviour
 {
     //--Variables--//
-    private List<GameObject> m_inventory = new List<GameObject>();
+    private List<Item> m_inventory = new List<Item>();
 
     //--Methods--//
-    public ref List<GameObject> AccessInventoryList()
+    public ref List<Item> AccessInventoryList()
     {
         return ref m_inventory;
     }
 
-    public void AddItemToInventory(GameObject newItem)
+    public void AddItemToInventory(Item newItem)
     {
         m_inventory.Add(newItem);
 
@@ -27,7 +27,7 @@ public class Player_Inventory : MonoBehaviour
         }
     }
 
-    public void AddItemsToInventory(List<GameObject> newItems)
+    public void AddItemsToInventory(List<Item> newItems)
     {
         //move newly picked up items to inventory zone
         for(int i = 0; i < newItems.Count; ++i)
@@ -36,7 +36,7 @@ public class Player_Inventory : MonoBehaviour
         }
     }
 
-    public void RemoveItemFromInventory(GameObject go)
+    public void RemoveItemFromInventory(Item go)
     {
         m_inventory.Remove(go);
     }

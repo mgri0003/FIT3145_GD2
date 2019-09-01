@@ -39,7 +39,14 @@ public class Player_Controller : MonoBehaviour
                 m_player.PickupNearbyItems();
             }
 
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                m_player.UseSpaceAugment();
+            }
+
             m_player.SetMovementValues(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            m_player.SetDirectionInput(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
             m_player.m_playerRotator.AddDesiredRotation(Input.GetAxis("Mouse X"));
             Camera_Main.GetMainCamera().MinusCurrentRotationY(Input.GetAxis("Mouse Y"));
 

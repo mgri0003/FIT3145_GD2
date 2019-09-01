@@ -7,6 +7,9 @@ public class Player_Core : Character_Core
     //-Variables-
     private float m_movementValueHorizontal = 0.0f;
     private float m_movementValueVertical = 0.0f;
+    private Vector3 m_directionInput = new Vector3(0,0,0);
+
+    private Augment m_spaceAugment = null;
 
     //Components
     [HideInInspector] public Player_Rotator m_playerRotator;
@@ -76,6 +79,14 @@ public class Player_Core : Character_Core
             //play the move state sublty :P
             m_animator.CrossFade("Move", 0.05f);
         }
+    }
+
+    public Vector3 GetDirectionInput() { return m_directionInput; }
+
+    public void SetDirectionInput(in float horizontal, in float vertical)
+    {
+        m_directionInput.x = horizontal;
+        m_directionInput.z = vertical;
     }
 
     public void SetMovementValues(in float horizontal, in float vertical)
@@ -166,8 +177,45 @@ public class Player_Core : Character_Core
         if(IsItemNearby())
         {
             //add items to inventory
-            m_playerInventory.AddItemsToInventory(m_playerItemPickupArea.GetAllGameObjectsCollided());
+            List<Item> items = new List<Item>();
+            foreach(GameObject go in m_playerItemPickupArea.GetAllGameObjectsCollided())
+            {
+                items.Add(go.GetComponent<Item>());
+            }
+            m_playerInventory.AddItemsToInventory(items);
             m_playerItemPickupArea.ClearCollidingObjects();
         }
+    }
+
+    public Augment GetSpaceAugment()
+    {
+        return m_spaceAugment;
+    }
+
+    public bool HasSpaceAugment()
+    {
+        return m_spaceAugment != null;
+    }
+
+    public void UseSpaceAugment()
+    {
+        if(m_spaceAugment)
+        {
+            m_spaceAugment.Use();
+        }
+    }
+
+    public void AttachSpaceAugment(Augment newAugment)
+    {
+        m_spaceAugment = newAugment;
+        m_spaceAugment.SetAugmentActive(true);
+        m_spaceAugment.SetPlayer(this);
+    }
+
+    public void DetachSpaceAugment(Augment newAugment)
+    {
+        m_spaceAugment.SetAugmentActive(false);
+        m_spaceAugment.SetPlayer(null);
+        m_spaceAugment = null;
     }
 }

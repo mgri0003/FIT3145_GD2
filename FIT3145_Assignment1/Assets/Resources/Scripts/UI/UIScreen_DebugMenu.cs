@@ -40,13 +40,36 @@ public class UIScreen_DebugMenu : UIScreenBase
                 if(GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.IsHoldingWeaponInHand((EPlayerHand)i))
                 {
                     GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.DetachWeaponFromHand((EPlayerHand)i);
-                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AddItemToInventory(weapon.gameObject);
+                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AddItemToInventory(weapon);
                 }
             }
         }
     }
 
-    private bool UI_DisplayInventoryElement(in GameObject item, in float x, in float y)
+    private void UI_DisplayInventoryElement_Augment(in Item item, in float x, in float y, float width, float height)
+    {
+        if (GUI.Button(new Rect(x, y + (height / 2), width, height / 2), "Equip to Spacebar"))
+        {
+            GamePlayManager.Instance.GetCurrentPlayer().AttachSpaceAugment(item as Augment);
+            GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(item);
+        }
+    }
+
+    private void UI_DisplayInventoryElement_Weapon(in Item item, in float x, in float y, float width, float height)
+    {
+        for (int i = 0; i < (int)EPlayerHand.MAX; ++i)
+        {
+            if (GUI.Button(new Rect((x + width / 2) - (width / 2 * i), y + (height / 2), width / 2, height / 2), ((EPlayerHand)i) == EPlayerHand.HAND_RIGHT ? "Equip Right Hand" : "Equip Left Hand"))
+            {
+                if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(((EPlayerHand)i), item.GetComponent<Weapon_Base>()))
+                {
+                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(item);
+                }
+            }
+        }
+    }
+
+    private void UI_DisplayInventoryElement(in Item item, in float x, in float y)
     {
         const float width = 250;
         const float height = 60;
@@ -54,25 +77,27 @@ public class UIScreen_DebugMenu : UIScreenBase
         //display item
         GUI.Box(new Rect(x, y, width, height), item.GetComponent<Item>().GetItemName());
 
-        //display Hand equips
-        for (int i = 0; i < (int)EPlayerHand.MAX; ++i)
+        //display Hand equips (For Weapons)
+        switch(item.GetItemType())
         {
-            if (GUI.Button(new Rect((x + width/2) - (width/2 * i), y + (height/2), width/2, height/2), ((EPlayerHand)i) == EPlayerHand.HAND_RIGHT ? "Equip Right Hand" : "Equip Left Hand"))
+            case EItemType.UPGRADE:
             {
-                if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(((EPlayerHand)i), item.GetComponent<Weapon_Base>()))
-                {
-                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(item);
-                    return true;
-                }
+                UI_DisplayInventoryElement_Weapon(item, x, y, width, height);
             }
+            break;
+            case EItemType.AUGMENT:
+            {
+                UI_DisplayInventoryElement_Augment(item, x, y, width, height);
+            }
+            break;
+
         }
 
-        return false;
     }
 
     public void UI_DisplayInventory()
     {
-        List<GameObject> items = GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AccessInventoryList();
+        List<Item> items = GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AccessInventoryList();
 
         for (int i = 0; i < items.Count; ++i)
         {

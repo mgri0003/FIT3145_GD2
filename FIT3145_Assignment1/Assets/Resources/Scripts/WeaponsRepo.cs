@@ -7,6 +7,8 @@ public class WeaponsRepo : Singleton<WeaponsRepo>
     private static List<GameObject> m_weapons = new List<GameObject>();
     private static List<GameObject> m_projectiles = new List<GameObject>();
     bool m_loadedContent = false;
+    const string m_weaponsPath = "GameObjects/Items/Weapons";
+    const string m_projectilesPath = "GameObjects/Projectiles";
 
     public void LoadAllContent()
     {
@@ -28,7 +30,7 @@ public class WeaponsRepo : Singleton<WeaponsRepo>
     private void LoadAllWeapons()
     {
         //load all weapons in folder
-        Object[] loadedObjects = Resources.LoadAll("GameObjects/Weapons", typeof(Object)) as Object[];
+        Object[] loadedObjects = Resources.LoadAll(m_weaponsPath, typeof(Object)) as Object[];
         Debug.Assert(loadedObjects != null, "WeaponsRepo: Failed To Load Objects (Weapons)");
 
         //add these loaded objects into weapons list as GameObjects
@@ -81,7 +83,7 @@ public class WeaponsRepo : Singleton<WeaponsRepo>
     private void LoadAllProjectiles()
     {
         //load all weapons in folder
-        Object[] loadedObjects = Resources.LoadAll("GameObjects/Projectiles", typeof(Object)) as Object[];
+        Object[] loadedObjects = Resources.LoadAll(m_projectilesPath, typeof(Object)) as Object[];
         Debug.Assert(loadedObjects != null, "WeaponsRepo: Failed To Load Objects (Projectiles)");
 
         //add these loaded objects into Projectiles list as GameObjects

@@ -32,13 +32,26 @@ public class UIScreen_InGameHud : UIScreenBase
         UI_DisplayWeaponForHand(EPlayerHand.HAND_RIGHT);
         UI_DisplayWeaponForHand(EPlayerHand.HAND_LEFT);
         UI_DisplayPickupable();
+        UI_DisplaySpaceAugment();
+    }
+
+    private void UI_DisplaySpaceAugment()
+    {
+        if(m_player.HasSpaceAugment())
+        {
+            GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height - 100, 200, 30), m_player.GetSpaceAugment().GetItemName() + " : " + m_player.GetSpaceAugment().GetCooldown());
+        }
+        else
+        {
+            GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height - 100, 200, 30), "No Augment Attached");
+        }
     }
 
     private void UI_DisplayPickupable()
     {
         if (m_player.IsItemNearby())
         {
-            GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Pick Nearby Item By Pressing 'E'");
+            GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Press 'E' To Pick Up");
         }
     }
 

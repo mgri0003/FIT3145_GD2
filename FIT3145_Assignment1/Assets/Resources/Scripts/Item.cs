@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EItemType
+{
+    WEAPON,
+    AUGMENT,
+    UPGRADE,
+    MAX
+}
+
 public class Item : MonoBehaviour
 {
     //--Variables--//
@@ -9,10 +17,12 @@ public class Item : MonoBehaviour
     [SerializeField] private BoxCollider m_physicsCollider = null;
 
     [SerializeField] private string m_name = "Default_Item";
+    [SerializeField] private EItemType m_itemType = EItemType.WEAPON;
 
 
     //--Methods--//
     public string GetItemName() { return m_name; }
+    public EItemType GetItemType() { return m_itemType; }
 
     public void SetPhysicsActive(bool enablePhysics)
     {
