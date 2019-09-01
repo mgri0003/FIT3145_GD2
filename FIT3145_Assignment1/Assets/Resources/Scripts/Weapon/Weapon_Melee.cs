@@ -7,11 +7,6 @@ public class Weapon_Melee : Weapon_Base
     //--Methods--
     public override bool Use()
     {
-        foreach (Upgrade up in m_currentUpgrades)
-        {
-            up.OnUpgradeWeaponUsed();
-        }
-
         return true;
     }
 

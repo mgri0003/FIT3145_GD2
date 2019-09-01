@@ -9,14 +9,20 @@ public class Enemy_Core : Character_Core
     [SerializeField] private float m_meleeDamage = 1.0f;
     private float m_minDistanceToAttack = 0.8f;
     private float m_minDistanceToMove = 5.0f;
+    [SerializeField] private GameObject[] m_itemDrops;
 
     //--Methods--//
     protected override void Start()
     {
         base.Start();
 
-        Debug.Assert(m_targetCharacter, "Missing Target Character, should be set when enemy is spawned!");
+        //Debug.Assert(m_targetCharacter, "Missing Target Character, should be set when enemy is spawned!");
         m_characterAimer.Init(m_targetCharacter.transform);
+    }
+
+    public void FindPlayerToTarget()
+    {
+        SetTargetCharacter(GameObject.Find("MainPlayer").GetComponent<Player_Core>());
     }
 
     private void Update()
@@ -81,6 +87,16 @@ public class Enemy_Core : Character_Core
 
     protected override void Die()
     {
+        if(m_itemDrops.Length > 0)
+        {
+            int i = 0;
+            foreach (GameObject go in m_itemDrops)
+            {
+                GameObject droppedGO = Instantiate(go, transform.position + new Vector3(0 + (i * 0.5f), 0.5f, 0), Quaternion.Euler(0, 0, 0));
+                ++i;
+            }
+        }
+
         gameObject.SetActive(false);
         base.Die();
     }

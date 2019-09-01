@@ -13,8 +13,8 @@ public abstract class Upgrade : Item
     [SerializeField] Effect m_onHitEffect = null;
     public Effect GetOnHitEffect() { return m_onHitEffect; }
 
-    public abstract void OnUpgradeAttached();
-    public abstract void OnUpgradeWeaponUsed();
+    //public abstract void OnUpgradeWeaponUsed();
+    //public abstract void OnUpgradeAttached();
 
 
 }

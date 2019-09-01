@@ -79,7 +79,7 @@ public abstract class Weapon_Base : Item
         {
             m_currentUpgrades.Add(newUpgrade);
             newUpgrade.SetParentWeapon(this);
-            newUpgrade.OnUpgradeAttached();
+            //newUpgrade.OnUpgradeAttached();
 
             newUpgrade.transform.parent = transform;
             newUpgrade.transform.localPosition = m_upgradeVisualLocations[m_currentUpgrades.Count - 1].localPosition;

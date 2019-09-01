@@ -4,13 +4,5 @@ using UnityEngine;
 
 public class ElectricGenerator : Upgrade
 {
-    public override void OnUpgradeAttached()
-    {
-        
-    }
 
-    public override void OnUpgradeWeaponUsed()
-    {
-        
-    }
 }

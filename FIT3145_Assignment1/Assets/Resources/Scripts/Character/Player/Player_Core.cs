@@ -133,19 +133,22 @@ public class Player_Core : Character_Core
 
     protected override void SendMeleeAttack(in int AE_handIndex)
     {
-        GameObject goHit = m_MeleeHitbox.GetFirstGameObjectCollided();
-        if (goHit && goHit.CompareTag("Character"))
+        List<GameObject> gosHit = m_MeleeHitbox.GetAllGameObjectsCollided();
+        foreach(GameObject goHit in gosHit)
         {
-            EPlayerHand hand = AE_handIndex == 1 ? EPlayerHand.HAND_LEFT : EPlayerHand.HAND_RIGHT;
-            Weapon_Melee meleeWeapon = null;
-
-            if (m_playerWeaponHolder.IsHoldingWeaponInHandOfType(hand, EWeaponType.MELEE))
+            if (goHit && goHit.CompareTag("Character"))
             {
-                meleeWeapon = (Weapon_Melee)m_playerWeaponHolder.GetWeaponInHand(hand);
+                EPlayerHand hand = AE_handIndex == 1 ? EPlayerHand.HAND_LEFT : EPlayerHand.HAND_RIGHT;
+                Weapon_Melee meleeWeapon = null;
 
-                if (meleeWeapon)
+                if (m_playerWeaponHolder.IsHoldingWeaponInHandOfType(hand, EWeaponType.MELEE))
                 {
-                    meleeWeapon.SendAttack(goHit.GetComponent<Character_Core>());
+                    meleeWeapon = (Weapon_Melee)m_playerWeaponHolder.GetWeaponInHand(hand);
+
+                    if (meleeWeapon)
+                    {
+                        meleeWeapon.SendAttack(goHit.GetComponent<Character_Core>());
+                    }
                 }
             }
         }
@@ -207,9 +210,12 @@ public class Player_Core : Character_Core
 
     public void AttachSpaceAugment(Augment newAugment)
     {
-        m_spaceAugment = newAugment;
-        m_spaceAugment.SetAugmentActive(true);
-        m_spaceAugment.SetPlayer(this);
+        if(CanAttachSpaceAugment())
+        {
+            m_spaceAugment = newAugment;
+            m_spaceAugment.SetAugmentActive(true);
+            m_spaceAugment.SetPlayer(this);
+        }
     }
 
     public void DetachSpaceAugment(Augment newAugment)
@@ -217,5 +223,10 @@ public class Player_Core : Character_Core
         m_spaceAugment.SetAugmentActive(false);
         m_spaceAugment.SetPlayer(null);
         m_spaceAugment = null;
+    }
+
+    public bool CanAttachSpaceAugment()
+    {
+        return m_spaceAugment == null;
     }
 }

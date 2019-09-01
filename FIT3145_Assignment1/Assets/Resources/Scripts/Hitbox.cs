@@ -7,6 +7,18 @@ public class Hitbox : MonoBehaviour
     [SerializeField] private List<string> m_collidingTags = new List<string>();
     private List<GameObject> m_collidingObjects = new List<GameObject>();
 
+    private void Update()
+    {
+        //hack to fix garb exit
+        for(int i = 0; i < m_collidingObjects.Count; ++i)
+        {
+            if(!m_collidingObjects[i].activeInHierarchy)
+            {
+                OnTriggerExit(m_collidingObjects[i].GetComponent<Collider>());
+            }
+        }
+    }
+
     private bool DoesColliderHasTags(in Collider col)
     {
         bool hasTag = false;
@@ -31,7 +43,7 @@ public class Hitbox : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(DoesColliderHasTags(other))
+        if (DoesColliderHasTags(other))
         {
             m_collidingObjects.Remove(other.gameObject);
         }

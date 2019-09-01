@@ -7,11 +7,12 @@ public class GamePlayManager : Singleton<GamePlayManager>
 {
     //--Variables--//
     private Transform m_spawnPoint = null;
-    private Transform m_enemySpawnPoint = null;
+    //private Transform[] m_enemySpawnPoints = null;
 
     //Spawnables (Do not change values in these objects)
     [SerializeField] private GameObject m_spawnable_mainPlayer = null;
-    [SerializeField] private GameObject m_spawnable_enemy = null;
+    //[SerializeField] private GameObject m_spawnable_enemy = null;
+    //[SerializeField] private GameObject m_spawnable_enemyDemo = null;
     [SerializeField] private GameObject m_spawnable_inventoryZone = null;
 
     //InGame GameObjects
@@ -30,7 +31,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
     void Start()
     {
         Debug.Assert(m_spawnable_mainPlayer, "Main Player Is Null");
-        Debug.Assert(m_spawnable_enemy, "Enemy Is Null");
+        //Debug.Assert(m_spawnable_enemy, "Enemy Is Null");
+        //Debug.Assert(m_spawnable_enemyDemo, "Enemy Demo Is Null");
         Debug.Assert(m_spawnable_inventoryZone, "Inventory Zone Is Null");
     }
 
@@ -76,7 +78,24 @@ public class GamePlayManager : Singleton<GamePlayManager>
         SpawnInventoryZone();
         SetupSpawnPoints();
         SpawnPlayer();
-        SpawnEnemy();
+
+        Enemy_Core[] enemies = FindObjectsOfType<Enemy_Core>();
+        if(enemies != null)
+        {
+            foreach(Enemy_Core enemy in enemies)
+            {
+                enemy.FindPlayerToTarget();
+            }
+        }
+
+        //if(m_enemySpawnPoints != null)
+        //{
+        //    for (int i = 0; i < m_enemySpawnPoints.Length; ++i)
+        //    {
+        //        SpawnEnemy(i);
+        //    }
+        //}
+
 
         UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAMEHUD);
 
@@ -111,22 +130,22 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
     }
 
-    void SpawnEnemy()
-    {
-        GameObject newEnemy = Instantiate(m_spawnable_enemy, m_enemySpawnPoint.position, Quaternion.Euler(0, 0, 0));
-        if(newEnemy)
-        {
-            if(m_current_mainPlayer)
-            {
-                newEnemy.GetComponent<Enemy_Core>().SetTargetCharacter(m_current_mainPlayer.GetComponent<Character_Core>());
-            }
-        }
-    }
+    //void SpawnEnemy(int spawnPointIndex)
+    //{
+    //    GameObject newEnemy = Instantiate(spawnPointIndex == 0? m_spawnable_enemyDemo : m_spawnable_enemy, m_enemySpawnPoints[spawnPointIndex].position, Quaternion.Euler(0, 0, 0));
+    //    if(newEnemy)
+    //    {
+    //        if(m_current_mainPlayer)
+    //        {
+    //            newEnemy.GetComponent<Enemy_Core>().SetTargetCharacter(m_current_mainPlayer.GetComponent<Character_Core>());
+    //        }
+    //    }
+    //}
 
     private void SetupSpawnPoints()
     {
         SetupPlayerSpawn();
-        SetupEnemySpawn();
+        //SetupEnemySpawns();
     }
 
     private void SetupPlayerSpawn()
@@ -139,15 +158,20 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
     }
 
-    private void SetupEnemySpawn()
-    {
-        GameObject spawn = GameObject.FindGameObjectWithTag("EnemySpawn");
-        Debug.Assert(spawn, "No Enemy Spawn Set?");
-        if (spawn)
-        {
-            m_enemySpawnPoint = spawn.transform;
-        }
-    }
+    //private void SetupEnemySpawns()
+    //{
+    //    GameObject[] spawns = GameObject.FindGameObjectsWithTag("EnemySpawn");
+    //    Debug.Assert(spawns.Length > 0, "No Enemy Spawn Set?");
+    //    if (spawns.Length > 0)
+    //    {
+    //        Transform[] transforms = new Transform[spawns.Length];
+    //        for(int i = 0; i < spawns.Length; ++i)
+    //        {
+    //            transforms[i] = spawns[i].transform;
+    //        }
+    //        m_enemySpawnPoints = transforms;
+    //    }
+    //}
 
     public Player_Core GetCurrentPlayer()
     {

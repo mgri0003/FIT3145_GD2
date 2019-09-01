@@ -47,5 +47,7 @@ MonoBehaviour:
     type: 3}
   m_spawnable_enemy: {fileID: 5342489822327469273, guid: 7d4f12637a3b2bc41933bfcbd0528003,
     type: 3}
+  m_spawnable_enemyDemo: {fileID: 5342489822327469273, guid: f64cb7488149af9449c5a1919fd2d8eb,
+    type: 3}
   m_spawnable_inventoryZone: {fileID: 8278307819504041503, guid: 22c3022ca3736d648a728d681aa355dc,
     type: 3}
