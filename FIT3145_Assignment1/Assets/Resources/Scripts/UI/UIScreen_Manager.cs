@@ -44,7 +44,7 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
             UIScreenBase screen = m_UIScreens[(int)screenToEnable];
             if (screen)
             {
-                screen.enabled = true;
+                screen.gameObject.SetActive(true);
             }
         }
         m_currentUIScreen = screenToEnable;
@@ -74,7 +74,7 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
         {
             if (screen)
             {
-                screen.enabled = false;
+                screen.gameObject.SetActive(false);
             }
         }
     }

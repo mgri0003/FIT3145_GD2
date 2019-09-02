@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class UIScreen_DebugMenu : UIScreenBase
 {
+    protected override void RegisterMethods()
+    {
+        
+    }
+
     protected override void OnEnable()
     {
         Cursor.visible = true;

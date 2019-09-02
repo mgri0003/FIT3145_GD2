@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#pragma warning disable 649
+
 public enum EPlayerHand
 {
     HAND_RIGHT,

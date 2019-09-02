@@ -8,6 +8,11 @@ public class UIScreen_InGameHud : UIScreenBase
     private Player_Core m_player = null;
 
     //--Methods--//
+    protected override void RegisterMethods()
+    {
+        
+    }
+
     protected override void OnEnable()
     {
         m_player = GamePlayManager.Instance.GetCurrentPlayer();
@@ -22,7 +27,7 @@ public class UIScreen_InGameHud : UIScreenBase
         if(m_player)
         {
             m_player.GetComponent<Player_Controller>().SetEnableInput(false);
-        }
+        } 
     }
 
     protected override void OnGUI()

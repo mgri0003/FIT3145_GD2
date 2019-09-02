@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#pragma warning disable 649
+
 [System.Serializable]
 public struct UpgradeSegment
 {

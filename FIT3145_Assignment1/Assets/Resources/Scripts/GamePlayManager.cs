@@ -175,7 +175,12 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public Player_Core GetCurrentPlayer()
     {
-        return m_current_mainPlayer.GetComponent<Player_Core>();
+        if(m_current_mainPlayer)
+        {
+            return m_current_mainPlayer.GetComponent<Player_Core>();
+        }
+
+        return null;
     }
 
     public void SpawnInventoryZone()
