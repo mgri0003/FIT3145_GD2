@@ -8,12 +8,11 @@ public class UI_Fader : MonoBehaviour
     [SerializeField] Image m_image;
     [SerializeField] float m_duration = 0.1f;
     [SerializeField] Color m_targetColor = Color.clear;
-    private Color m_originalColor = Color.white;
+    [SerializeField] Color m_startColor = Color.clear;
 
     private void Awake()
     {
         Debug.Assert(m_image, "Missing Image, Cant Fade");
-        m_originalColor = m_image.color;
     }
 
     public void StartFade()
@@ -26,6 +25,6 @@ public class UI_Fader : MonoBehaviour
 
     public void Reset()
     {
-        m_image.color = m_originalColor;
+        m_image.color = m_startColor;
     }
 }

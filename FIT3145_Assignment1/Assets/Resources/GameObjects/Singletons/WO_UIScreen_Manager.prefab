@@ -518,6 +518,7 @@ MonoBehaviour:
   m_image: {fileID: 708674349959691964}
   m_duration: 3.5
   m_targetColor: {r: 0, g: 0, b: 0, a: 0}
+  m_startColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &2363880075253336396
 GameObject:
   m_ObjectHideFlags: 0
