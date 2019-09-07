@@ -1,11 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+#pragma warning disable 649
 
 public class UIScreen_InGameHud : UIScreenBase
 {
     //--variables--//
     private Player_Core m_player = null;
+
+    //--ui elements--//
+    [SerializeField] private Image m_healthBar;
+    [SerializeField] private Image[] m_handDisplays = new Image[2];
+    [SerializeField] private Image[] m_handDisplaysAmmo = new Image[2];
+    [SerializeField] private Text[] m_handDisplaysAmmoText = new Text[2];
+    [SerializeField] private Sprite m_defaultHandSprite;
+
+
 
     //--Methods--//
     protected override void RegisterMethods()
@@ -32,12 +44,73 @@ public class UIScreen_InGameHud : UIScreenBase
 
     protected override void OnGUI()
     {
-        GUI.Box(new Rect(0, 0, 100, 30), "Health: " + m_player.m_characterStats.AccessHealthStat().GetCurrent());
-
-        UI_DisplayWeaponForHand(EPlayerHand.HAND_RIGHT);
-        UI_DisplayWeaponForHand(EPlayerHand.HAND_LEFT);
         UI_DisplayPickupable();
         UI_DisplaySpaceAugment();
+        
+        UI_UpdateHealthBar();
+        UI_UpdateHandDisplays();
+    }
+
+    private void UI_UpdateHandDisplays()
+    {
+        for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
+        {
+            EPlayerHand hand = (EPlayerHand)i;
+            bool displayAmmo = false;
+
+            if (m_player.m_playerWeaponHolder.IsHoldingWeaponInHand(hand))
+            {
+                Item item = m_player.m_playerWeaponHolder.GetWeaponInHand(hand);
+                if(item)
+                {
+                    if(item.GetItemSprite())
+                    {
+                        m_handDisplays[i].sprite = item.GetItemSprite();
+                    }
+
+                    Weapon_Base baseWeapon = item as Weapon_Base;
+                    if (baseWeapon.GetWeaponType() == EWeaponType.RANGED)
+                    {
+                        Weapon_Ranged rangedWeapon = baseWeapon as Weapon_Ranged;
+                        if (rangedWeapon)
+                        {
+                            //set the fill amount to ration of ammo
+                            float ammoRatio = rangedWeapon.GetCurrentAmmo() / rangedWeapon.AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent();
+                            m_handDisplaysAmmo[i].fillAmount = ammoRatio;
+
+                            //set ammo text
+                            m_handDisplaysAmmoText[i].text = rangedWeapon.GetCurrentAmmo().ToString();
+
+                            //reload effect
+                            if (rangedWeapon.IsReloading())
+                            {
+                                m_handDisplaysAmmo[i].color = Color.green;
+                                m_handDisplaysAmmo[i].fillAmount = 1 - (rangedWeapon.GetCurrentReloadTime() / rangedWeapon.AccessWeaponStat(EWeaponStat.RANGED_RELOAD_TIME).GetCurrent());
+                                m_handDisplaysAmmoText[i].text = "R";
+                            }
+                            else
+                            {
+                                m_handDisplaysAmmo[i].color = Color.white;
+                            }
+                        }
+
+                        displayAmmo = true;
+                    }
+                }
+            }
+            else
+            {
+                m_handDisplays[i].sprite = m_defaultHandSprite;
+            }
+
+            m_handDisplaysAmmo[i].transform.parent.gameObject.SetActive(displayAmmo);
+        }
+    }
+
+    private void UI_UpdateHealthBar()
+    {
+        float healthFillRatio = m_player.m_characterStats.AccessHealthStat().GetCurrent() / m_player.m_characterStats.AccessHealthStat().GetMax();
+        m_healthBar.fillAmount = healthFillRatio;
     }
 
     private void UI_DisplaySpaceAugment()
@@ -58,31 +131,6 @@ public class UIScreen_InGameHud : UIScreenBase
         {
             GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Press 'E' To Pick Up");
         }
-    }
-
-    private void UI_DisplayWeaponForHand(in EPlayerHand hand)
-    {
-        bool isRightLeftHand = (hand == EPlayerHand.HAND_RIGHT);
-
-        string handDisplay = isRightLeftHand ? "Right Hand: " : "Left Hand: ";
-        string weaponDisplay = "Empty";
-        Weapon_Base weapon = m_player.m_playerWeaponHolder.GetWeaponInHand(hand);
-        if (weapon)
-        {
-            weaponDisplay = weapon.GetItemName();
-            if (weapon.GetWeaponType() == EWeaponType.RANGED)
-            {
-                if (((Weapon_Ranged)weapon).IsReloading())
-                {
-                    weaponDisplay += "| Reloading!";
-                }
-                else
-                {
-                    weaponDisplay += "| Ammo(" + ((Weapon_Ranged)weapon).GetCurrentAmmo() + ")";
-                }
-            }
-        }
-        GUI.Box(new Rect(0, isRightLeftHand ? 30 : 60, 300, 30), handDisplay + weaponDisplay);
     }
 
     public void SetPlayer(in Player_Core newPlayer)

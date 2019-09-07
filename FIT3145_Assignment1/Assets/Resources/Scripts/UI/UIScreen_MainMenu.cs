@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class UIScreen_MainMenu : UIScreenBase
 {
     [SerializeField] private Button m_startGameButton;
+    [SerializeField] private UI_Fader m_fader;
+
 
     protected override void RegisterMethods()
     {
@@ -17,7 +19,8 @@ public class UIScreen_MainMenu : UIScreenBase
 
     protected override void OnEnable()
     {
-        
+        m_fader.Reset();
+        Invoke("StartMainScreenFadeOut", 0.5f);
     }
 
     protected override void OnDisable()
@@ -34,5 +37,10 @@ public class UIScreen_MainMenu : UIScreenBase
     {
         SceneManager.LoadScene("Bridge_HUB");
         SceneManager.sceneLoaded += GamePlayManager.Instance.OnSceneLoadedToGameplay;
+    }
+
+    private void StartMainScreenFadeOut()
+    {
+        m_fader.StartFade();
     }
 }

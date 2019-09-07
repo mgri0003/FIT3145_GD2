@@ -19,9 +19,12 @@ public class Item : MonoBehaviour
     [SerializeField] private string m_name = "Default_Item";
     [SerializeField] private EItemType m_itemType = EItemType.WEAPON;
 
+    [SerializeField] private Sprite m_itemSprite = null;
+
     //--Methods--//
     public string GetItemName() { return m_name; }
     public EItemType GetItemType() { return m_itemType; }
+    public Sprite GetItemSprite() { return m_itemSprite; }
 
     public void SetPhysicsActive(bool enablePhysics)
     {

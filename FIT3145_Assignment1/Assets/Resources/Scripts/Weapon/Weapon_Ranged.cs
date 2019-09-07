@@ -133,4 +133,9 @@ public class Weapon_Ranged : Weapon_Base
     {
         return m_currentAmmo;
     }
+
+    public float GetCurrentReloadTime()
+    {
+        return m_currentReloadTime;
+    }
 }

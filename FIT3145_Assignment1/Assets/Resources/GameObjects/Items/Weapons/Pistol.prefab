@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 1295313564781236068}
   - component: {fileID: 5961892357635601912}
   m_Layer: 0
-  m_Name: testWeaponRanged
+  m_Name: Pistol
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -172,8 +172,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_physicsRigidbody: {fileID: 1295313564781236068}
   m_physicsCollider: {fileID: 5961892357635601912}
-  m_name: Test Ranged Weapon
+  m_name: Pistol
   m_itemType: 0
+  m_itemSprite: {fileID: 21300000, guid: 64ab8e5b8f230114abb9598d84e09842, type: 3}
   m_weaponStats:
   - m_current: 10
     m_max: -1
