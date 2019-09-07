@@ -143,7 +143,7 @@ public class Player_WeaponHolder : MonoBehaviour
             //remove parent
             m_currentWeapons[(int)hand].transform.SetParent(null);
 
-            //enable physics for weapon when in hand
+            //enable physics for weapon when removed from hand
             m_currentWeapons[(int)hand].SetPhysicsActive(true);
 
             //remove weapon from current weapons
