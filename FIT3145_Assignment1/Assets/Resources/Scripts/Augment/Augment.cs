@@ -38,4 +38,5 @@ public abstract class Augment : Item
     protected abstract bool AugmentAbility();
     public void SetPlayer(Player_Core player) { m_player = player; }
     public float GetCooldown() { return m_cooldown; }
+    public float GetMaxCooldown() { return m_maxCooldown; }
 }

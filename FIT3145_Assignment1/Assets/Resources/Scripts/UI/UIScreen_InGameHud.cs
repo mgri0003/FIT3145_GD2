@@ -11,11 +11,20 @@ public class UIScreen_InGameHud : UIScreenBase
     private Player_Core m_player = null;
 
     //--ui elements--//
+
+    //defaults
+    [SerializeField] private Sprite m_defaultHandSprite;
+    [SerializeField] private Sprite m_EmptyAugmentSprite;
+
+    //refs
     [SerializeField] private Image m_healthBar;
     [SerializeField] private Image[] m_handDisplays = new Image[2];
     [SerializeField] private Image[] m_handDisplaysAmmo = new Image[2];
     [SerializeField] private Text[] m_handDisplaysAmmoText = new Text[2];
-    [SerializeField] private Sprite m_defaultHandSprite;
+    [SerializeField] private Image m_spaceAugmentDisplay;
+    [SerializeField] private Image m_spaceAugmentDisplay_Cooldown;
+    [SerializeField] private Image m_spaceAugmentDisplay_Frame;
+
 
 
 
@@ -45,7 +54,7 @@ public class UIScreen_InGameHud : UIScreenBase
     protected override void OnGUI()
     {
         UI_DisplayPickupable();
-        UI_DisplaySpaceAugment();
+        UI_UpdateSpaceAugment();
         
         UI_UpdateHealthBar();
         UI_UpdateHandDisplays();
@@ -113,15 +122,26 @@ public class UIScreen_InGameHud : UIScreenBase
         m_healthBar.fillAmount = healthFillRatio;
     }
 
-    private void UI_DisplaySpaceAugment()
+    private void UI_UpdateSpaceAugment()
     {
         if(m_player.HasSpaceAugment())
         {
-            GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height - 100, 200, 30), m_player.GetSpaceAugment().GetItemName() + " : " + m_player.GetSpaceAugment().GetCooldown());
+            m_spaceAugmentDisplay.sprite = m_player.GetSpaceAugment().GetItemSprite();
+            m_spaceAugmentDisplay_Cooldown.fillAmount = (m_player.GetSpaceAugment().GetCooldown() / m_player.GetSpaceAugment().GetMaxCooldown());
+            
+            if(m_player.GetSpaceAugment().GetCooldown() == 0)
+            {
+                m_spaceAugmentDisplay_Frame.color = Color.green;
+            }
+            else
+            {
+                m_spaceAugmentDisplay_Frame.color = Color.white;
+            }
         }
         else
         {
-            GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height - 100, 200, 30), "No Augment Attached");
+            m_spaceAugmentDisplay.sprite = m_EmptyAugmentSprite;
+            m_spaceAugmentDisplay_Frame.color = Color.white;
         }
     }
 
