@@ -135,9 +135,9 @@ MonoBehaviour:
     - StatToImprove: 0
       Value: 20
       ScrapCost: 100
-      SlotUnlock: 1
+      SlotUnlock: 0
     - StatToImprove: 0
-      Value: 40
+      Value: 20
       ScrapCost: 300
       SlotUnlock: 1
   m_upgradeVisualLocations:

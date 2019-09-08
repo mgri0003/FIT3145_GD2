@@ -12,17 +12,21 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     //ui elements
     [SerializeField] private UnityEngine.UI.Button m_backButton;
     [SerializeField] private UnityEngine.UI.Button m_removeAllUpgradesButton;
+    [SerializeField] private UnityEngine.UI.Button m_upgradeButton;
 
     //refs
     [SerializeField] Canvas m_canvas;
     [SerializeField] private Transform m_WeaponDisplay;
     [SerializeField] private GameObject m_upgradeScrollViewContentGO;
+    [SerializeField] private Transform m_upgradeSegmentsListTransform;
     [SerializeField] private GameObject m_spawnable_upgradeElement;
+    [SerializeField] private GameObject m_spawnable_upgradeSegment;
     [SerializeField] private UnityEngine.UI.Image m_upgradeApplyArea;
 
     //dynamic refs
     private Player_Core m_player = null;
     private List<GameObject> m_upgradeElements = new List<GameObject>();
+    private List<GameObject> m_upgradeSegments = new List<GameObject>();
     private Weapon_Base m_weaponToUpgrade = null;
 
     //constants
@@ -38,6 +42,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     {
         m_backButton.onClick.AddListener(() => { OnBack(); });
         m_removeAllUpgradesButton.onClick.AddListener(() => { RemoveAllAttachedUpgrades(); });
+        m_upgradeButton.onClick.AddListener(() => { m_weaponToUpgrade.UpgradeWeapon(); RefreshUpgradeSegments(); });
     }
 
     protected override void OnEnable()
@@ -50,6 +55,8 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
             //Populate upgrade scroll view
             RepopulateUpgradeElementsInScrollView();
+
+            PopulateUpgradeSegments();
         }
     }
 
@@ -57,6 +64,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     {
         RemoveWeaponDisplay();
         CleanUpUpgradeElementsInScrollView();
+        CleanUpUpgradeSegments();
 
         m_weaponToUpgrade = null;
         m_player = null;
@@ -242,5 +250,88 @@ public class UIScreen_UpgradeMenu : UIScreenBase
         return false;
     }
 
+    private void PopulateUpgradeSegments()
+    {
+        if (m_spawnable_upgradeSegment)
+        {
+            float positionY = 0.0f;
+            foreach (UpgradeSegment upSeg in m_weaponToUpgrade.GetUpgradePath().GetUpgradeSegments())
+            {
+                //Debug.Log("Upgrade Element Created");
+                GameObject go = Instantiate(m_spawnable_upgradeSegment);
+                go.transform.SetParent(m_upgradeSegmentsListTransform.transform, false);
+                go.transform.localPosition = new Vector3(0, positionY, 0);
+                m_upgradeSegments.Add(go);
+                positionY -= 35.0f;
+            }
+
+            RefreshUpgradeSegments();
+        }
+    }
+
+    private void RefreshUpgradeSegments()
+    {
+        int upgradeIndex = 0;
+        foreach (GameObject upSegGO in m_upgradeSegments)
+        {
+            //Debug.Log("Upgrade Element Created");
+            UI_UpgradeSegment uiUpSeg = upSegGO.GetComponent<UI_UpgradeSegment>();
+            UpgradeSegment upSeg = m_weaponToUpgrade.GetUpgradePath().GetUpgradeSegments()[upgradeIndex];
+            if (uiUpSeg)
+            {
+                uiUpSeg.AccessUpgradeSegmentText().text = (upSeg.StatToImprove != EWeaponStat.MAX) ? (m_weaponToUpgrade.AccessWeaponStat(upSeg.StatToImprove).GetName() + " +" + upSeg.Value) : ("") ;
+
+                if (upSeg.SlotUnlock)
+                {
+                    uiUpSeg.AccessUpgradeSegmentText().text += ((uiUpSeg.AccessUpgradeSegmentText().text == "") ? "" : " | " ) + "Upgrade Slot +1";
+                }
+
+                if (upSeg.ScrapCost > 0)
+                {
+                    uiUpSeg.AccessUpgradeSegmentCostText().text = upSeg.ScrapCost.ToString();
+                }
+
+                if(m_weaponToUpgrade.GetUpgradePath().GetCurrentUpgradeIndex() >= upgradeIndex)
+                {
+                    uiUpSeg.SetUISegmentOpacity(1.0f);
+
+                    if(m_weaponToUpgrade.GetUpgradePath().GetCurrentUpgradeIndex() > upgradeIndex)
+                    {
+                        uiUpSeg.AccessUpgradeSegmentText().color = Color.green;
+                        uiUpSeg.AccessUpgradeSegmentCostText().color = Color.green;
+                    }
+                }
+                else
+                {
+                    uiUpSeg.SetUISegmentOpacity(0.1f);
+                }
+            }
+            ++upgradeIndex;
+        }
+
+        //reposition Upgrade Button to latest position
+        if(m_weaponToUpgrade.GetUpgradePath().GetCurrentUpgradeIndex() < m_weaponToUpgrade.GetUpgradePath().GetUpgradeSegmentCount())
+        {
+            m_upgradeButton.gameObject.SetActive(true);
+
+            m_upgradeButton.transform.localPosition = new Vector3(
+                m_upgradeSegmentsListTransform.localPosition.x - 50.0f, 
+                m_upgradeSegmentsListTransform.transform.localPosition.y - (0.0f) - (m_weaponToUpgrade.GetUpgradePath().GetCurrentUpgradeIndex() * 35.0f), 
+                0);
+        }
+        else
+        {
+            m_upgradeButton.gameObject.SetActive(false);
+        }
+    }
+
+    private void CleanUpUpgradeSegments()
+    {
+        while (m_upgradeSegments.Count > 0)
+        {
+            Destroy(m_upgradeSegments[0]);
+            m_upgradeSegments.RemoveAt(0);
+        }
+    }
 
 }

@@ -53,4 +53,14 @@ public struct UpgradePath
     {
         return m_currentUpgradeIndex < m_upgradesSegments.Length;
     }
+
+    public uint GetUpgradeSegmentCount()
+    {
+        return (uint)m_upgradesSegments.Length;
+    }
+
+    public UpgradeSegment[] GetUpgradeSegments()
+    {
+        return m_upgradesSegments;
+    }
 }

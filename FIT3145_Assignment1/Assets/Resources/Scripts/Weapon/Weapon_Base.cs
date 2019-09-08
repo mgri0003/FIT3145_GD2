@@ -53,7 +53,7 @@ public abstract class Weapon_Base : Item
     public EWeaponType GetWeaponType() { return m_weaponType; }
     public ref Stat AccessWeaponStat(EWeaponStat stat)
     {
-        Debug.Assert((int)stat >= 0 && (int)stat < m_weaponStats.Length, "Incorrect Stat Index");
+        Debug.Assert((int)stat >= 0 && (int)stat < m_weaponStats.Length, "Incorrect Stat Index : Value Passed In: " + stat.ToString());
         return ref m_weaponStats[(int)stat];
     }
 
