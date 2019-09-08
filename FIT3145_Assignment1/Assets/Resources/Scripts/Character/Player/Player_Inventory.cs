@@ -18,13 +18,7 @@ public class Player_Inventory : MonoBehaviour
         m_inventory.Add(newItem);
 
         //move items to inventory zone
-        newItem.transform.position = GamePlayManager.Instance.GetInventoryZonePosition() + new Vector3(0, 5, 0);
-
-        //disable item physics
-        if (newItem.GetComponent<Item>())
-        {
-            newItem.GetComponent<Item>().SetPhysicsActive(false);
-        }
+        newItem.MoveItemToInventoryZone();
     }
 
     public void AddItemsToInventory(List<Item> newItems)

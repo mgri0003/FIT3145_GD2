@@ -60,6 +60,11 @@ public class UIScreen_InGameHud : UIScreenBase
         UI_UpdateHandDisplays();
     }
 
+    protected override void OnBack()
+    {
+        throw new System.NotImplementedException();
+    }
+
     private void UI_UpdateHandDisplays()
     {
         for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)

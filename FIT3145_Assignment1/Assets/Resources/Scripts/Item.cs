@@ -26,6 +26,13 @@ public class Item : MonoBehaviour
     public EItemType GetItemType() { return m_itemType; }
     public Sprite GetItemSprite() { return m_itemSprite; }
 
+    public void MoveItemToInventoryZone()
+    {
+        transform.localPosition = Vector3.zero;
+        transform.position = GamePlayManager.Instance.GetInventoryZonePosition() + new Vector3(0, 5, 0);
+        SetPhysicsActive(false);
+    }
+
     public void SetPhysicsActive(bool enablePhysics)
     {
         Debug.Assert(m_physicsRigidbody, "Missing Rigidbody!?!?");

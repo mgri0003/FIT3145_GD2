@@ -110,7 +110,6 @@ Transform:
   m_Children:
   - {fileID: 1725078717156419668}
   - {fileID: 4006120368742364951}
-  - {fileID: 3453398215660875897}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -159,7 +158,10 @@ MonoBehaviour:
   m_physicsCollider: {fileID: 1725078717245774647}
   m_name: Electric Generator
   m_itemType: 2
+  m_itemSprite: {fileID: 0}
   m_onHitEffect: {fileID: 139301493673717843, guid: 63ebfff9b30e1694093ac6ac325f33ff,
+    type: 3}
+  m_spawnable_particleEffect: {fileID: 7539420459107209283, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
     type: 3}
 --- !u!1 &7974912482348458972
 GameObject:
@@ -239,103 +241,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1001 &5137914032019922999
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1725078717245774641}
-    m_Modifications:
-    - target: {fileID: 7539420459107209283, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_Name
-      value: LightningEmitter
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209281, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: RotationModule.curve.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209281, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: RotationModule.x.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209281, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: RotationModule.y.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209281, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: RotationModule.curve.minScalar
-      value: -3.1415925
-      objectReference: {fileID: 0}
-    - target: {fileID: 7539420459107209281, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-        type: 3}
-      propertyPath: ShapeModule.radius.value
-      value: 0.1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6c55ba629cf43f643bf9ddf0a00aacda, type: 3}
---- !u!4 &3453398215660875897 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7539420459107209294, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
-    type: 3}
-  m_PrefabInstance: {fileID: 5137914032019922999}
-  m_PrefabAsset: {fileID: 0}

@@ -28,6 +28,11 @@ public class UIScreen_DebugMenu : UIScreenBase
         UI_DisplayHands();
     }
 
+    protected override void OnBack()
+    {
+        throw new System.NotImplementedException();
+    }
+
     private void UI_DisplayHands()
     {
         for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
@@ -46,24 +51,6 @@ public class UIScreen_DebugMenu : UIScreenBase
                 {
                     GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.DetachWeaponFromHand((EPlayerHand)i);
                     GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AddItemToInventory(weapon);
-                }
-            }
-        }
-    }
-
-    private void UI_DisplayInventoryElement_Upgrade(in Upgrade upgrade, in float x, in float y, float width, float height)
-    {
-        for (int i = 0; i < (int)EPlayerHand.MAX; ++i)
-        {
-            if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.IsHoldingWeaponInHand(((EPlayerHand)i)))
-            {
-                if(GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)i).CanAddUpgrade())
-                {
-                    if (GUI.Button(new Rect((x + width / 2) - (width / 2 * i), y + (height / 2), width / 2, height / 2), ((EPlayerHand)i) == EPlayerHand.HAND_RIGHT ? "Attach To R Weapon" : "Attach To L Weapon"))
-                    {
-                        GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)i).AddUpgrade(upgrade);
-                        GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(upgrade);
-                    }
                 }
             }
         }
@@ -91,7 +78,9 @@ public class UIScreen_DebugMenu : UIScreenBase
             }
             if (GUI.Button(new Rect((x + width), y, 80, height), "Upgrade (" + weapon.GetUpgradePath().GetCurrentUpgradeIndex() + ")"))
             {
-                weapon.UpgradeWeapon();
+                //weapon.UpgradeWeapon();
+                (UIScreen_Manager.Instance.GetUIScreen(EUIScreen.UPGRADE_MENU) as UIScreen_UpgradeMenu).SetWeaponToUpgrade(weapon);
+                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.UPGRADE_MENU);
             }
         }
     }
@@ -115,11 +104,6 @@ public class UIScreen_DebugMenu : UIScreenBase
             case EItemType.AUGMENT:
             {
                 UI_DisplayInventoryElement_Augment(item, x, y, width, height);
-            }
-            break;
-            case EItemType.UPGRADE:
-            {
-                UI_DisplayInventoryElement_Upgrade(item as Upgrade, x, y, width, height);
             }
             break;
         }

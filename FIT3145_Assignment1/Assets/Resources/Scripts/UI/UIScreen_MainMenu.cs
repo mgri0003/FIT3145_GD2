@@ -33,6 +33,11 @@ public class UIScreen_MainMenu : UIScreenBase
 
     }
 
+    protected override void OnBack()
+    {
+        throw new System.NotImplementedException();
+    }
+
     void OnStartGamePressed()
     {
         SceneManager.LoadScene("Bridge_HUB");

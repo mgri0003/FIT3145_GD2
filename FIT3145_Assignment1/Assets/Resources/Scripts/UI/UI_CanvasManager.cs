@@ -15,19 +15,24 @@ public class UI_CanvasManager : MonoBehaviour
         Init();
     }
 
-    void Init()
+    public void Init()
     {
-        m_canvas = GetComponentInChildren<Canvas>();
+        if(m_canvas == null)
+        {
+            m_canvas = GetComponentInChildren<Canvas>();
+        }
         Debug.Assert(m_canvas, "Canvas not found!?!?");
+
         if (m_canvas)
         {
             foreach (Camera cam in Camera.allCameras)
             {
-                if (cam.name == "Main Camera")
+                if (cam.name == "Main Camera" || cam.name == "ThirdPersonCamera")
                 {
                     m_camera = cam;
                 }
             }
+
             Debug.Assert(m_camera, "Failed To Find Camera");
             if (m_camera)
             {

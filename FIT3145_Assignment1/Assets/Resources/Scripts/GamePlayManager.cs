@@ -41,15 +41,15 @@ public class GamePlayManager : Singleton<GamePlayManager>
     {
         if(IsGameplayActive())
         {
-            if (Input.GetKeyDown(KeyCode.X))
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
-                if (UIScreen_Manager.Instance.GetCurrentUIScreen() == EUIScreen.DEBUGMENU)
+                if (UIScreen_Manager.Instance.GetCurrentUIScreenAsEnum() == EUIScreen.DEBUG_MENU)
                 {
-                    UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAMEHUD);
+                    UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAME_HUD);
                 }
                 else
                 {
-                    UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.DEBUGMENU);
+                    UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.DEBUG_MENU);
                 }
             }
 
@@ -68,6 +68,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     {
         GamePlayManager.Instance.SetupInGame();
         SceneManager.sceneLoaded -= GamePlayManager.Instance.OnSceneLoadedToGameplay;
+        UIScreen_Manager.Instance.GetCanvasManager().Init();
     }
 
     public void SetupInGame()
@@ -97,7 +98,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         //}
 
 
-        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAMEHUD);
+        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAME_HUD);
 
         m_current_mainPlayer.GetComponent<Player_Controller>().SetEnableInput(true);
     }
@@ -108,7 +109,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         SceneManager.LoadScene("MainMenu");
         m_current_mainPlayer = null;
         m_current_inventoryZone = null;
-        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.MAINMENU);
+        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.TITLESCREEN_MENU);
     }
 
     public bool IsGameplayActive()

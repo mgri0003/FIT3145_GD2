@@ -73,7 +73,7 @@ public abstract class Weapon_Base : Item
         return m_currentUpgrades.Count < m_upgradeLimit;
     }
 
-    public void AddUpgrade(Upgrade newUpgrade)
+    public bool AddUpgrade(Upgrade newUpgrade)
     {
         if(CanAddUpgrade())
         {
@@ -84,12 +84,23 @@ public abstract class Weapon_Base : Item
             newUpgrade.transform.parent = transform;
             newUpgrade.transform.localPosition = m_upgradeVisualLocations[m_currentUpgrades.Count - 1].localPosition;
             newUpgrade.transform.rotation = transform.rotation;
+
+            return true;
         }
+
+        return false;
     }
-    public void RemoveUpgrade(Upgrade upgradeToRemove)
+    public void RemoveUpgrade(int index)
     {
-        m_currentUpgrades.Remove(upgradeToRemove);
-        upgradeToRemove.transform.parent = null;
+        m_currentUpgrades[index].transform.SetParent(null);
+        m_currentUpgrades.RemoveAt(index);
+    }
+    public void RemoveAllUpgrades()
+    {
+        for(int i = 0; i < m_currentUpgrades.Count; ++i)
+        {
+            RemoveUpgrade(i);
+        }
     }
 
     public List<Effect> GetOnHitEffectsFromUpgrades()
@@ -104,6 +115,19 @@ public abstract class Weapon_Base : Item
         }
 
         return effectsToApply;
+    }
+
+    public ref List<Upgrade> AccessCurrentUpgrades()
+    {
+        return ref m_currentUpgrades;
+    }
+
+    public void SetAllAttachedUpgradeParticleEffects(float value)
+    {
+        foreach (Upgrade up in m_currentUpgrades)
+        {
+            up.SetParticleEffectScale(value);
+        }
     }
 
 }

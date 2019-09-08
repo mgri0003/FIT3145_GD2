@@ -12,4 +12,5 @@ public abstract class UIScreenBase : MonoBehaviour
     protected abstract void OnEnable();
     protected abstract void OnDisable();
     protected abstract void OnGUI();
+    protected abstract void OnBack();
 }
