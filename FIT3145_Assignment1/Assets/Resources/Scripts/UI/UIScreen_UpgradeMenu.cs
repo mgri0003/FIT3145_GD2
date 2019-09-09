@@ -31,7 +31,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
     //constants
     const float m_displayWeaponSize = 400.0f;
-    const float m_displayWeaponRotationSpeed = 10.00f;
+    const float m_displayWeaponRotationSpeed = 0.15f;
 
     public void SetWeaponToUpgrade(Weapon_Base newWeapon)
     {
@@ -73,9 +73,9 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     protected override void OnGUI()
     {
         //rotate weapon for pzaz
-        if (m_weaponToUpgrade)
+        if(m_weaponToUpgrade)
         {
-            m_weaponToUpgrade.transform.Rotate(Vector3.up, m_displayWeaponRotationSpeed * Time.deltaTime);
+            m_weaponToUpgrade.transform.Rotate(Vector3.up, m_displayWeaponRotationSpeed);
         }
 
         //check which upgrade element is being dragged
@@ -89,10 +89,9 @@ public class UIScreen_UpgradeMenu : UIScreenBase
                 {
                     Rect canvasSize = m_canvas.pixelRect;
                     dragableItem.GetParentTransform().SetParent(m_canvas.transform);
+                    dragableItem.GetParentTransform().localPosition = Input.mousePosition - new Vector3(canvasSize.width / 2, canvasSize.height / 2, 0.0f);
 
-                    dragableItem.GetParentTransform().localPosition = UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre());
-
-                    if(IsInsideUpgradeApplyArea(UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
+                    if(IsInsideUpgradeApplyArea(Input.mousePosition))
                     {
                         m_upgradeApplyArea.color = Color.green;
                     }
@@ -195,23 +194,22 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
     private void OnUpgradeElementDropped(UI_DragableItem dragableItem, PointerEventData eventData)
     {
-        if (IsInsideUpgradeApplyArea(UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
+        //Debug.Log("OnUpgradeElementReleased");
+        if (IsInsideUpgradeApplyArea(Input.mousePosition))
         {
             Upgrade newUpgrade = dragableItem.GetParentItem() as Upgrade;
             if(newUpgrade)
             {
                 if(m_weaponToUpgrade.AddUpgrade(newUpgrade))
                 {
-                    //fix up scale of upgrade visually
+                    //Debug.Log("Added Upgrade!");
+
+                    //fix up scale of upgrades
                     newUpgrade.transform.localScale = new Vector3(1, 1, 1);
 
-                    //remove the upgrade from the inventory!
                     m_player.m_playerInventory.RemoveItemFromInventory(newUpgrade);
-
-                    //remove the UI upgrade element
                     m_upgradeElements.Remove(dragableItem.transform.parent.gameObject);
 
-                    //reset the weapon display!
                     SetupWeaponDisplay();
                 }
             }
@@ -230,10 +228,9 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
         // Get the rectangular bounding box of your UI element
         Rect rect = m_upgradeApplyArea.rectTransform.rect;
-
         //convert position to bottom left being 0,0
-        // canvasSize = m_canvas.pixelRect;
-        //pos -= new Vector2(canvasSize.width / 2, canvasSize.height / 2);
+        Rect canvasSize = m_canvas.pixelRect;
+        pos -= new Vector2(canvasSize.width / 2, canvasSize.height / 2);
         
         // Get the left, right, top, and bottom boundaries of the rect
         float leftSide = m_upgradeApplyArea.rectTransform.anchoredPosition.x - rect.width / 2;
@@ -292,10 +289,6 @@ public class UIScreen_UpgradeMenu : UIScreenBase
                 if (upSeg.ScrapCost > 0)
                 {
                     uiUpSeg.AccessUpgradeSegmentCostText().text = upSeg.ScrapCost.ToString();
-                }
-                else
-                {
-                    uiUpSeg.AccessUpgradeSegmentCostText().text = "FREE";
                 }
 
                 if(m_weaponToUpgrade.GetUpgradePath().GetCurrentUpgradeIndex() >= upgradeIndex)
