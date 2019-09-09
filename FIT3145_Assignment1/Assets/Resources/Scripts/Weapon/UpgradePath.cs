@@ -38,6 +38,12 @@ public struct UpgradePath
             if(miniUpgrade.StatToImprove != EWeaponStat.MAX)
             {
                 m_parentWeapon.AccessWeaponStat(miniUpgrade.StatToImprove).AddCurrent(miniUpgrade.Value);
+
+                //hacky way of fixing up ammo if clip size is modified
+                if(m_parentWeapon.GetWeaponType() == EWeaponType.RANGED && miniUpgrade.StatToImprove == EWeaponStat.RANGED_CLIP_SIZE)
+                {
+                    ((Weapon_Ranged)(m_parentWeapon)).ResetAmmo();
+                }
             }
 
             if(miniUpgrade.SlotUnlock)
