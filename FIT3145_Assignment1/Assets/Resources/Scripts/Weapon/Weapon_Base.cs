@@ -97,9 +97,9 @@ public abstract class Weapon_Base : Item
     }
     public void RemoveAllUpgrades()
     {
-        for(int i = 0; i < m_currentUpgrades.Count; ++i)
+        while(m_currentUpgrades.Count > 0)
         {
-            RemoveUpgrade(i);
+            RemoveUpgrade(0);
         }
     }
 

@@ -14,6 +14,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     [SerializeField] private UnityEngine.UI.Button m_removeAllUpgradesButton;
     [SerializeField] private UnityEngine.UI.Button m_upgradeButton;
     [SerializeField] private UnityEngine.UI.Text m_weaponInformationText;
+    [SerializeField] private UnityEngine.UI.Text m_weaponInformationText_Upgrades;
 
     //refs
     [SerializeField] Canvas m_canvas;
@@ -103,7 +104,14 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
                     if(IsInsideUpgradeApplyArea(UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
                     {
-                        m_upgradeApplyArea.color = Color.green;
+                        if(m_weaponToUpgrade.CanAddUpgrade())
+                        {
+                            m_upgradeApplyArea.color = Color.green;
+                        }
+                        else
+                        {
+                            m_upgradeApplyArea.color = Color.red;
+                        }
                     }
                     else
                     {
@@ -359,9 +367,10 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
     private void RefreshWeaponInformation()
     {
-        if(m_weaponInformationText)
+        if(m_weaponInformationText && m_weaponInformationText_Upgrades)
         {
-            m_weaponInformationText.text =  "Weapon Name: " + m_weaponToUpgrade.GetItemName();
+            //weapon name & stats
+            m_weaponInformationText.text =  "Name: " + m_weaponToUpgrade.GetItemName();
             m_weaponInformationText.text += "\n";
 
             for(int i = 0; i < (int)EWeaponStat.MAX; ++i)
@@ -378,22 +387,24 @@ public class UIScreen_UpgradeMenu : UIScreenBase
                 }
             }
 
-            m_weaponInformationText.text += "\n";
-            m_weaponInformationText.text += "==UPGRADES== (SLOTS AVAILABLE: " + m_weaponToUpgrade.GetUpgradesAvailableCount() + ")";
-            m_weaponInformationText.text += "\n";
+            //upgrades info
 
-            if(m_weaponToUpgrade.AccessCurrentUpgrades().Count > 0)
+            m_weaponInformationText_Upgrades.text = "==UPGRADES==";
+            m_weaponInformationText_Upgrades.text += "\n";
+            m_weaponInformationText_Upgrades.text += "(SLOTS AVAILABLE: " + m_weaponToUpgrade.GetUpgradesAvailableCount() + ")";
+            m_weaponInformationText_Upgrades.text += "\n";
+
+            if (m_weaponToUpgrade.AccessCurrentUpgrades().Count > 0)
             {
                 foreach (Upgrade up in m_weaponToUpgrade.AccessCurrentUpgrades())
                 {
-                    m_weaponInformationText.text += up.GetItemName() + "\n";
+                    m_weaponInformationText_Upgrades.text += up.GetItemName() + "\n";
                 }
             }
             else
             {
-                m_weaponInformationText.text += "none";
+                m_weaponInformationText_Upgrades.text += "none";
             }
-
         }
     }
 
