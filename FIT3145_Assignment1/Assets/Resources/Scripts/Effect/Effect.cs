@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class Effect : MonoBehaviour
 {
     //--Variables--//
+    [SerializeField] private string m_effectName;
     protected Character_Core m_parentCharacter;
     [SerializeField] private float m_lifetime = 0.0f;
 
@@ -16,6 +17,7 @@ public abstract class Effect : MonoBehaviour
 
     public abstract void UpdateEffect();
     public void SetCharacter(in Character_Core character) { m_parentCharacter = character; }
+
     public float GetLifeTime() { return m_lifetime; }
     public void SetLifeTime(float newValue)
     {
@@ -23,4 +25,6 @@ public abstract class Effect : MonoBehaviour
         m_lifetime = Mathf.Clamp(m_lifetime, 0, float.MaxValue);
     }
     public void AddLifeTime(float newValue) { SetLifeTime(GetLifeTime() + newValue); }
+
+    public string GetEffectName() { return m_effectName; }
 }

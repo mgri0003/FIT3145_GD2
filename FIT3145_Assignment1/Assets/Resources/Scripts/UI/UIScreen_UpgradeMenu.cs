@@ -13,6 +13,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     [SerializeField] private UnityEngine.UI.Button m_backButton;
     [SerializeField] private UnityEngine.UI.Button m_removeAllUpgradesButton;
     [SerializeField] private UnityEngine.UI.Button m_upgradeButton;
+    [SerializeField] private UnityEngine.UI.Text m_weaponInformationText;
 
     //refs
     [SerializeField] Canvas m_canvas;
@@ -42,7 +43,11 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     {
         m_backButton.onClick.AddListener(() => { OnBack(); });
         m_removeAllUpgradesButton.onClick.AddListener(() => { RemoveAllAttachedUpgrades(); });
-        m_upgradeButton.onClick.AddListener(() => { m_weaponToUpgrade.UpgradeWeapon(); RefreshUpgradeSegments(); });
+        m_upgradeButton.onClick.AddListener(() => {
+            m_weaponToUpgrade.UpgradeWeapon();
+            RefreshUpgradeSegments();
+            RefreshWeaponInformation();
+        });
     }
 
     protected override void OnEnable()
@@ -56,7 +61,11 @@ public class UIScreen_UpgradeMenu : UIScreenBase
             //Populate upgrade scroll view
             RepopulateUpgradeElementsInScrollView();
 
+            //populate the upgrade segments
             PopulateUpgradeSegments();
+
+            //update the weapon information
+            RefreshWeaponInformation();
         }
     }
 
@@ -119,7 +128,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
             m_weaponToUpgrade.transform.localScale = new Vector3(1, 1, 1) * m_displayWeaponSize;
             m_weaponToUpgrade.transform.rotation = m_WeaponDisplay.rotation;
 
-            m_weaponToUpgrade.SetAllAttachedUpgradeParticleEffects(0.2f);
+            m_weaponToUpgrade.SetAllAttachedUpgradeParticleEffectsScale(0.2f);
         }
     }
 
@@ -131,7 +140,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
             m_weaponToUpgrade.transform.localScale = new Vector3(1, 1, 1);
             m_weaponToUpgrade.MoveItemToInventoryZone();
 
-            m_weaponToUpgrade.SetAllAttachedUpgradeParticleEffects(1.0f);
+            m_weaponToUpgrade.SetAllAttachedUpgradeParticleEffectsScale(1.0f);
         }
     }
 
@@ -191,6 +200,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
         }
 
         RepopulateUpgradeElementsInScrollView();
+        RefreshWeaponInformation();
     }
 
     private void OnUpgradeElementDropped(UI_DragableItem dragableItem, PointerEventData eventData)
@@ -213,6 +223,9 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
                     //reset the weapon display!
                     SetupWeaponDisplay();
+
+                    //refresh weapon info!!
+                    RefreshWeaponInformation();
                 }
             }
         }
@@ -222,6 +235,9 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
         //reposition the elements in scroll view
         RepositionUpgradeElementsInScrollView();
+
+        //refresh the weapon info just incase
+        RefreshWeaponInformation();
     }
 
     private bool IsInsideUpgradeApplyArea(Vector2 pos)
@@ -338,6 +354,46 @@ public class UIScreen_UpgradeMenu : UIScreenBase
         {
             Destroy(m_upgradeSegments[0]);
             m_upgradeSegments.RemoveAt(0);
+        }
+    }
+
+    private void RefreshWeaponInformation()
+    {
+        if(m_weaponInformationText)
+        {
+            m_weaponInformationText.text =  "Weapon Name: " + m_weaponToUpgrade.GetItemName();
+            m_weaponInformationText.text += "\n";
+
+            for(int i = 0; i < (int)EWeaponStat.MAX; ++i)
+            {
+                bool isMeleeStat = ((EWeaponStat)i).ToString().Contains("MELEE_");
+                bool isRangedStat = ((EWeaponStat)i).ToString().Contains("RANGED_");
+
+                if( ((EWeaponStat)i).ToString().Contains("ALL_") 
+                    || (m_weaponToUpgrade.GetWeaponType() == EWeaponType.MELEE && isMeleeStat) 
+                    || (m_weaponToUpgrade.GetWeaponType() == EWeaponType.RANGED && isRangedStat))
+                {
+                    Stat stat = m_weaponToUpgrade.AccessWeaponStat((EWeaponStat)i);
+                    m_weaponInformationText.text += stat.GetName() + ": " + stat.GetCurrent().ToString() + "\n";
+                }
+            }
+
+            m_weaponInformationText.text += "\n";
+            m_weaponInformationText.text += "==UPGRADES== (SLOTS AVAILABLE: " + m_weaponToUpgrade.GetUpgradesAvailableCount() + ")";
+            m_weaponInformationText.text += "\n";
+
+            if(m_weaponToUpgrade.AccessCurrentUpgrades().Count > 0)
+            {
+                foreach (Upgrade up in m_weaponToUpgrade.AccessCurrentUpgrades())
+                {
+                    m_weaponInformationText.text += up.GetItemName() + "\n";
+                }
+            }
+            else
+            {
+                m_weaponInformationText.text += "none";
+            }
+
         }
     }
 

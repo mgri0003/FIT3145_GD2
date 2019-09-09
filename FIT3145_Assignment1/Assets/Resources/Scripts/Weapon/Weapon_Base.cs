@@ -122,7 +122,17 @@ public abstract class Weapon_Base : Item
         return ref m_currentUpgrades;
     }
 
-    public void SetAllAttachedUpgradeParticleEffects(float value)
+    public uint GetUpgradeLimit()
+    {
+        return m_upgradeLimit;
+    }
+
+    public int GetUpgradesAvailableCount()
+    {
+        return (int)m_upgradeLimit - m_currentUpgrades.Count;
+    }
+
+    public void SetAllAttachedUpgradeParticleEffectsScale(float value)
     {
         foreach (Upgrade up in m_currentUpgrades)
         {
@@ -130,4 +140,17 @@ public abstract class Weapon_Base : Item
         }
     }
 
+    public string GetWeaponStatAsString(in EWeaponStat stat)
+    {
+        string[] WeaponStatNames = 
+        {
+            "DAMAGE",
+            "PROJECTILE SPEED",
+            "CLIP SIZE",
+            "RELOAD TIME",
+            "FIRE RATE"
+        };
+
+        return WeaponStatNames[(int)stat];
+    }
 }

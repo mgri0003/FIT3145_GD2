@@ -43,4 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62642a5075ddab44a840c4f754ae36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_effectName: Zap
   m_lifetime: 1
