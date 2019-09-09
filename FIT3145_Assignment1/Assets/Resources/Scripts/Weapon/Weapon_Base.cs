@@ -26,7 +26,7 @@ public abstract class Weapon_Base : Item
     //--Variables--
     [SerializeField] protected Stat[] m_weaponStats = new Stat[(int)EWeaponStat.MAX];
     [SerializeField] private EWeaponType m_weaponType = EWeaponType.NONE;
-    [SerializeField] private UpgradePath m_upgradePath;
+    [SerializeField] private ImprovementPath m_improvementPath;
     protected List<Upgrade> m_currentUpgrades = new List<Upgrade>();
     private uint m_upgradeLimit = 1;
     private const uint m_totalUpgradeLimit = 3;
@@ -36,7 +36,7 @@ public abstract class Weapon_Base : Item
     protected Weapon_Base()
     {
         Constructor_InitWeaponStats();
-        m_upgradePath.SetParentWeapon(this);
+        m_improvementPath.SetParentWeapon(this);
     }
 
     protected void Constructor_InitWeaponStats()
@@ -57,10 +57,10 @@ public abstract class Weapon_Base : Item
         return ref m_weaponStats[(int)stat];
     }
 
-    public UpgradePath GetUpgradePath() { return m_upgradePath; }
-    public void UpgradeWeapon()
+    public ImprovementPath GetImprovementPath() { return m_improvementPath; }
+    public void ImproveWeapon()
     {
-        m_upgradePath.Upgrade();
+        m_improvementPath.Improve();
     }
 
     public void IncreaseUpgradeLimit()

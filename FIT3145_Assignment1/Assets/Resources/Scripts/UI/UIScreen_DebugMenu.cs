@@ -76,9 +76,8 @@ public class UIScreen_DebugMenu : UIScreenBase
                     GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(weapon);
                 }
             }
-            if (GUI.Button(new Rect((x + width), y, 80, height), "Upgrade (" + weapon.GetUpgradePath().GetCurrentUpgradeIndex() + ")"))
+            if (GUI.Button(new Rect((x + width), y, 80, height), "Upgrade (" + weapon.GetImprovementPath().GetCurrentImprovementIndex() + ")"))
             {
-                //weapon.UpgradeWeapon();
                 (UIScreen_Manager.Instance.GetUIScreen(EUIScreen.UPGRADE_MENU) as UIScreen_UpgradeMenu).SetWeaponToUpgrade(weapon);
                 UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.UPGRADE_MENU);
             }

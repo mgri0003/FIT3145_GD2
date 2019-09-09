@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 6054189061151031522}
   - component: {fileID: 8145998295189267668}
   m_Layer: 0
-  m_Name: UI_UpgradeSegment
+  m_Name: UI_ImprovementSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -203,10 +203,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc7c7aa586c2cd45a6ca4e977215462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_upgradeSegmentText: {fileID: 2099064223266062835}
-  m_upgradeSegmentCostText: {fileID: 9186960146691536330}
-  m_upgradeSegmentFrame: {fileID: 7446119362807580610}
-  m_upgradeSegmentCostFrame: {fileID: 3727433458911368720}
+  m_improvementSegmentText: {fileID: 2099064223266062835}
+  m_improvementSegmentCostText: {fileID: 9186960146691536330}
+  m_improvementSegmentFrame: {fileID: 7446119362807580610}
+  m_improvementSegmentCostFrame: {fileID: 3727433458911368720}
   m_background: {fileID: 3003181866000303904}
 --- !u!1 &4955468691076836766
 GameObject:
