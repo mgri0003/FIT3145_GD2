@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UI_CanvasManager : MonoBehaviour
 {
     [SerializeField] float m_planeDistance = 0.3f;
-    private Canvas m_canvas;
+    private static Canvas m_canvas;
     private Camera m_camera;
 
     // Start is called before the first frame update
@@ -40,5 +40,63 @@ public class UI_CanvasManager : MonoBehaviour
                 m_canvas.planeDistance = m_planeDistance;
             }
         }
+    }
+
+    public static Vector2 ConvertCanvasLocalPositionToScreenPosition(Vector2 localPos)
+    {
+        localPos.x /= m_canvas.GetComponent<RectTransform>().sizeDelta.x;
+        localPos.y /= m_canvas.GetComponent<RectTransform>().sizeDelta.y;
+
+        localPos.x *= m_canvas.pixelRect.width;
+        localPos.y *= m_canvas.pixelRect.height;
+
+        return localPos;
+    }
+
+    public static Vector2 ConvertScreenPositionToCanvasLocalPosition(Vector2 screenPos)
+    {
+        screenPos.x /= m_canvas.pixelRect.width;
+        screenPos.y /= m_canvas.pixelRect.height;
+
+        screenPos.x *= m_canvas.GetComponent<RectTransform>().sizeDelta.x;
+        screenPos.y *= m_canvas.GetComponent<RectTransform>().sizeDelta.y;
+
+        return screenPos;
+    }
+
+    public static Vector2 GetMousePositionFromScreenCentre()
+    {
+        Rect canvasSize = m_canvas.pixelRect;
+        return Input.mousePosition - new Vector3(canvasSize.width / 2, canvasSize.height / 2, 0.0f);
+    }
+
+    public static Vector2 GetMousePositionPercent()
+    {
+        Vector2 mousePosPercent = Input.mousePosition;
+        mousePosPercent.x /= Screen.width;
+        mousePosPercent.y /= Screen.height;
+        return mousePosPercent;
+    }
+
+    public static Vector2 GetMousePositionPercentFromScreenCentre()
+    {
+        Vector2 mousePosPercent = Input.mousePosition - new Vector3(Screen.width / 2, Screen.height / 2, 0.0f);
+        mousePosPercent.x /= Screen.width;
+        mousePosPercent.y /= Screen.height;
+        return mousePosPercent;
+    }
+
+    public static Vector3 MousePositionPercentToScreenPixel(Vector2 mousePosPercent)
+    {
+        mousePosPercent.x *= Screen.width;
+        mousePosPercent.y *= Screen.height;
+        return mousePosPercent;
+    }
+
+    public static Vector3 MousePositionPercentToCanvasPixel(Vector2 mousePosPercent)
+    {
+        mousePosPercent.x *= m_canvas.pixelRect.width;
+        mousePosPercent.y *= m_canvas.pixelRect.height;
+        return mousePosPercent;
     }
 }
