@@ -282,7 +282,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
             UpgradeSegment upSeg = m_weaponToUpgrade.GetUpgradePath().GetUpgradeSegments()[upgradeIndex];
             if (uiUpSeg)
             {
-                uiUpSeg.AccessUpgradeSegmentText().text = (upSeg.StatToImprove != EWeaponStat.MAX) ? (m_weaponToUpgrade.AccessWeaponStat(upSeg.StatToImprove).GetName() + " +" + upSeg.Value) : ("") ;
+                uiUpSeg.AccessUpgradeSegmentText().text = (upSeg.StatToImprove != EWeaponStat.MAX) ? (m_weaponToUpgrade.AccessWeaponStat(upSeg.StatToImprove).GetName() + ((upSeg.Value > 0) ? (" +") : (" ") ) + upSeg.Value.ToString()) : "";
 
                 if (upSeg.SlotUnlock)
                 {
