@@ -28,7 +28,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     //dynamic refs
     private Player_Core m_player = null;
     private List<GameObject> m_upgradeElements = new List<GameObject>();
-    private List<GameObject> m_upgradeSegments = new List<GameObject>();
+    private List<GameObject> m_improvementSegments = new List<GameObject>();
     private Weapon_Base m_weaponToUpgrade = null;
 
     //constants
@@ -102,7 +102,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
                     dragableItem.GetParentTransform().localPosition = UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre());
 
-                    if(IsInsideUpgradeApplyArea(UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
+                    if(UI_CanvasManager.IsPointInsideRect(m_upgradeApplyArea.rectTransform, UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
                     {
                         if(m_weaponToUpgrade.CanAddUpgrade())
                         {
@@ -213,7 +213,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
     private void OnUpgradeElementDropped(UI_DragableItem dragableItem, PointerEventData eventData)
     {
-        if (IsInsideUpgradeApplyArea(UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
+        if (UI_CanvasManager.IsPointInsideRect(m_upgradeApplyArea.rectTransform, UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
         {
             Upgrade newUpgrade = dragableItem.GetParentItem() as Upgrade;
             if(newUpgrade)
@@ -248,35 +248,6 @@ public class UIScreen_UpgradeMenu : UIScreenBase
         RefreshWeaponInformation();
     }
 
-    private bool IsInsideUpgradeApplyArea(Vector2 pos)
-    {
-        //Reference : https://stackoverflow.com/questions/40566250/unity-recttransform-contains-point?rq=1
-
-        // Get the rectangular bounding box of your UI element
-        Rect rect = m_upgradeApplyArea.rectTransform.rect;
-
-        //convert position to bottom left being 0,0
-        // canvasSize = m_canvas.pixelRect;
-        //pos -= new Vector2(canvasSize.width / 2, canvasSize.height / 2);
-        
-        // Get the left, right, top, and bottom boundaries of the rect
-        float leftSide = m_upgradeApplyArea.rectTransform.anchoredPosition.x - rect.width / 2;
-        float rightSide = m_upgradeApplyArea.rectTransform.anchoredPosition.x + rect.width / 2;
-        float topSide = m_upgradeApplyArea.rectTransform.anchoredPosition.y + rect.height / 2;
-        float bottomSide = m_upgradeApplyArea.rectTransform.anchoredPosition.y - rect.height / 2;
-        
-        //Debug.Log(leftSide + ", " + rightSide + ", " + topSide + ", " + bottomSide + " | " + pos.x + ", " + pos.y);
-        
-        //Check to see if the point is in the calculated bounds
-        if (pos.x >= leftSide && pos.x <= rightSide &&
-            pos.y >= bottomSide && pos.y <= topSide)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     private void PopulateUpgradeSegments()
     {
         if (m_spawnable_upgradeSegment)
@@ -288,7 +259,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
                 GameObject go = Instantiate(m_spawnable_upgradeSegment);
                 go.transform.SetParent(m_upgradeSegmentsListTransform.transform, false);
                 go.transform.localPosition = new Vector3(0, positionY, 0);
-                m_upgradeSegments.Add(go);
+                m_improvementSegments.Add(go);
                 positionY -= 35.0f;
             }
 
@@ -299,7 +270,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     private void RefreshUpgradeSegments()
     {
         int upgradeIndex = 0;
-        foreach (GameObject upSegGO in m_upgradeSegments)
+        foreach (GameObject upSegGO in m_improvementSegments)
         {
             //Debug.Log("Upgrade Element Created");
             UI_ImprovementSegment uiUpSeg = upSegGO.GetComponent<UI_ImprovementSegment>();
@@ -358,10 +329,10 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
     private void CleanUpUpgradeSegments()
     {
-        while (m_upgradeSegments.Count > 0)
+        while (m_improvementSegments.Count > 0)
         {
-            Destroy(m_upgradeSegments[0]);
-            m_upgradeSegments.RemoveAt(0);
+            Destroy(m_improvementSegments[0]);
+            m_improvementSegments.RemoveAt(0);
         }
     }
 

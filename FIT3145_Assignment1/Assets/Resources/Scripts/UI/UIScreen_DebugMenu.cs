@@ -1,31 +1,76 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UIScreen_DebugMenu : UIScreenBase
 {
+    //UI Elements
+    [SerializeField] private Button m_unequipAllWeaponsButton;
+    [SerializeField] private Image[] m_loadout_hands = new Image[(int)EPlayerHand.MAX];
+    [SerializeField] private Image[] m_loadout_handFrames = new Image[(int)EPlayerHand.MAX];
+
+    //refs
+    [SerializeField] private Sprite m_sprite_defaultEmptyHand;
+    [SerializeField] private GameObject m_spawnable_itemElement;
+    [SerializeField] private GameObject m_inventoryScrollViewContentGO;
+
+    //dynamic refs
+    private Player_Core m_player = null;
+    private List<GameObject> m_itemElements = new List<GameObject>();
+
     protected override void RegisterMethods()
     {
-        
+        m_unequipAllWeaponsButton.onClick.AddListener(() => { UnequipAllWeapons(); });
     }
 
     protected override void OnEnable()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        m_player = GamePlayManager.Instance.GetCurrentPlayer();
+
+        RepopulateItemElementsInScrollView();
+        UpdateLoadoutUIHands();
     }
 
     protected override void OnDisable()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        m_player = null;
     }
 
     protected override void OnGUI()
     {
-        //DEBUG_UI_DisplaySpawnOptions();
-        UI_DisplayInventory();
-        UI_DisplayHands();
+        foreach (GameObject go in m_itemElements)
+        {
+            UI_DragableItem dragableItem = go.GetComponentInChildren<UI_DragableItem>();
+            if (dragableItem)
+            {
+                if (dragableItem.IsDragging())
+                {
+                    //Move the element!
+                    Rect canvasSize = UI_CanvasManager.GetCanvas().pixelRect;
+                    dragableItem.GetParentTransform().SetParent(UI_CanvasManager.GetCanvas().transform);
+                    dragableItem.GetParentTransform().localPosition = UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre());
+
+                    if(dragableItem.GetParentItem().GetItemType() == EItemType.WEAPON)
+                    {
+                        for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+                        {
+                            //if your hovering over a UI hand
+                            if (UI_CanvasManager.IsPointInsideRect(m_loadout_hands[i].rectTransform, dragableItem.GetParentTransform().localPosition))
+                            {
+                                m_loadout_handFrames[i].color = Color.green;
+                            }
+                            else //if your not hovering over a UI Hand
+                            {
+                                //reset UI hand frame colour
+                                m_loadout_handFrames[i].color = Color.white;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     protected override void OnBack()
@@ -33,6 +78,161 @@ public class UIScreen_DebugMenu : UIScreenBase
         throw new System.NotImplementedException();
     }
 
+    private void RepopulateItemElementsInScrollView()
+    {
+        CleanUpItemElementsInScrollView();
+
+        if(m_player)
+        {
+            foreach (Item item in m_player.m_playerInventory.AccessInventoryList())
+            {
+                //if (item.GetItemType() == EItemType.UPGRADE)
+                {
+                    GameObject go = Instantiate(m_spawnable_itemElement);
+
+                    go.transform.SetParent(m_inventoryScrollViewContentGO.transform, false);
+
+                    go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnDrop = OnItemElementDropped;
+                    go.GetComponentInChildren<UI_DragableItem>().SetParentItem(item);
+
+                    m_itemElements.Add(go);
+                }
+            }
+        }
+
+        RepositionItemElementsInScrollView();
+    }
+
+    private void RemoveItemElement(GameObject itemElement)
+    {
+        if(m_itemElements.Contains(itemElement))
+        {
+            m_itemElements.Remove(itemElement);
+            Destroy(itemElement);
+        }
+    }
+
+    private void CleanUpItemElementsInScrollView()
+    {
+        while (m_itemElements.Count > 0)
+        {
+            Destroy(m_itemElements[0]);
+            m_itemElements.RemoveAt(0);
+        }
+    }
+
+    private void RepositionItemElementsInScrollView()
+    {
+        float upgradePositionY = 0;
+        foreach (GameObject go in m_itemElements)
+        {
+            go.transform.localPosition = new Vector3(100, -30 - upgradePositionY, 0);
+
+            upgradePositionY += 50.0f;
+        }
+    }
+
+    private void OnItemElementDropped(UI_DragableItem dragableItem, PointerEventData eventData)
+    {
+        bool weaponItemSlotted = false;
+        if(dragableItem.GetParentItem().GetItemType() == EItemType.WEAPON)
+        {
+            for(uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+            {
+                if(UI_CanvasManager.IsPointInsideRect(m_loadout_hands[i].rectTransform, dragableItem.GetParentTransform().localPosition))
+                {
+                    weaponItemSlotted = true;
+
+                    //if a weapon is already being held, its about to get replaced, so detach it and put it back into inventory
+                    if (m_player.m_playerWeaponHolder.IsHoldingWeaponInHand((EPlayerHand)i))
+                    {
+                        UnequipWeapon((EPlayerHand)i);
+                    }
+                    
+                    //attach new weapon to hand!
+                    m_player.m_playerWeaponHolder.AttachWeaponToHand((EPlayerHand)i, dragableItem.GetParentItem() as Weapon_Base);
+
+                    //remove the weapon from the inventory!
+                    m_player.m_playerInventory.RemoveItemFromInventory(dragableItem.GetParentItem());
+
+                    //remove the UI item element
+                    RemoveItemElement(dragableItem.GetParentTransform().gameObject);
+                }
+            }
+        }
+
+        if(!weaponItemSlotted)
+        {
+            //set the parent of the dragable element back to the scroll view
+            dragableItem.GetParentTransform().SetParent(m_inventoryScrollViewContentGO.transform);
+        }
+
+        //Repopulate the elements in scroll view
+        RepopulateItemElementsInScrollView();
+
+        //update ui hands
+        UpdateLoadoutUIHands();
+
+        //reset hand frames
+        for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+        {
+            //reset UI hand frame colour
+            m_loadout_handFrames[i].color = Color.white;
+        }
+    }
+
+    private void UpdateLoadoutUIHands()
+    {
+        if(m_player)
+        {
+            for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+            {
+                //set hand sprite to default hand sprite
+                m_loadout_hands[i].sprite = m_sprite_defaultEmptyHand;
+
+                //if there is a weapon equipped, set the hand sprite to the weapon sprite
+                if (m_player.m_playerWeaponHolder.IsHoldingWeaponInHand((EPlayerHand)i))
+                {
+                    Weapon_Base weapon = m_player.m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)i);
+                    if (weapon)
+                    {
+                        m_loadout_hands[i].sprite = weapon.GetItemSprite();
+                    }
+                }
+            }
+        }
+    }
+
+    private void UnequipWeapon(in EPlayerHand hand)
+    {
+        if (m_player.m_playerWeaponHolder.IsHoldingWeaponInHand(hand))
+        {
+            Weapon_Base weapon = m_player.m_playerWeaponHolder.GetWeaponInHand(hand);
+
+            //remove weapon from hand
+            m_player.m_playerWeaponHolder.DetachWeaponFromHand(hand);
+
+            //add weapon back into inventory
+            if (weapon)
+            {
+                m_player.m_playerInventory.AddItemToInventory(weapon);
+            }
+        }
+    }
+
+    private void UnequipAllWeapons()
+    {
+        for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+        {
+            UnequipWeapon((EPlayerHand)i);
+        }
+
+        RepopulateItemElementsInScrollView();
+
+        UpdateLoadoutUIHands();
+    }
+
+    /*
     private void UI_DisplayHands()
     {
         for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
@@ -151,4 +351,5 @@ public class UIScreen_DebugMenu : UIScreenBase
             GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(hand, WeaponsRepo.SpawnWeapon(weaponID).GetComponent<Weapon_Base>());
         }
     }
+    */
 }

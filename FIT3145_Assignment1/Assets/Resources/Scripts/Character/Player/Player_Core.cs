@@ -187,6 +187,29 @@ public class Player_Core : Character_Core
             }
             m_playerInventory.AddItemsToInventory(items);
             m_playerItemPickupArea.ClearCollidingObjects();
+
+            //auto-equip to right hand if empty handed
+            MaybeAutoEquipWeapon();
+        }
+    }
+
+    private void MaybeAutoEquipWeapon()
+    {
+        Weapon_Base possibleWeaponToEquip = null;
+
+        foreach (Item item in m_playerInventory.AccessInventoryList())
+        {
+            if (item.GetItemType() == EItemType.WEAPON)
+            {
+                possibleWeaponToEquip = item as Weapon_Base;
+            }
+        }
+
+        if (possibleWeaponToEquip && !m_playerWeaponHolder.IsHoldingAnyWeapon())
+        {
+            //equip and remove from inventory
+            m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, possibleWeaponToEquip);
+            m_playerInventory.RemoveItemFromInventory(possibleWeaponToEquip);
         }
     }
 
