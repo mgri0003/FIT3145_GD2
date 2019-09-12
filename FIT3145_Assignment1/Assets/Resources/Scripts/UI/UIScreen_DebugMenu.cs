@@ -10,6 +10,8 @@ public class UIScreen_DebugMenu : UIScreenBase
     [SerializeField] private Button m_unequipAllWeaponsButton;
     [SerializeField] private Image[] m_loadout_hands = new Image[(int)EPlayerHand.MAX];
     [SerializeField] private Image[] m_loadout_handFrames = new Image[(int)EPlayerHand.MAX];
+    [SerializeField] private Image m_upgradeSection;
+    [SerializeField] private Image m_upgradeSectionFrame;
 
     //refs
     [SerializeField] private Sprite m_sprite_defaultEmptyHand;
@@ -31,6 +33,8 @@ public class UIScreen_DebugMenu : UIScreenBase
 
         RepopulateItemElementsInScrollView();
         UpdateLoadoutUIHands();
+
+        m_upgradeSectionFrame.color = Color.white;
     }
 
     protected override void OnDisable()
@@ -66,6 +70,15 @@ public class UIScreen_DebugMenu : UIScreenBase
                                 //reset UI hand frame colour
                                 m_loadout_handFrames[i].color = Color.white;
                             }
+                        }
+
+                        if (UI_CanvasManager.IsPointInsideRect(m_upgradeSection.rectTransform, dragableItem.GetParentTransform().localPosition))
+                        {
+                            m_upgradeSectionFrame.color = Color.green;
+                        }
+                        else
+                        {
+                            m_upgradeSectionFrame.color = Color.white;
                         }
                     }
                 }
@@ -139,6 +152,7 @@ public class UIScreen_DebugMenu : UIScreenBase
         {
             for(uint i = 0; i < (uint)EPlayerHand.MAX; i++)
             {
+                //if item dropped on hand
                 if(UI_CanvasManager.IsPointInsideRect(m_loadout_hands[i].rectTransform, dragableItem.GetParentTransform().localPosition))
                 {
                     weaponItemSlotted = true;
@@ -158,6 +172,12 @@ public class UIScreen_DebugMenu : UIScreenBase
                     //remove the UI item element
                     RemoveItemElement(dragableItem.GetParentTransform().gameObject);
                 }
+            }
+
+            if (UI_CanvasManager.IsPointInsideRect(m_upgradeSection.rectTransform, dragableItem.GetParentTransform().localPosition))
+            {
+                (UIScreen_Manager.Instance.GetUIScreen(EUIScreen.UPGRADE_MENU) as UIScreen_UpgradeMenu).SetWeaponToUpgrade(dragableItem.GetParentItem() as Weapon_Base);
+                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.UPGRADE_MENU);
             }
         }
 
