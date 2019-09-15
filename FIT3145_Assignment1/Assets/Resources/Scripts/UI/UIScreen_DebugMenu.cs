@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+#pragma warning disable 649
+
 public class UIScreen_DebugMenu : UIScreenBase
 {
     //UI Elements
@@ -268,13 +270,13 @@ public class UIScreen_DebugMenu : UIScreenBase
                     if(CanAugmentBeSlotted(augSlot, aug.GetAugmentType()))
                     {
                         //if a augment is already slotted in slot, its about to get replaced, so detach it and put it back into inventory
-                        if (m_player.HasAugment(augSlot))
+                        if (m_player.m_playerAugmentHandler.HasAugment(augSlot))
                         {
                             DetachPlayerAugment(augSlot);
                         }
 
                         //attach augment
-                        m_player.AttachAugment(augSlot, aug);
+                        m_player.m_playerAugmentHandler.AttachAugment(augSlot, aug);
 
                         //remove the augment from the inventory!
                         m_player.m_playerInventory.RemoveItemFromInventory(dragableItem.GetParentItem());
@@ -361,13 +363,13 @@ public class UIScreen_DebugMenu : UIScreenBase
 
     private void DetachPlayerAugment(in EAugmentSlot augmentSlot)
     {
-        if(m_player.HasAugment(augmentSlot))
+        if(m_player.m_playerAugmentHandler.HasAugment(augmentSlot))
         {
-            Augment augment = m_player.GetAugment(augmentSlot);
+            Augment augment = m_player.m_playerAugmentHandler.GetAugment(augmentSlot);
             if(augment)
             {
                 //detach augment from augment slot
-                m_player.DetachAugment(augmentSlot);
+                m_player.m_playerAugmentHandler.DetachAugment(augmentSlot);
 
                 //put augment back into inventory
                 m_player.m_playerInventory.AddItemToInventory(augment);
@@ -379,9 +381,9 @@ public class UIScreen_DebugMenu : UIScreenBase
     {
         for (uint i = 0; i < (uint)EAugmentSlot.MAX; i++)
         {
-            if (m_player.HasAugment((EAugmentSlot)i))
+            if (m_player.m_playerAugmentHandler.HasAugment((EAugmentSlot)i))
             {
-                m_augmentSlots[i].sprite = m_player.GetAugment((EAugmentSlot)i).GetItemSprite();
+                m_augmentSlots[i].sprite = m_player.m_playerAugmentHandler.GetAugment((EAugmentSlot)i).GetItemSprite();
             }
             else
             {

@@ -2,18 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EAugmentSlot
-{
-    Q,
-    E,
-    SPACE,
-    PASSIVE_1,
-    PASSIVE_2,
-
-    MAX
-}
-
-
 public class Player_Core : Character_Core
 {
     //-Variables-
@@ -21,13 +9,11 @@ public class Player_Core : Character_Core
     private float m_movementValueVertical = 0.0f;
     private Vector3 m_directionInput = new Vector3(0,0,0);
 
-    //augments
-    private Augment[] m_augments = new Augment[(int)EAugmentSlot.MAX];
-
     //Components
     [HideInInspector] public Player_Rotator m_playerRotator;
     [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
     [HideInInspector] public Player_Inventory m_playerInventory;
+    [HideInInspector] public Player_AugmentHandler m_playerAugmentHandler;
     [SerializeField] public Hitbox m_playerItemPickupArea;
 
 
@@ -53,6 +39,10 @@ public class Player_Core : Character_Core
 
         m_playerInventory = GetComponent<Player_Inventory>();
         Debug.Assert(m_playerInventory != null, "Player Inventory Is Null");
+
+        m_playerAugmentHandler = GetComponent<Player_AugmentHandler>();
+        Debug.Assert(m_playerAugmentHandler != null, "Player Augment Handler Is Null");
+
 
         Debug.Assert(m_playerItemPickupArea != null, "Player Item Pickup Are Is Null");
     }
@@ -241,74 +231,11 @@ public class Player_Core : Character_Core
             }
         }
 
-        if (possibleAugmentToEquip && !HasAugment(EAugmentSlot.SPACE))
+        if (possibleAugmentToEquip && !m_playerAugmentHandler.HasAugment(EAugmentSlot.SPACE))
         {
             //equip and remove from inventory
-            AttachAugment(EAugmentSlot.SPACE, possibleAugmentToEquip);
+            m_playerAugmentHandler.AttachAugment(EAugmentSlot.SPACE, possibleAugmentToEquip);
             m_playerInventory.RemoveItemFromInventory(possibleAugmentToEquip);
         }
-    }
-
-    public Augment GetAugment(in EAugmentSlot augmentSlot)
-    {
-        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
-
-        if(augmentSlot != EAugmentSlot.MAX)
-        {
-            return m_augments[(int)augmentSlot];
-        }
-
-        return null;
-    }
-
-    public bool HasAugment(in EAugmentSlot augmentSlot)
-    {
-        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
-
-        if (augmentSlot != EAugmentSlot.MAX)
-        {
-            return m_augments[(int)augmentSlot] != null;
-        }
-
-        return false;
-    }
-
-    public void UseAugment(in EAugmentSlot augmentSlot)
-    {
-        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
-        Debug.Assert(augmentSlot != EAugmentSlot.PASSIVE_1 && augmentSlot != EAugmentSlot.PASSIVE_2, "Can't Use Passive Augments!");
-
-        if (HasAugment(augmentSlot))
-        {
-            GetAugment(augmentSlot).Use();
-        }
-    }
-
-    public void AttachAugment(in EAugmentSlot augmentSlot, Augment newAugment)
-    {
-        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
-        if (CanAttachAugment(augmentSlot))
-        {
-            m_augments[(int)augmentSlot] = newAugment;
-            m_augments[(int)augmentSlot].SetAugmentActive(true);
-            m_augments[(int)augmentSlot].SetPlayer(this);
-        }
-    }
-
-    public void DetachAugment(in EAugmentSlot augmentSlot)
-    {
-        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
-        if (HasAugment(augmentSlot))
-        {
-            m_augments[(int)augmentSlot].SetAugmentActive(false);
-            m_augments[(int)augmentSlot].SetPlayer(null);
-            m_augments[(int)augmentSlot] = null;
-        }
-    }
-
-    public bool CanAttachAugment(in EAugmentSlot augmentSlot)
-    {
-        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
-        return !HasAugment(augmentSlot);
     }
 }

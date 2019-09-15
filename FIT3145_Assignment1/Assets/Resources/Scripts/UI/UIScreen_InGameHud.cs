@@ -132,12 +132,12 @@ public class UIScreen_InGameHud : UIScreenBase
         {
             EAugmentSlot augSlot = (EAugmentSlot)i;
 
-            if (m_player.HasAugment(augSlot))
+            if (m_player.m_playerAugmentHandler.HasAugment(augSlot))
             {
-                m_augmentsDisplay[i].sprite = m_player.GetAugment(augSlot).GetItemSprite();
-                m_augmentsDisplay_Cooldown[i].fillAmount = (m_player.GetAugment(augSlot).GetCooldownRatio());
+                m_augmentsDisplay[i].sprite = m_player.m_playerAugmentHandler.GetAugment(augSlot).GetItemSprite();
+                m_augmentsDisplay_Cooldown[i].fillAmount = (m_player.m_playerAugmentHandler.GetAugment(augSlot).GetCooldownRatio());
 
-                if (m_player.GetAugment(augSlot).GetCooldown() == 0)
+                if (m_player.m_playerAugmentHandler.GetAugment(augSlot).GetCooldown() == 0)
                 {
                     m_augmentsDisplay_Frame[i].color = Color.green;
                 }
