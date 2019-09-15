@@ -21,11 +21,10 @@ public class UIScreen_InGameHud : UIScreenBase
     [SerializeField] private Image[] m_handDisplays = new Image[2];
     [SerializeField] private Image[] m_handDisplaysAmmo = new Image[2];
     [SerializeField] private Text[] m_handDisplaysAmmoText = new Text[2];
-    [SerializeField] private Image m_spaceAugmentDisplay;
-    [SerializeField] private Image m_spaceAugmentDisplay_Cooldown;
-    [SerializeField] private Image m_spaceAugmentDisplay_Frame;
 
-
+    [SerializeField] private Image[] m_augmentsDisplay = new Image[(int)EAugmentSlot.MAX];
+    [SerializeField] private Image[] m_augmentsDisplay_Cooldown = new Image[(int)EAugmentSlot.MAX];
+    [SerializeField] private Image[] m_augmentsDisplay_Frame = new Image[(int)EAugmentSlot.MAX];
 
 
     //--Methods--//
@@ -54,7 +53,7 @@ public class UIScreen_InGameHud : UIScreenBase
     protected override void OnGUI()
     {
         UI_DisplayPickupable();
-        UI_UpdateSpaceAugment();
+        UI_UpdateDisplayAugments();
         
         UI_UpdateHealthBar();
         UI_UpdateHandDisplays();
@@ -127,26 +126,32 @@ public class UIScreen_InGameHud : UIScreenBase
         m_healthBar.fillAmount = healthFillRatio;
     }
 
-    private void UI_UpdateSpaceAugment()
+    private void UI_UpdateDisplayAugments()
     {
-        if(m_player.HasSpaceAugment())
+        for(uint i = 0; i < (uint)EAugmentSlot.MAX; ++i)
         {
-            m_spaceAugmentDisplay.sprite = m_player.GetSpaceAugment().GetItemSprite();
-            m_spaceAugmentDisplay_Cooldown.fillAmount = (m_player.GetSpaceAugment().GetCooldown() / m_player.GetSpaceAugment().GetMaxCooldown());
-            
-            if(m_player.GetSpaceAugment().GetCooldown() == 0)
+            EAugmentSlot augSlot = (EAugmentSlot)i;
+
+            if (m_player.HasAugment(augSlot))
             {
-                m_spaceAugmentDisplay_Frame.color = Color.green;
+                m_augmentsDisplay[i].sprite = m_player.GetAugment(augSlot).GetItemSprite();
+                m_augmentsDisplay_Cooldown[i].fillAmount = (m_player.GetAugment(augSlot).GetCooldownRatio());
+
+                if (m_player.GetAugment(augSlot).GetCooldown() == 0)
+                {
+                    m_augmentsDisplay_Frame[i].color = Color.green;
+                }
+                else
+                {
+                    m_augmentsDisplay_Frame[i].color = Color.white;
+                }
             }
             else
             {
-                m_spaceAugmentDisplay_Frame.color = Color.white;
+                m_augmentsDisplay[i].sprite = m_EmptyAugmentSprite;
+                m_augmentsDisplay_Frame[i].color = Color.white;
+                m_augmentsDisplay_Cooldown[i].fillAmount = 0;
             }
-        }
-        else
-        {
-            m_spaceAugmentDisplay.sprite = m_EmptyAugmentSprite;
-            m_spaceAugmentDisplay_Frame.color = Color.white;
         }
     }
 

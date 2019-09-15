@@ -2,6 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EAugmentSlot
+{
+    Q,
+    E,
+    SPACE,
+    PASSIVE_1,
+    PASSIVE_2,
+
+    MAX
+}
+
+
 public class Player_Core : Character_Core
 {
     //-Variables-
@@ -9,7 +21,8 @@ public class Player_Core : Character_Core
     private float m_movementValueVertical = 0.0f;
     private Vector3 m_directionInput = new Vector3(0,0,0);
 
-    private Augment m_spaceAugment = null;
+    //augments
+    private Augment[] m_augments = new Augment[(int)EAugmentSlot.MAX];
 
     //Components
     [HideInInspector] public Player_Rotator m_playerRotator;
@@ -188,16 +201,19 @@ public class Player_Core : Character_Core
             m_playerInventory.AddItemsToInventory(items);
             m_playerItemPickupArea.ClearCollidingObjects();
 
-            //auto-equip to right hand if empty handed
-            MaybeAutoEquipWeapon();
+            //auto-equip first weapon to right hand if empty handed
+            MaybeAutoEquipWeapon(items);
+
+            //auto-equip first augment to space
+            MaybeAutoEquipAugment(items);
         }
     }
 
-    private void MaybeAutoEquipWeapon()
+    private void MaybeAutoEquipWeapon(List<Item> items)
     {
         Weapon_Base possibleWeaponToEquip = null;
 
-        foreach (Item item in m_playerInventory.AccessInventoryList())
+        foreach (Item item in items)
         {
             if (item.GetItemType() == EItemType.WEAPON)
             {
@@ -213,43 +229,86 @@ public class Player_Core : Character_Core
         }
     }
 
-    public Augment GetSpaceAugment()
+    private void MaybeAutoEquipAugment(List<Item> items)
     {
-        return m_spaceAugment;
-    }
+        Augment possibleAugmentToEquip = null;
 
-    public bool HasSpaceAugment()
-    {
-        return m_spaceAugment != null;
-    }
-
-    public void UseSpaceAugment()
-    {
-        if(m_spaceAugment)
+        foreach (Item item in items)
         {
-            m_spaceAugment.Use();
+            if (item.GetItemType() == EItemType.AUGMENT)
+            {
+                possibleAugmentToEquip = item as Augment;
+            }
+        }
+
+        if (possibleAugmentToEquip && !HasAugment(EAugmentSlot.SPACE))
+        {
+            //equip and remove from inventory
+            AttachAugment(EAugmentSlot.SPACE, possibleAugmentToEquip);
+            m_playerInventory.RemoveItemFromInventory(possibleAugmentToEquip);
         }
     }
 
-    public void AttachSpaceAugment(Augment newAugment)
+    public Augment GetAugment(in EAugmentSlot augmentSlot)
     {
-        if(CanAttachSpaceAugment())
+        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
+
+        if(augmentSlot != EAugmentSlot.MAX)
         {
-            m_spaceAugment = newAugment;
-            m_spaceAugment.SetAugmentActive(true);
-            m_spaceAugment.SetPlayer(this);
+            return m_augments[(int)augmentSlot];
+        }
+
+        return null;
+    }
+
+    public bool HasAugment(in EAugmentSlot augmentSlot)
+    {
+        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
+
+        if (augmentSlot != EAugmentSlot.MAX)
+        {
+            return m_augments[(int)augmentSlot] != null;
+        }
+
+        return false;
+    }
+
+    public void UseAugment(in EAugmentSlot augmentSlot)
+    {
+        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
+        Debug.Assert(augmentSlot != EAugmentSlot.PASSIVE_1 && augmentSlot != EAugmentSlot.PASSIVE_2, "Can't Use Passive Augments!");
+
+        if (HasAugment(augmentSlot))
+        {
+            GetAugment(augmentSlot).Use();
         }
     }
 
-    public void DetachSpaceAugment(Augment newAugment)
+    public void AttachAugment(in EAugmentSlot augmentSlot, Augment newAugment)
     {
-        m_spaceAugment.SetAugmentActive(false);
-        m_spaceAugment.SetPlayer(null);
-        m_spaceAugment = null;
+        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
+        if (CanAttachAugment(augmentSlot))
+        {
+            m_augments[(int)augmentSlot] = newAugment;
+            m_augments[(int)augmentSlot].SetAugmentActive(true);
+            m_augments[(int)augmentSlot].SetPlayer(this);
+        }
     }
 
-    public bool CanAttachSpaceAugment()
+    public void DetachAugment(in EAugmentSlot augmentSlot)
     {
-        return m_spaceAugment == null;
+        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
+        if (HasAugment(augmentSlot))
+        {
+            m_augments[(int)augmentSlot].SetAugmentActive(false);
+            m_augments[(int)augmentSlot].SetPlayer(null);
+            m_augments[(int)augmentSlot] = null;
+        }
+    }
+
+    public bool CanAttachAugment(in EAugmentSlot augmentSlot)
+    {
+        Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
+        return !HasAugment(augmentSlot);
     }
 }

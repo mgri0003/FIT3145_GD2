@@ -39,9 +39,17 @@ public class Player_Controller : MonoBehaviour
                 m_player.PickupNearbyItems();
             }
 
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                m_player.UseAugment(EAugmentSlot.Q);
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                m_player.UseAugment(EAugmentSlot.E);
+            }
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                m_player.UseSpaceAugment();
+                m_player.UseAugment(EAugmentSlot.SPACE);
             }
 
             m_player.SetMovementValues(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));

@@ -8,13 +8,19 @@ public class UIScreen_DebugMenu : UIScreenBase
 {
     //UI Elements
     [SerializeField] private Button m_unequipAllWeaponsButton;
+    [SerializeField] private Button[] m_unequipHandButtons = new Button[(int)EPlayerHand.MAX];
+    [SerializeField] private Button[] m_detachAugmentButtons = new Button[(int)EAugmentSlot.MAX];
     [SerializeField] private Image[] m_loadout_hands = new Image[(int)EPlayerHand.MAX];
     [SerializeField] private Image[] m_loadout_handFrames = new Image[(int)EPlayerHand.MAX];
     [SerializeField] private Image m_upgradeSection;
     [SerializeField] private Image m_upgradeSectionFrame;
 
+    [SerializeField] private Image[] m_augmentSlots = new Image[(int)EAugmentSlot.MAX];
+    [SerializeField] private Image[] m_augmentSlots_Frame = new Image[(int)EAugmentSlot.MAX];
+
     //refs
     [SerializeField] private Sprite m_sprite_defaultEmptyHand;
+    [SerializeField] private Sprite m_sprite_defaultEmptyAugment;
     [SerializeField] private GameObject m_spawnable_itemElement;
     [SerializeField] private GameObject m_inventoryScrollViewContentGO;
 
@@ -25,6 +31,17 @@ public class UIScreen_DebugMenu : UIScreenBase
     protected override void RegisterMethods()
     {
         m_unequipAllWeaponsButton.onClick.AddListener(() => { UnequipAllWeapons(); });
+
+        m_unequipHandButtons[(int)EPlayerHand.HAND_RIGHT].onClick.AddListener(() => { UnequipPlayerHand(EPlayerHand.HAND_RIGHT); });
+        m_unequipHandButtons[(int)EPlayerHand.HAND_LEFT].onClick.AddListener(() => { UnequipPlayerHand(EPlayerHand.HAND_LEFT); });
+
+
+
+        m_detachAugmentButtons[(int)EAugmentSlot.Q].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.Q); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
+        m_detachAugmentButtons[(int)EAugmentSlot.E].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.E); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
+        m_detachAugmentButtons[(int)EAugmentSlot.SPACE].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.SPACE); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
+        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_1].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.PASSIVE_1); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
+        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_2].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.PASSIVE_2); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
     }
 
     protected override void OnEnable()
@@ -33,6 +50,7 @@ public class UIScreen_DebugMenu : UIScreenBase
 
         RepopulateItemElementsInScrollView();
         UpdateLoadoutUIHands();
+        UpdateAugmentSlots();
 
         m_upgradeSectionFrame.color = Color.white;
     }
@@ -44,51 +62,99 @@ public class UIScreen_DebugMenu : UIScreenBase
 
     protected override void OnGUI()
     {
+        //reset colours
+        m_upgradeSectionFrame.color = Color.white;
+        for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+        {
+            m_loadout_handFrames[i].color = Color.white;
+        }
+        for (int i = 0; i < (int)EAugmentSlot.MAX; ++i)
+        {
+            m_augmentSlots_Frame[i].color = Color.white;
+        }
+
         foreach (GameObject go in m_itemElements)
         {
             UI_DragableItem dragableItem = go.GetComponentInChildren<UI_DragableItem>();
-            if (dragableItem)
-            {
-                if (dragableItem.IsDragging())
-                {
-                    //Move the element!
-                    Rect canvasSize = UI_CanvasManager.GetCanvas().pixelRect;
-                    dragableItem.GetParentTransform().SetParent(UI_CanvasManager.GetCanvas().transform);
-                    dragableItem.GetParentTransform().localPosition = UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre());
-
-                    if(dragableItem.GetParentItem().GetItemType() == EItemType.WEAPON)
-                    {
-                        for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
-                        {
-                            //if your hovering over a UI hand
-                            if (UI_CanvasManager.IsPointInsideRect(m_loadout_hands[i].rectTransform, dragableItem.GetParentTransform().localPosition))
-                            {
-                                m_loadout_handFrames[i].color = Color.green;
-                            }
-                            else //if your not hovering over a UI Hand
-                            {
-                                //reset UI hand frame colour
-                                m_loadout_handFrames[i].color = Color.white;
-                            }
-                        }
-
-                        if (UI_CanvasManager.IsPointInsideRect(m_upgradeSection.rectTransform, dragableItem.GetParentTransform().localPosition))
-                        {
-                            m_upgradeSectionFrame.color = Color.green;
-                        }
-                        else
-                        {
-                            m_upgradeSectionFrame.color = Color.white;
-                        }
-                    }
-                }
-            }
+            HandleItemDragging(dragableItem);
         }
     }
 
     protected override void OnBack()
     {
         throw new System.NotImplementedException();
+    }
+
+    private void HandleItemDragging(UI_DragableItem dragableItem)
+    {
+        if (dragableItem)
+        {
+            if (dragableItem.IsDragging())
+            {
+                //Move the element!
+                Rect canvasSize = UI_CanvasManager.GetCanvas().pixelRect;
+                dragableItem.GetParentTransform().SetParent(UI_CanvasManager.GetCanvas().transform);
+                dragableItem.GetParentTransform().localPosition = UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre());
+
+                if (dragableItem.GetParentItem().GetItemType() == EItemType.WEAPON)
+                {
+                    //Hovering over HAND SLOTS
+                    for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+                    {
+                        //if your hovering over a UI hand
+                        if (UI_CanvasManager.IsPointInsideRect(m_loadout_hands[i].rectTransform, dragableItem.GetParentTransform().localPosition))
+                        {
+                            m_loadout_handFrames[i].color = Color.green;
+                        }
+                    }
+
+                    //Hovering over UPGRADE SECTION
+                    if (UI_CanvasManager.IsPointInsideRect(m_upgradeSection.rectTransform, dragableItem.GetParentTransform().localPosition))
+                    {
+                        m_upgradeSectionFrame.color = Color.green;
+                    }
+                }
+                else
+                {
+                    for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+                    {
+                        m_loadout_handFrames[i].color = Color.red;
+                    }
+                    m_upgradeSectionFrame.color = Color.red;
+                }
+
+                if(dragableItem.GetParentItem().GetItemType() == EItemType.AUGMENT)
+                {
+                    Augment aug = dragableItem.GetParentItem() as Augment;
+
+                    //Hovering over AUGMENTS
+                    for (int i = 0; i < (int)EAugmentSlot.MAX; ++i)
+                    {
+                        EAugmentSlot augSlot = (EAugmentSlot)i;
+
+                        if (UI_CanvasManager.IsPointInsideRect(m_augmentSlots[i].rectTransform, dragableItem.GetParentTransform().localPosition))
+                        {
+                            if(CanAugmentBeSlotted(augSlot, aug.GetAugmentType()))
+                            {
+                                m_augmentSlots_Frame[i].color = Color.green;
+                            }
+                            else
+                            {
+                                m_augmentSlots_Frame[i].color = Color.red;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //display bad colours for aug slots
+                    for (int i = 0; i < (int)EAugmentSlot.MAX; ++i)
+                    {
+                        m_augmentSlots_Frame[i].color = Color.red;
+                    }
+                }
+            }
+        }
     }
 
     private void RepopulateItemElementsInScrollView()
@@ -147,12 +213,13 @@ public class UIScreen_DebugMenu : UIScreenBase
 
     private void OnItemElementDropped(UI_DragableItem dragableItem, PointerEventData eventData)
     {
-        bool weaponItemSlotted = false;
         if(dragableItem.GetParentItem().GetItemType() == EItemType.WEAPON)
         {
-            for(uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+            bool weaponItemSlotted = false;
+
+            //if item dropped on HAND SLOT
+            for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
             {
-                //if item dropped on hand
                 if(UI_CanvasManager.IsPointInsideRect(m_loadout_hands[i].rectTransform, dragableItem.GetParentTransform().localPosition))
                 {
                     weaponItemSlotted = true;
@@ -174,17 +241,51 @@ public class UIScreen_DebugMenu : UIScreenBase
                 }
             }
 
+            //if item dropped on UPGRADE SECTION
             if (UI_CanvasManager.IsPointInsideRect(m_upgradeSection.rectTransform, dragableItem.GetParentTransform().localPosition))
             {
                 (UIScreen_Manager.Instance.GetUIScreen(EUIScreen.UPGRADE_MENU) as UIScreen_UpgradeMenu).SetWeaponToUpgrade(dragableItem.GetParentItem() as Weapon_Base);
                 UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.UPGRADE_MENU);
             }
+
+            if (!weaponItemSlotted)
+            {
+                //set the parent of the dragable element back to the scroll view
+                dragableItem.GetParentTransform().SetParent(m_inventoryScrollViewContentGO.transform);
+            }
         }
 
-        if(!weaponItemSlotted)
+        if (dragableItem.GetParentItem().GetItemType() == EItemType.AUGMENT)
         {
-            //set the parent of the dragable element back to the scroll view
-            dragableItem.GetParentTransform().SetParent(m_inventoryScrollViewContentGO.transform);
+            for (uint i = 0; i < (uint)EAugmentSlot.MAX; i++)
+            {
+                EAugmentSlot augSlot = (EAugmentSlot)i;
+                Augment aug = dragableItem.GetParentItem() as Augment;
+
+                //if item dropped on AUGMENT SLOT
+                if (UI_CanvasManager.IsPointInsideRect(m_augmentSlots[i].rectTransform, dragableItem.GetParentTransform().localPosition))
+                {
+                    if(CanAugmentBeSlotted(augSlot, aug.GetAugmentType()))
+                    {
+                        //if a augment is already slotted in slot, its about to get replaced, so detach it and put it back into inventory
+                        if (m_player.HasAugment(augSlot))
+                        {
+                            DetachPlayerAugment(augSlot);
+                        }
+
+                        //attach augment
+                        m_player.AttachAugment(augSlot, aug);
+
+                        //remove the augment from the inventory!
+                        m_player.m_playerInventory.RemoveItemFromInventory(dragableItem.GetParentItem());
+
+                        break;
+                    }
+                }
+            }
+
+            //update ui of augments
+            UpdateAugmentSlots();
         }
 
         //Repopulate the elements in scroll view
@@ -248,128 +349,49 @@ public class UIScreen_DebugMenu : UIScreenBase
         }
 
         RepopulateItemElementsInScrollView();
-
         UpdateLoadoutUIHands();
     }
 
-    /*
-    private void UI_DisplayHands()
+    private void UnequipPlayerHand(in EPlayerHand hand)
     {
-        for (uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
-        {
-            Weapon_Base weapon = GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)i);
-
-            string handDisplay = "Empty Hand";
-            if(weapon)
-            {
-                handDisplay = weapon.GetItemName();
-            }
-
-            if (GUI.Button(new Rect(300 - (150 * i), 300, 150, 150), handDisplay))
-            {
-                if(GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.IsHoldingWeaponInHand((EPlayerHand)i))
-                {
-                    GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.DetachWeaponFromHand((EPlayerHand)i);
-                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AddItemToInventory(weapon);
-                }
-            }
-        }
+        UnequipWeapon(hand);
+        RepopulateItemElementsInScrollView();
+        UpdateLoadoutUIHands();
     }
 
-    private void UI_DisplayInventoryElement_Augment(in Item item, in float x, in float y, float width, float height)
+    private void DetachPlayerAugment(in EAugmentSlot augmentSlot)
     {
-        if (GUI.Button(new Rect(x, y + (height / 2), width, height / 2), "Equip to Spacebar"))
+        if(m_player.HasAugment(augmentSlot))
         {
-            GamePlayManager.Instance.GetCurrentPlayer().AttachSpaceAugment(item as Augment);
-            GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(item);
-        }
-    }
+            Augment augment = m_player.GetAugment(augmentSlot);
+            if(augment)
+            {
+                //detach augment from augment slot
+                m_player.DetachAugment(augmentSlot);
 
-    private void UI_DisplayInventoryElement_Weapon(in Weapon_Base weapon, in float x, in float y, float width, float height)
-    {
-        for (int i = 0; i < (int)EPlayerHand.MAX; ++i)
-        {
-            if (GUI.Button(new Rect((x + width / 2) - (width / 2 * i), y + (height / 2), width / 2, height / 2), ((EPlayerHand)i) == EPlayerHand.HAND_RIGHT ? "Equip Right Hand" : "Equip Left Hand"))
-            {
-                if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(((EPlayerHand)i), weapon))
-                {
-                    GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.RemoveItemFromInventory(weapon);
-                }
-            }
-            if (GUI.Button(new Rect((x + width), y, 80, height), "Upgrade (" + weapon.GetImprovementPath().GetCurrentImprovementIndex() + ")"))
-            {
-                (UIScreen_Manager.Instance.GetUIScreen(EUIScreen.UPGRADE_MENU) as UIScreen_UpgradeMenu).SetWeaponToUpgrade(weapon);
-                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.UPGRADE_MENU);
+                //put augment back into inventory
+                m_player.m_playerInventory.AddItemToInventory(augment);
             }
         }
     }
 
-    private void UI_DisplayInventoryElement(in Item item, in float x, in float y)
+    private void UpdateAugmentSlots()
     {
-        const float width = 250;
-        const float height = 60;
-
-        //display item
-        GUI.Box(new Rect(x, y, width, height), item.GetComponent<Item>().GetItemName());
-
-        //display Hand equips (For Weapons)
-        switch(item.GetItemType())
+        for (uint i = 0; i < (uint)EAugmentSlot.MAX; i++)
         {
-            case EItemType.WEAPON:
+            if (m_player.HasAugment((EAugmentSlot)i))
             {
-                UI_DisplayInventoryElement_Weapon(item as Weapon_Base, x, y, width, height);
+                m_augmentSlots[i].sprite = m_player.GetAugment((EAugmentSlot)i).GetItemSprite();
             }
-            break;
-            case EItemType.AUGMENT:
+            else
             {
-                UI_DisplayInventoryElement_Augment(item, x, y, width, height);
+                m_augmentSlots[i].sprite = m_sprite_defaultEmptyAugment;
             }
-            break;
         }
-
     }
 
-    public void UI_DisplayInventory()
+    private bool CanAugmentBeSlotted(in EAugmentSlot augSlot, in EAugmentType augType)
     {
-        List<Item> items = GamePlayManager.Instance.GetCurrentPlayer().m_playerInventory.AccessInventoryList();
-
-        for (int i = 0; i < items.Count; ++i)
-        {
-            UI_DisplayInventoryElement(items[i], Screen.width - 400, 100 + (i * 60));
-        }
+        return (augType == EAugmentType.ACTIVE && augSlot < EAugmentSlot.PASSIVE_1) || (augType == EAugmentType.PASSIVE && augSlot >= EAugmentSlot.PASSIVE_1);
     }
-
-    private void DEBUG_UI_DisplaySpawnOptions()
-    {
-        if (GUI.Button(new Rect(100, 50, 250, 40), "Spawn Melee Weapon In Left Hand"))
-        {
-            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_LEFT, 0);
-        }
-        if (GUI.Button(new Rect(350, 50, 250, 40), "Spawn Melee Weapon In Right Hand"))
-        {
-            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_RIGHT, 0);
-        }
-
-        if (GUI.Button(new Rect(100, 90, 250, 40), "Spawn Ranged Weapon In Left Hand"))
-        {
-            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_LEFT, 1);
-        }
-        if (GUI.Button(new Rect(350, 90, 250, 40), "Spawn Ranged Weapon In Right Hand"))
-        {
-            DEBUG_SpawnWeaponInHand(EPlayerHand.HAND_RIGHT, 1);
-        }
-    }
-
-    public void DEBUG_SpawnWeaponInHand(in EPlayerHand hand, in uint weaponID)
-    {
-        if (GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.IsHoldingWeaponInHand(hand))
-        {
-            GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.DetachWeaponFromHand(hand);
-        }
-        else
-        {
-            GamePlayManager.Instance.GetCurrentPlayer().m_playerWeaponHolder.AttachWeaponToHand(hand, WeaponsRepo.SpawnWeapon(weaponID).GetComponent<Weapon_Base>());
-        }
-    }
-    */
 }
