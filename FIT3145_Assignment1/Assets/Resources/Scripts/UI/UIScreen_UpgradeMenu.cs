@@ -124,7 +124,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
     protected override void OnBack()
     {
-        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.DEBUG_MENU);
+        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.LOADOUT_MENU);
     }
 
     private void SetupWeaponDisplay()

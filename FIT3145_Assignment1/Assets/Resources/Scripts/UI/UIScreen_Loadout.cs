@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 #pragma warning disable 649
 
-public class UIScreen_DebugMenu : UIScreenBase
+public class UIScreen_Loadout : UIScreenBase
 {
     //UI Elements
     [SerializeField] private Button m_unequipAllWeaponsButton;

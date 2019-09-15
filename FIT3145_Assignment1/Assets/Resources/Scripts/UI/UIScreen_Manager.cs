@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public enum EUIScreen
 {
     NONE = -1,
-    DEBUG_MENU,
+    LOADOUT_MENU,
     INGAME_HUD,
     TITLESCREEN_MENU,
     UPGRADE_MENU,
