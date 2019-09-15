@@ -37,8 +37,6 @@ public class UIScreen_Loadout : UIScreenBase
         m_unequipHandButtons[(int)EPlayerHand.HAND_RIGHT].onClick.AddListener(() => { UnequipPlayerHand(EPlayerHand.HAND_RIGHT); });
         m_unequipHandButtons[(int)EPlayerHand.HAND_LEFT].onClick.AddListener(() => { UnequipPlayerHand(EPlayerHand.HAND_LEFT); });
 
-
-
         m_detachAugmentButtons[(int)EAugmentSlot.Q].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.Q); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
         m_detachAugmentButtons[(int)EAugmentSlot.E].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.E); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
         m_detachAugmentButtons[(int)EAugmentSlot.SPACE].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.SPACE); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
@@ -59,6 +57,9 @@ public class UIScreen_Loadout : UIScreenBase
 
     protected override void OnDisable()
     {
+        CleanUpToolTips();
+        CleanUpItemElementsInScrollView();
+
         m_player = null;
     }
 
@@ -159,6 +160,18 @@ public class UIScreen_Loadout : UIScreenBase
         }
     }
 
+    private void CleanUpToolTips()
+    {
+        foreach (GameObject go in m_itemElements)
+        {
+            UI_DragableItem dragableItem = go.GetComponentInChildren<UI_DragableItem>();
+            if(dragableItem)
+            {
+                dragableItem.DestroyToolTip();
+            }
+        }
+    }
+
     private void RepopulateItemElementsInScrollView()
     {
         CleanUpItemElementsInScrollView();
@@ -167,17 +180,16 @@ public class UIScreen_Loadout : UIScreenBase
         {
             foreach (Item item in m_player.m_playerInventory.AccessInventoryList())
             {
-                //if (item.GetItemType() == EItemType.UPGRADE)
-                {
-                    GameObject go = Instantiate(m_spawnable_itemElement);
+                GameObject go = Instantiate(m_spawnable_itemElement);
 
-                    go.transform.SetParent(m_inventoryScrollViewContentGO.transform, false);
+                go.transform.SetParent(m_inventoryScrollViewContentGO.transform, false);
 
-                    go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnDrop = OnItemElementDropped;
-                    go.GetComponentInChildren<UI_DragableItem>().SetParentItem(item);
+                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnDrop = OnItemElementDropped;
+                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverEnter = UIScreen_Manager.Instance.CreateItemToolTip;
+                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverExit = UIScreen_Manager.Instance.DestroyItemToolTip;
+                go.GetComponentInChildren<UI_DragableItem>().SetParentItem(item);
 
-                    m_itemElements.Add(go);
-                }
+                m_itemElements.Add(go);
             }
         }
 

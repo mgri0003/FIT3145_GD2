@@ -159,7 +159,9 @@ MonoBehaviour:
   m_name: Dash
   m_itemType: 1
   m_itemSprite: {fileID: 21300000, guid: c86c6dad3150915429c2de8024331cef, type: 3}
+  m_itemDescription: move a small distance quickly in a direction
   m_maxCooldown: 1
+  m_augmentType: 0
 --- !u!1 &4574466541976357974
 GameObject:
   m_ObjectHideFlags: 0

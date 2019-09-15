@@ -166,6 +166,8 @@ public class UIScreen_UpgradeMenu : UIScreenBase
                 go.transform.SetParent(m_upgradeScrollViewContentGO.transform, false);
 
                 go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnDrop = OnUpgradeElementDropped;
+                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverEnter = UIScreen_Manager.Instance.CreateItemToolTip;
+                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverExit = UIScreen_Manager.Instance.DestroyItemToolTip;
                 go.GetComponentInChildren<UI_DragableItem>().SetParentItem(item);
 
                 m_upgradeElements.Add(go);

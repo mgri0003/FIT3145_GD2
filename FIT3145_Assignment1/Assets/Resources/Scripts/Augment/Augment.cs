@@ -50,4 +50,9 @@ public abstract class Augment : Item
     public float GetMaxCooldown() { return m_maxCooldown; }
     public float GetCooldownRatio() { return m_cooldown/m_maxCooldown; }
     public EAugmentType GetAugmentType() { return m_augmentType; }
+
+    public override string GetItemTypeDescription()
+    {
+        return "Cooldown: " + GetMaxCooldown() + " second" + (GetMaxCooldown() > 1.0f ? "s" :"");
+    }
 }

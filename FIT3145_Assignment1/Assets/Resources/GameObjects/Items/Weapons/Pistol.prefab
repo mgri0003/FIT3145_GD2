@@ -175,6 +175,7 @@ MonoBehaviour:
   m_name: Pistol
   m_itemType: 0
   m_itemSprite: {fileID: 21300000, guid: 64ab8e5b8f230114abb9598d84e09842, type: 3}
+  m_itemDescription: They call them pistols but I've never seen them pist ;)
   m_weaponStats:
   - m_current: 10
     m_max: -1

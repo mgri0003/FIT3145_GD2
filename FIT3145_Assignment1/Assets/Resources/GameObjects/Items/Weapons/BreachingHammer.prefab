@@ -114,6 +114,7 @@ MonoBehaviour:
   m_name: Breaching Hammer
   m_itemType: 0
   m_itemSprite: {fileID: 21300000, guid: d576bbfb4f35f30408c49306ad53aa94, type: 3}
+  m_itemDescription: STOP...Hammer Time!
   m_weaponStats:
   - m_current: 30
     m_max: -1

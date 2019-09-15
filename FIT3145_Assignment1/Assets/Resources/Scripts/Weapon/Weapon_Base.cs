@@ -153,4 +153,30 @@ public abstract class Weapon_Base : Item
 
         return WeaponStatNames[(int)stat];
     }
+
+    public string GetWeaponStatDescription()
+    {
+        string retVal = "";
+
+        for (int i = 0; i < (int)EWeaponStat.MAX; ++i)
+        {
+            bool isMeleeStat = ((EWeaponStat)i).ToString().Contains("MELEE_");
+            bool isRangedStat = ((EWeaponStat)i).ToString().Contains("RANGED_");
+
+            if (((EWeaponStat)i).ToString().Contains("ALL_")
+                || (GetWeaponType() == EWeaponType.MELEE && isMeleeStat)
+                || (GetWeaponType() == EWeaponType.RANGED && isRangedStat))
+            {
+                Stat stat = AccessWeaponStat((EWeaponStat)i);
+                retVal += stat.GetName() + ": " + stat.GetCurrent().ToString() + "\n";
+            }
+        }
+
+        return retVal;
+    }
+
+    public override string GetItemTypeDescription()
+    {
+        return GetWeaponStatDescription();
+    }
 }

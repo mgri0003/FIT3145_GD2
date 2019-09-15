@@ -10,7 +10,7 @@ public enum EItemType
     MAX
 }
 
-public class Item : MonoBehaviour
+public abstract class Item : MonoBehaviour
 {
     //--Variables--//
     [SerializeField] private Rigidbody m_physicsRigidbody = null;
@@ -18,13 +18,15 @@ public class Item : MonoBehaviour
 
     [SerializeField] private string m_name = "Default_Item";
     [SerializeField] private EItemType m_itemType = EItemType.WEAPON;
-
     [SerializeField] private Sprite m_itemSprite = null;
+    [SerializeField] private string m_itemDescription = "";
 
     //--Methods--//
     public string GetItemName() { return m_name; }
     public EItemType GetItemType() { return m_itemType; }
     public Sprite GetItemSprite() { return m_itemSprite; }
+    public string GetItemDescription() { return m_itemDescription; }
+    public abstract string GetItemTypeDescription();
 
     public void MoveItemToInventoryZone()
     {

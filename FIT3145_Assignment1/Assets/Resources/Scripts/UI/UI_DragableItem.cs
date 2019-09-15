@@ -25,6 +25,19 @@ public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private bool m_isHovered = false;
     public bool IsHovered() { return m_isHovered; }
 
+    public UI_ItemToolTip m_currentToolTip = null;
+
+    public void DestroyToolTip()
+    {
+        if(m_currentToolTip)
+        {
+            Destroy(m_currentToolTip.gameObject);
+            m_currentToolTip = null;
+
+            //Debug.Log("ToolTip Destroyed!");
+        }
+    }
+
     public void OnDrag(PointerEventData eventData)
     {
 
@@ -75,5 +88,6 @@ public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnPointerUp(PointerEventData eventData)
     {
         m_delegate_OnDrop?.Invoke(this, eventData);
+        DestroyToolTip();
     }
 }
