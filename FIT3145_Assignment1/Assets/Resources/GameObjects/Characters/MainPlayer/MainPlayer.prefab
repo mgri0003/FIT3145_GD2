@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7863929051329000188}
   - component: {fileID: 5668204084136973636}
   - component: {fileID: 5267765243281213323}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: ItemPickupArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,6 +181,7 @@ MonoBehaviour:
   m_playerRotator: {fileID: 0}
   m_playerWeaponHolder: {fileID: 0}
   m_playerInventory: {fileID: 0}
+  m_playerAugmentHandler: {fileID: 0}
   m_playerItemPickupArea: {fileID: 5668204084136973636}
 --- !u!114 &4230743391449152156
 MonoBehaviour:
