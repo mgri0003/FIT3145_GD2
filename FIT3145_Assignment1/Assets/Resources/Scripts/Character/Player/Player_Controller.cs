@@ -62,6 +62,15 @@ public class Player_Controller : MonoBehaviour
             {
                 Camera_Main.GetMainCamera().CycleCameraViewMode();
             }
+
+            if(Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                Camera_Main.GetMainCamera().SetForceZoom(true);
+            }
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                Camera_Main.GetMainCamera().SetForceZoom(false);
+            }
         }
     }
 

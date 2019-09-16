@@ -30,6 +30,7 @@ public class Camera_Main : MonoBehaviour
     private const float m_CAMERA_LIMIT_Z_MIN = -2.5f;
     private const float m_CAMERA_LIMIT_Z_MAX = -0.8f;
     private const float m_CAMERA_Z_RANGE = 2.5f;
+    private bool m_forceZoom = false;
 
 
     //--methods--
@@ -38,6 +39,9 @@ public class Camera_Main : MonoBehaviour
         Debug.Assert(m_mainInstance, "Main Camera Variable Not Initialised?");
         return m_mainInstance;
     }
+
+    public void SetForceZoom(bool val) { m_forceZoom = val; }
+    public bool GetForceZoom() { return m_forceZoom; }
 
     private void Awake()
     {
@@ -124,7 +128,7 @@ public class Camera_Main : MonoBehaviour
         RaycastHit rayHit;
         bool isColliding = Physics.Linecast(m_cameraHolder.position, m_cameraHolder.position + -m_cameraHolder.forward * m_CAMERA_Z_RANGE, out rayHit);
         Debug.DrawLine(m_cameraHolder.position, m_cameraHolder.position + -m_cameraHolder.forward * m_CAMERA_Z_RANGE);
-        if (isColliding && !rayHit.transform.root.CompareTag("Character"))
+        if ( (isColliding && !rayHit.transform.root.CompareTag("Character")) || GetForceZoom())
         {
             m_currentCameraZ += 0.1f;
         }
