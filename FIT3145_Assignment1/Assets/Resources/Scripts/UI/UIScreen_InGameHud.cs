@@ -18,6 +18,7 @@ public class UIScreen_InGameHud : UIScreenBase
 
     //refs
     [SerializeField] private Image m_healthBar;
+    [SerializeField] private Text m_healthText;
     [SerializeField] private Image[] m_handDisplays = new Image[2];
     [SerializeField] private Image[] m_handDisplaysAmmo = new Image[2];
     [SerializeField] private Text[] m_handDisplaysAmmoText = new Text[2];
@@ -124,6 +125,8 @@ public class UIScreen_InGameHud : UIScreenBase
     {
         float healthFillRatio = m_player.m_characterStats.AccessHealthStat().GetCurrent() / m_player.m_characterStats.AccessHealthStat().GetMax();
         m_healthBar.fillAmount = healthFillRatio;
+
+        m_healthText.text = m_player.m_characterStats.AccessHealthStat().GetCurrent().ToString() + "/" + m_player.m_characterStats.AccessHealthStat().GetMax().ToString();
     }
 
     private void UI_UpdateDisplayAugments()
