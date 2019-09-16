@@ -102,6 +102,7 @@ public abstract class Character_Core : MonoBehaviour
 
             //deal damage to health
             m_characterStats.AccessHealthStat().AddCurrent(-damage);
+            FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.HIT, transform.position + new Vector3(0,0,0));
 
             if (m_characterStats.AccessHealthStat().GetCurrent() == 0)
             {
