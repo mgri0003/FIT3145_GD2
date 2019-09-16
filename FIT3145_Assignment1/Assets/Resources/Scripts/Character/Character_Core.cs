@@ -116,13 +116,12 @@ public abstract class Character_Core : MonoBehaviour
 
     protected virtual void Revive()
     {
-        m_characterAimer.SetEnabled(true);
+        
     }
 
     protected virtual void Die()
     {
         //Debug.Log(transform.name + " has died");
-        m_characterAimer.SetEnabled(false);
     }
 
     public bool IsDead()

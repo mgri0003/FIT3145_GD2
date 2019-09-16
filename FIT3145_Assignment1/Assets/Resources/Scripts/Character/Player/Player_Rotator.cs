@@ -7,6 +7,7 @@ public class Player_Rotator : MonoBehaviour
     //--variables--
     private float m_desiredRotation = 0;
     private float m_currentRotation = 0;
+    private bool m_disableRotation = false;
 
     //constants
     public const float PLAYER_ROTATION_MAX = 50;
@@ -15,8 +16,14 @@ public class Player_Rotator : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        SmoothRotatePlayer();
+        if(!GetDisabledRotation())
+        {
+            SmoothRotatePlayer();
+        }
     }
+
+    public void SetDisabledRotation(bool val) { m_disableRotation = val; GetComponent<Character_Aimer>().SetEnabled(!val); }
+    public bool GetDisabledRotation() { return m_disableRotation; }
 
     public void AddDesiredRotation(in float rotationVal)
     {

@@ -24,7 +24,7 @@ public class Camera_Main : MonoBehaviour
     private float m_currentRotationX;
     private float m_currentRotationY;
     private ECamera_ViewMode m_cameraViewMode = ECamera_ViewMode.RIGHT_SIDE;
-    const float CameraView_SideX    = 0.6f;
+    const float CameraView_SideX = 0.6f;
     static Camera_Main m_mainInstance = null;
     private float m_currentCameraZ = m_CAMERA_LIMIT_Z_MIN;
     private const float m_CAMERA_LIMIT_Z_MIN = -2.5f;
@@ -71,7 +71,7 @@ public class Camera_Main : MonoBehaviour
             m_cameraHolder.SetPositionAndRotation(m_target.position, m_cameraHolder.rotation);
 
             //Camera Rotation
-            m_currentRotationX = m_target.GetComponent<Player_Rotator>().GetDesiredRotation();
+            m_currentRotationX = GetCalculatedRotation();
             m_currentRotationY = Mathf.Clamp(m_currentRotationY, CAMERA_RANGE_MIN, CAMERA_RANGE_MAX);
             m_cameraHolder.transform.rotation = Quaternion.Euler(m_currentRotationY, m_currentRotationX, 0);
 
@@ -80,6 +80,17 @@ public class Camera_Main : MonoBehaviour
         }
     }
 
+    private float GetCalculatedRotation()
+    {
+        float retVal = 0.0f;
+
+        if(m_target)
+        {
+            retVal = m_target.GetComponent<Player_Rotator>().GetDesiredRotation();
+        }
+
+        return retVal;
+    }
 
     public void CycleCameraViewMode()
     {
