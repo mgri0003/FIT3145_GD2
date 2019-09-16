@@ -192,7 +192,7 @@ MonoBehaviour:
     m_current: 100
     m_max: 100
   m_movementSpeed:
-    m_current: 0.05
+    m_current: 3
     m_max: -1
 --- !u!1001 &754787523952431483
 PrefabInstance:
