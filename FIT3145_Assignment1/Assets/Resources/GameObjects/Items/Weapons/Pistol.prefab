@@ -179,7 +179,7 @@ MonoBehaviour:
   m_weaponStats:
   - m_current: 10
     m_max: -1
-  - m_current: 8
+  - m_current: 16
     m_max: -1
   - m_current: 5
     m_max: -1
