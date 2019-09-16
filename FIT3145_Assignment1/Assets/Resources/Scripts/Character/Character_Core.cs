@@ -104,6 +104,9 @@ public abstract class Character_Core : MonoBehaviour
             m_characterStats.AccessHealthStat().AddCurrent(-damage);
             FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.HIT, transform.position);
 
+            m_animator.Play("HitStun", 1, 0.0f);
+            m_animator.Play("HitStun", 2, 0.0f);
+
             if (m_characterStats.AccessHealthStat().GetCurrent() == 0)
             {
                 Die();
