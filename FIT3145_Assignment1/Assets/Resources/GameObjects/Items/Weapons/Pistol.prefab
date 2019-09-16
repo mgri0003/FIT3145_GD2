@@ -175,6 +175,7 @@ MonoBehaviour:
   m_name: Pistol
   m_itemType: 0
   m_itemSprite: {fileID: 21300000, guid: 64ab8e5b8f230114abb9598d84e09842, type: 3}
+  m_itemDescription: They call them pistols but I've never seen them pist ;)
   m_weaponStats:
   - m_current: 10
     m_max: -1
@@ -187,32 +188,28 @@ MonoBehaviour:
   - m_current: 0.3
     m_max: -1
   m_weaponType: 1
-  m_upgradePath:
-    m_upgradesSegments:
+  m_improvementPath:
+    m_improvementSegments:
     - StatToImprove: 2
-      Value: 2
-      ScrapCost: 10
-      SlotUnlock: 0
-    - StatToImprove: 0
       Value: 5
-      ScrapCost: 20
-      SlotUnlock: 0
-    - StatToImprove: 2
-      Value: 3
       ScrapCost: 40
-      SlotUnlock: 0
-    - StatToImprove: 4
-      Value: -0.1
+      UpgradeSlotIncrease: 0
+    - StatToImprove: 1
+      Value: 5
       ScrapCost: 60
-      SlotUnlock: 0
+      UpgradeSlotIncrease: 0
     - StatToImprove: 0
       Value: 10
-      ScrapCost: 80
-      SlotUnlock: 0
+      ScrapCost: 100
+      UpgradeSlotIncrease: 0
+    - StatToImprove: 3
+      Value: -0.5
+      ScrapCost: 200
+      UpgradeSlotIncrease: 0
     - StatToImprove: 5
       Value: 0
-      ScrapCost: 200
-      SlotUnlock: 1
+      ScrapCost: 400
+      UpgradeSlotIncrease: 1
   m_upgradeVisualLocations:
   - {fileID: 107821848212228709}
   - {fileID: 1610480828322002602}

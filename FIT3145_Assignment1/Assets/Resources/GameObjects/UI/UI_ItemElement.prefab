@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6054189061151031522}
   m_Layer: 0
-  m_Name: UI_UpgradeElement
+  m_Name: UI_ItemElement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 7564975561604582032}
   - component: {fileID: 462216668651650834}
   m_Layer: 5
-  m_Name: UpgradeSprite
+  m_Name: ItemSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 78fc319387583584881fb4f6d80e0476, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e154f8a7fc32bad4aa0e8c4f94793fe9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 6742399331141341946}
   - component: {fileID: 4269237395232073060}
   m_Layer: 5
-  m_Name: UpgradeSprite_Frame
+  m_Name: ItemSprite_Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

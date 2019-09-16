@@ -30,7 +30,7 @@ public class Player_Inventory : MonoBehaviour
         }
     }
 
-    public void RemoveItemFromInventory(Item go)
+    public void RemoveItemFromInventory(in Item go)
     {
         m_inventory.Remove(go);
     }

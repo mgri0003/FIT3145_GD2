@@ -10,9 +10,9 @@ public class Weapon_Ranged : Weapon_Base
     [SerializeField] private Vector3 m_lookAtPos = Vector3.zero;
 
     //Current Variables
-    uint m_currentAmmo = 0;
-    float m_currentReloadTime = 0;
-    float m_currentFireRateCooldown = 0;
+    private uint m_currentAmmo = 0;
+    private float m_currentReloadTime = 0;
+    private float m_currentFireRateCooldown = 0;
 
     //--Methods--
 
@@ -97,7 +97,7 @@ public class Weapon_Ranged : Weapon_Base
             {
                 //reload complete
                 //reset ammo back to full
-                m_currentAmmo = (uint)AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent();
+                ResetAmmo();
 
                 //set reload time to complete (-1)
                 m_currentReloadTime = -1;
@@ -137,5 +137,10 @@ public class Weapon_Ranged : Weapon_Base
     public float GetCurrentReloadTime()
     {
         return m_currentReloadTime;
+    }
+
+    public void ResetAmmo()
+    {
+        m_currentAmmo = (uint)AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent();
     }
 }

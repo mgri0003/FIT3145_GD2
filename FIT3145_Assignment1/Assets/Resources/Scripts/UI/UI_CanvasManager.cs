@@ -42,6 +42,8 @@ public class UI_CanvasManager : MonoBehaviour
         }
     }
 
+    public static Canvas GetCanvas() { return m_canvas; }
+
     public static Vector2 ConvertCanvasLocalPositionToScreenPosition(Vector2 localPos)
     {
         localPos.x /= m_canvas.GetComponent<RectTransform>().sizeDelta.x;
@@ -98,5 +100,40 @@ public class UI_CanvasManager : MonoBehaviour
         mousePosPercent.x *= m_canvas.pixelRect.width;
         mousePosPercent.y *= m_canvas.pixelRect.height;
         return mousePosPercent;
+    }
+
+    /// <summary>
+    /// This only works against rect Transforms whose parent is the Canvas/RootUIScreen
+    /// </summary>
+    /// <param name="rectTrans"></param>
+    /// <param name="pos"></param>
+    /// <returns></returns>
+    public static bool IsPointInsideRect(in RectTransform rectTrans, in Vector2 pos)
+    {
+        //Reference : https://stackoverflow.com/questions/40566250/unity-recttransform-contains-point?rq=1
+
+        // Get the rectangular bounding box of your UI element
+        Rect rect = rectTrans.rect;
+
+        //convert position to bottom left being 0,0
+        // canvasSize = m_canvas.pixelRect;
+        //pos -= new Vector2(canvasSize.width / 2, canvasSize.height / 2);
+
+        // Get the left, right, top, and bottom boundaries of the rect
+        float leftSide = rectTrans.anchoredPosition.x - rect.width / 2;
+        float rightSide = rectTrans.anchoredPosition.x + rect.width / 2;
+        float topSide = rectTrans.anchoredPosition.y + rect.height / 2;
+        float bottomSide = rectTrans.anchoredPosition.y - rect.height / 2;
+
+        //Debug.Log(leftSide + ", " + rightSide + ", " + topSide + ", " + bottomSide + " | " + pos.x + ", " + pos.y);
+
+        //Check to see if the point is in the calculated bounds
+        if (pos.x >= leftSide && pos.x <= rightSide &&
+            pos.y >= bottomSide && pos.y <= topSide)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

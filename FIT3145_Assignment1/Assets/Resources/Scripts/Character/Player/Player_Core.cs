@@ -9,12 +9,11 @@ public class Player_Core : Character_Core
     private float m_movementValueVertical = 0.0f;
     private Vector3 m_directionInput = new Vector3(0,0,0);
 
-    private Augment m_spaceAugment = null;
-
     //Components
     [HideInInspector] public Player_Rotator m_playerRotator;
     [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
     [HideInInspector] public Player_Inventory m_playerInventory;
+    [HideInInspector] public Player_AugmentHandler m_playerAugmentHandler;
     [SerializeField] public Hitbox m_playerItemPickupArea;
 
 
@@ -40,6 +39,10 @@ public class Player_Core : Character_Core
 
         m_playerInventory = GetComponent<Player_Inventory>();
         Debug.Assert(m_playerInventory != null, "Player Inventory Is Null");
+
+        m_playerAugmentHandler = GetComponent<Player_AugmentHandler>();
+        Debug.Assert(m_playerAugmentHandler != null, "Player Augment Handler Is Null");
+
 
         Debug.Assert(m_playerItemPickupArea != null, "Player Item Pickup Are Is Null");
     }
@@ -187,46 +190,52 @@ public class Player_Core : Character_Core
             }
             m_playerInventory.AddItemsToInventory(items);
             m_playerItemPickupArea.ClearCollidingObjects();
+
+            //auto-equip first weapon to right hand if empty handed
+            MaybeAutoEquipWeapon(items);
+
+            //auto-equip first augment to space
+            MaybeAutoEquipAugment(items);
         }
     }
 
-    public Augment GetSpaceAugment()
+    private void MaybeAutoEquipWeapon(List<Item> items)
     {
-        return m_spaceAugment;
-    }
+        Weapon_Base possibleWeaponToEquip = null;
 
-    public bool HasSpaceAugment()
-    {
-        return m_spaceAugment != null;
-    }
-
-    public void UseSpaceAugment()
-    {
-        if(m_spaceAugment)
+        foreach (Item item in items)
         {
-            m_spaceAugment.Use();
+            if (item.GetItemType() == EItemType.WEAPON)
+            {
+                possibleWeaponToEquip = item as Weapon_Base;
+            }
         }
-    }
 
-    public void AttachSpaceAugment(Augment newAugment)
-    {
-        if(CanAttachSpaceAugment())
+        if (possibleWeaponToEquip && !m_playerWeaponHolder.IsHoldingAnyWeapon())
         {
-            m_spaceAugment = newAugment;
-            m_spaceAugment.SetAugmentActive(true);
-            m_spaceAugment.SetPlayer(this);
+            //equip and remove from inventory
+            m_playerWeaponHolder.AttachWeaponToHand(EPlayerHand.HAND_RIGHT, possibleWeaponToEquip);
+            m_playerInventory.RemoveItemFromInventory(possibleWeaponToEquip);
         }
     }
 
-    public void DetachSpaceAugment(Augment newAugment)
+    private void MaybeAutoEquipAugment(List<Item> items)
     {
-        m_spaceAugment.SetAugmentActive(false);
-        m_spaceAugment.SetPlayer(null);
-        m_spaceAugment = null;
-    }
+        Augment possibleAugmentToEquip = null;
 
-    public bool CanAttachSpaceAugment()
-    {
-        return m_spaceAugment == null;
+        foreach (Item item in items)
+        {
+            if (item.GetItemType() == EItemType.AUGMENT)
+            {
+                possibleAugmentToEquip = item as Augment;
+            }
+        }
+
+        if (possibleAugmentToEquip && !m_playerAugmentHandler.HasAugment(EAugmentSlot.SPACE))
+        {
+            //equip and remove from inventory
+            m_playerAugmentHandler.AttachAugment(EAugmentSlot.SPACE, possibleAugmentToEquip);
+            m_playerInventory.RemoveItemFromInventory(possibleAugmentToEquip);
+        }
     }
 }

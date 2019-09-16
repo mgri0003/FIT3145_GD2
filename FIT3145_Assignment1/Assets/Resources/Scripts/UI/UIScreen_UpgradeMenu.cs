@@ -13,6 +13,8 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     [SerializeField] private UnityEngine.UI.Button m_backButton;
     [SerializeField] private UnityEngine.UI.Button m_removeAllUpgradesButton;
     [SerializeField] private UnityEngine.UI.Button m_upgradeButton;
+    [SerializeField] private UnityEngine.UI.Text m_weaponInformationText;
+    [SerializeField] private UnityEngine.UI.Text m_weaponInformationText_Upgrades;
 
     //refs
     [SerializeField] Canvas m_canvas;
@@ -26,7 +28,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     //dynamic refs
     private Player_Core m_player = null;
     private List<GameObject> m_upgradeElements = new List<GameObject>();
-    private List<GameObject> m_upgradeSegments = new List<GameObject>();
+    private List<GameObject> m_improvementSegments = new List<GameObject>();
     private Weapon_Base m_weaponToUpgrade = null;
 
     //constants
@@ -42,7 +44,11 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     {
         m_backButton.onClick.AddListener(() => { OnBack(); });
         m_removeAllUpgradesButton.onClick.AddListener(() => { RemoveAllAttachedUpgrades(); });
-        m_upgradeButton.onClick.AddListener(() => { m_weaponToUpgrade.UpgradeWeapon(); RefreshUpgradeSegments(); });
+        m_upgradeButton.onClick.AddListener(() => {
+            m_weaponToUpgrade.ImproveWeapon();
+            RefreshUpgradeSegments();
+            RefreshWeaponInformation();
+        });
     }
 
     protected override void OnEnable()
@@ -56,7 +62,11 @@ public class UIScreen_UpgradeMenu : UIScreenBase
             //Populate upgrade scroll view
             RepopulateUpgradeElementsInScrollView();
 
+            //populate the upgrade segments
             PopulateUpgradeSegments();
+
+            //update the weapon information
+            RefreshWeaponInformation();
         }
     }
 
@@ -92,9 +102,16 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
                     dragableItem.GetParentTransform().localPosition = UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre());
 
-                    if(IsInsideUpgradeApplyArea(UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
+                    if(UI_CanvasManager.IsPointInsideRect(m_upgradeApplyArea.rectTransform, UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
                     {
-                        m_upgradeApplyArea.color = Color.green;
+                        if(m_weaponToUpgrade.CanAddUpgrade())
+                        {
+                            m_upgradeApplyArea.color = Color.green;
+                        }
+                        else
+                        {
+                            m_upgradeApplyArea.color = Color.red;
+                        }
                     }
                     else
                     {
@@ -107,7 +124,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
     protected override void OnBack()
     {
-        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.DEBUG_MENU);
+        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.LOADOUT_MENU);
     }
 
     private void SetupWeaponDisplay()
@@ -119,7 +136,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
             m_weaponToUpgrade.transform.localScale = new Vector3(1, 1, 1) * m_displayWeaponSize;
             m_weaponToUpgrade.transform.rotation = m_WeaponDisplay.rotation;
 
-            m_weaponToUpgrade.SetAllAttachedUpgradeParticleEffects(0.2f);
+            m_weaponToUpgrade.SetAllAttachedUpgradeParticleEffectsScale(0.2f);
         }
     }
 
@@ -131,7 +148,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
             m_weaponToUpgrade.transform.localScale = new Vector3(1, 1, 1);
             m_weaponToUpgrade.MoveItemToInventoryZone();
 
-            m_weaponToUpgrade.SetAllAttachedUpgradeParticleEffects(1.0f);
+            m_weaponToUpgrade.SetAllAttachedUpgradeParticleEffectsScale(1.0f);
         }
     }
 
@@ -149,6 +166,8 @@ public class UIScreen_UpgradeMenu : UIScreenBase
                 go.transform.SetParent(m_upgradeScrollViewContentGO.transform, false);
 
                 go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnDrop = OnUpgradeElementDropped;
+                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverEnter = UIScreen_Manager.Instance.CreateItemToolTip;
+                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverExit = UIScreen_Manager.Instance.DestroyItemToolTip;
                 go.GetComponentInChildren<UI_DragableItem>().SetParentItem(item);
 
                 m_upgradeElements.Add(go);
@@ -191,11 +210,12 @@ public class UIScreen_UpgradeMenu : UIScreenBase
         }
 
         RepopulateUpgradeElementsInScrollView();
+        RefreshWeaponInformation();
     }
 
     private void OnUpgradeElementDropped(UI_DragableItem dragableItem, PointerEventData eventData)
     {
-        if (IsInsideUpgradeApplyArea(UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
+        if (UI_CanvasManager.IsPointInsideRect(m_upgradeApplyArea.rectTransform, UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
         {
             Upgrade newUpgrade = dragableItem.GetParentItem() as Upgrade;
             if(newUpgrade)
@@ -213,6 +233,9 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
                     //reset the weapon display!
                     SetupWeaponDisplay();
+
+                    //refresh weapon info!!
+                    RefreshWeaponInformation();
                 }
             }
         }
@@ -222,35 +245,9 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
         //reposition the elements in scroll view
         RepositionUpgradeElementsInScrollView();
-    }
 
-    private bool IsInsideUpgradeApplyArea(Vector2 pos)
-    {
-        //Reference : https://stackoverflow.com/questions/40566250/unity-recttransform-contains-point?rq=1
-
-        // Get the rectangular bounding box of your UI element
-        Rect rect = m_upgradeApplyArea.rectTransform.rect;
-
-        //convert position to bottom left being 0,0
-        // canvasSize = m_canvas.pixelRect;
-        //pos -= new Vector2(canvasSize.width / 2, canvasSize.height / 2);
-        
-        // Get the left, right, top, and bottom boundaries of the rect
-        float leftSide = m_upgradeApplyArea.rectTransform.anchoredPosition.x - rect.width / 2;
-        float rightSide = m_upgradeApplyArea.rectTransform.anchoredPosition.x + rect.width / 2;
-        float topSide = m_upgradeApplyArea.rectTransform.anchoredPosition.y + rect.height / 2;
-        float bottomSide = m_upgradeApplyArea.rectTransform.anchoredPosition.y - rect.height / 2;
-        
-        //Debug.Log(leftSide + ", " + rightSide + ", " + topSide + ", " + bottomSide + " | " + pos.x + ", " + pos.y);
-        
-        //Check to see if the point is in the calculated bounds
-        if (pos.x >= leftSide && pos.x <= rightSide &&
-            pos.y >= bottomSide && pos.y <= topSide)
-        {
-            return true;
-        }
-
-        return false;
+        //refresh the weapon info just incase
+        RefreshWeaponInformation();
     }
 
     private void PopulateUpgradeSegments()
@@ -258,13 +255,13 @@ public class UIScreen_UpgradeMenu : UIScreenBase
         if (m_spawnable_upgradeSegment)
         {
             float positionY = 0.0f;
-            foreach (UpgradeSegment upSeg in m_weaponToUpgrade.GetUpgradePath().GetUpgradeSegments())
+            foreach (ImprovementSegment upSeg in m_weaponToUpgrade.GetImprovementPath().GetImprovementSegments())
             {
                 //Debug.Log("Upgrade Element Created");
                 GameObject go = Instantiate(m_spawnable_upgradeSegment);
                 go.transform.SetParent(m_upgradeSegmentsListTransform.transform, false);
                 go.transform.localPosition = new Vector3(0, positionY, 0);
-                m_upgradeSegments.Add(go);
+                m_improvementSegments.Add(go);
                 positionY -= 35.0f;
             }
 
@@ -275,37 +272,37 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     private void RefreshUpgradeSegments()
     {
         int upgradeIndex = 0;
-        foreach (GameObject upSegGO in m_upgradeSegments)
+        foreach (GameObject upSegGO in m_improvementSegments)
         {
             //Debug.Log("Upgrade Element Created");
-            UI_UpgradeSegment uiUpSeg = upSegGO.GetComponent<UI_UpgradeSegment>();
-            UpgradeSegment upSeg = m_weaponToUpgrade.GetUpgradePath().GetUpgradeSegments()[upgradeIndex];
+            UI_ImprovementSegment uiUpSeg = upSegGO.GetComponent<UI_ImprovementSegment>();
+            ImprovementSegment upSeg = m_weaponToUpgrade.GetImprovementPath().GetImprovementSegments()[upgradeIndex];
             if (uiUpSeg)
             {
-                uiUpSeg.AccessUpgradeSegmentText().text = (upSeg.StatToImprove != EWeaponStat.MAX) ? (m_weaponToUpgrade.AccessWeaponStat(upSeg.StatToImprove).GetName() + ((upSeg.Value > 0) ? (" +") : (" ") ) + upSeg.Value.ToString()) : "";
+                uiUpSeg.AccessImprovementSegmentText().text = (upSeg.StatToImprove != EWeaponStat.MAX) ? (m_weaponToUpgrade.AccessWeaponStat(upSeg.StatToImprove).GetName() + ((upSeg.Value > 0) ? (" +") : (" ") ) + upSeg.Value.ToString()) : "";
 
-                if (upSeg.SlotUnlock)
+                if (upSeg.UpgradeSlotIncrease)
                 {
-                    uiUpSeg.AccessUpgradeSegmentText().text += ((uiUpSeg.AccessUpgradeSegmentText().text == "") ? "" : " | " ) + "Upgrade Slot +1";
+                    uiUpSeg.AccessImprovementSegmentText().text += ((uiUpSeg.AccessImprovementSegmentText().text == "") ? "" : " | " ) + "Upgrade Slot +1";
                 }
 
                 if (upSeg.ScrapCost > 0)
                 {
-                    uiUpSeg.AccessUpgradeSegmentCostText().text = upSeg.ScrapCost.ToString();
+                    uiUpSeg.AccessImprovementSegmentCostText().text = upSeg.ScrapCost.ToString();
                 }
                 else
                 {
-                    uiUpSeg.AccessUpgradeSegmentCostText().text = "FREE";
+                    uiUpSeg.AccessImprovementSegmentCostText().text = "FREE";
                 }
 
-                if(m_weaponToUpgrade.GetUpgradePath().GetCurrentUpgradeIndex() >= upgradeIndex)
+                if(m_weaponToUpgrade.GetImprovementPath().GetCurrentImprovementIndex() >= upgradeIndex)
                 {
                     uiUpSeg.SetUISegmentOpacity(1.0f);
 
-                    if(m_weaponToUpgrade.GetUpgradePath().GetCurrentUpgradeIndex() > upgradeIndex)
+                    if(m_weaponToUpgrade.GetImprovementPath().GetCurrentImprovementIndex() > upgradeIndex)
                     {
-                        uiUpSeg.AccessUpgradeSegmentText().color = Color.green;
-                        uiUpSeg.AccessUpgradeSegmentCostText().color = Color.green;
+                        uiUpSeg.AccessImprovementSegmentText().color = Color.green;
+                        uiUpSeg.AccessImprovementSegmentCostText().color = Color.green;
                     }
                 }
                 else
@@ -317,13 +314,13 @@ public class UIScreen_UpgradeMenu : UIScreenBase
         }
 
         //reposition Upgrade Button to latest position
-        if(m_weaponToUpgrade.GetUpgradePath().GetCurrentUpgradeIndex() < m_weaponToUpgrade.GetUpgradePath().GetUpgradeSegmentCount())
+        if(m_weaponToUpgrade.GetImprovementPath().GetCurrentImprovementIndex() < m_weaponToUpgrade.GetImprovementPath().GetImprovementSegmentCount())
         {
             m_upgradeButton.gameObject.SetActive(true);
 
             m_upgradeButton.transform.localPosition = new Vector3(
                 m_upgradeSegmentsListTransform.localPosition.x - 50.0f, 
-                m_upgradeSegmentsListTransform.transform.localPosition.y - (0.0f) - (m_weaponToUpgrade.GetUpgradePath().GetCurrentUpgradeIndex() * 35.0f), 
+                m_upgradeSegmentsListTransform.transform.localPosition.y - (0.0f) - (m_weaponToUpgrade.GetImprovementPath().GetCurrentImprovementIndex() * 35.0f), 
                 0);
         }
         else
@@ -334,10 +331,53 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
     private void CleanUpUpgradeSegments()
     {
-        while (m_upgradeSegments.Count > 0)
+        while (m_improvementSegments.Count > 0)
         {
-            Destroy(m_upgradeSegments[0]);
-            m_upgradeSegments.RemoveAt(0);
+            Destroy(m_improvementSegments[0]);
+            m_improvementSegments.RemoveAt(0);
+        }
+    }
+
+    private void RefreshWeaponInformation()
+    {
+        if(m_weaponInformationText && m_weaponInformationText_Upgrades)
+        {
+            //weapon name & stats
+            m_weaponInformationText.text =  "Name: " + m_weaponToUpgrade.GetItemName();
+            m_weaponInformationText.text += "\n";
+
+            for(int i = 0; i < (int)EWeaponStat.MAX; ++i)
+            {
+                bool isMeleeStat = ((EWeaponStat)i).ToString().Contains("MELEE_");
+                bool isRangedStat = ((EWeaponStat)i).ToString().Contains("RANGED_");
+
+                if( ((EWeaponStat)i).ToString().Contains("ALL_") 
+                    || (m_weaponToUpgrade.GetWeaponType() == EWeaponType.MELEE && isMeleeStat) 
+                    || (m_weaponToUpgrade.GetWeaponType() == EWeaponType.RANGED && isRangedStat))
+                {
+                    Stat stat = m_weaponToUpgrade.AccessWeaponStat((EWeaponStat)i);
+                    m_weaponInformationText.text += stat.GetName() + ": " + stat.GetCurrent().ToString() + "\n";
+                }
+            }
+
+            //upgrades info
+
+            m_weaponInformationText_Upgrades.text = "==UPGRADES==";
+            m_weaponInformationText_Upgrades.text += "\n";
+            m_weaponInformationText_Upgrades.text += "(SLOTS AVAILABLE: " + m_weaponToUpgrade.GetUpgradesAvailableCount() + ")";
+            m_weaponInformationText_Upgrades.text += "\n";
+
+            if (m_weaponToUpgrade.AccessCurrentUpgrades().Count > 0)
+            {
+                foreach (Upgrade up in m_weaponToUpgrade.AccessCurrentUpgrades())
+                {
+                    m_weaponInformationText_Upgrades.text += up.GetItemName() + "\n";
+                }
+            }
+            else
+            {
+                m_weaponInformationText_Upgrades.text += "none";
+            }
         }
     }
 

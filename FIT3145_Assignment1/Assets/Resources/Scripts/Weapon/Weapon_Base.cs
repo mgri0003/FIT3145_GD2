@@ -26,7 +26,7 @@ public abstract class Weapon_Base : Item
     //--Variables--
     [SerializeField] protected Stat[] m_weaponStats = new Stat[(int)EWeaponStat.MAX];
     [SerializeField] private EWeaponType m_weaponType = EWeaponType.NONE;
-    [SerializeField] private UpgradePath m_upgradePath;
+    [SerializeField] private ImprovementPath m_improvementPath;
     protected List<Upgrade> m_currentUpgrades = new List<Upgrade>();
     private uint m_upgradeLimit = 1;
     private const uint m_totalUpgradeLimit = 3;
@@ -36,7 +36,7 @@ public abstract class Weapon_Base : Item
     protected Weapon_Base()
     {
         Constructor_InitWeaponStats();
-        m_upgradePath.SetParentWeapon(this);
+        m_improvementPath.SetParentWeapon(this);
     }
 
     protected void Constructor_InitWeaponStats()
@@ -57,10 +57,10 @@ public abstract class Weapon_Base : Item
         return ref m_weaponStats[(int)stat];
     }
 
-    public UpgradePath GetUpgradePath() { return m_upgradePath; }
-    public void UpgradeWeapon()
+    public ImprovementPath GetImprovementPath() { return m_improvementPath; }
+    public void ImproveWeapon()
     {
-        m_upgradePath.Upgrade();
+        m_improvementPath.Improve();
     }
 
     public void IncreaseUpgradeLimit()
@@ -97,9 +97,9 @@ public abstract class Weapon_Base : Item
     }
     public void RemoveAllUpgrades()
     {
-        for(int i = 0; i < m_currentUpgrades.Count; ++i)
+        while(m_currentUpgrades.Count > 0)
         {
-            RemoveUpgrade(i);
+            RemoveUpgrade(0);
         }
     }
 
@@ -122,7 +122,17 @@ public abstract class Weapon_Base : Item
         return ref m_currentUpgrades;
     }
 
-    public void SetAllAttachedUpgradeParticleEffects(float value)
+    public uint GetUpgradeLimit()
+    {
+        return m_upgradeLimit;
+    }
+
+    public int GetUpgradesAvailableCount()
+    {
+        return (int)m_upgradeLimit - m_currentUpgrades.Count;
+    }
+
+    public void SetAllAttachedUpgradeParticleEffectsScale(float value)
     {
         foreach (Upgrade up in m_currentUpgrades)
         {
@@ -130,4 +140,43 @@ public abstract class Weapon_Base : Item
         }
     }
 
+    public string GetWeaponStatAsString(in EWeaponStat stat)
+    {
+        string[] WeaponStatNames = 
+        {
+            "DAMAGE",
+            "PROJECTILE SPEED",
+            "CLIP SIZE",
+            "RELOAD TIME",
+            "FIRE RATE"
+        };
+
+        return WeaponStatNames[(int)stat];
+    }
+
+    public string GetWeaponStatDescription()
+    {
+        string retVal = "";
+
+        for (int i = 0; i < (int)EWeaponStat.MAX; ++i)
+        {
+            bool isMeleeStat = ((EWeaponStat)i).ToString().Contains("MELEE_");
+            bool isRangedStat = ((EWeaponStat)i).ToString().Contains("RANGED_");
+
+            if (((EWeaponStat)i).ToString().Contains("ALL_")
+                || (GetWeaponType() == EWeaponType.MELEE && isMeleeStat)
+                || (GetWeaponType() == EWeaponType.RANGED && isRangedStat))
+            {
+                Stat stat = AccessWeaponStat((EWeaponStat)i);
+                retVal += stat.GetName() + ": " + stat.GetCurrent().ToString() + "\n";
+            }
+        }
+
+        return retVal;
+    }
+
+    public override string GetItemTypeDescription()
+    {
+        return GetWeaponStatDescription();
+    }
 }

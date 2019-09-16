@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7863929051329000188}
   - component: {fileID: 5668204084136973636}
   - component: {fileID: 5267765243281213323}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: ItemPickupArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 736138765452689857}
   - component: {fileID: 3019553838894725184}
   - component: {fileID: 7559953839021195307}
+  - component: {fileID: 4058829184689675678}
   - component: {fileID: -3202970337432792865}
   - component: {fileID: -1889737827967805000}
   - component: {fileID: 8290247817697547751}
@@ -180,6 +181,7 @@ MonoBehaviour:
   m_playerRotator: {fileID: 0}
   m_playerWeaponHolder: {fileID: 0}
   m_playerInventory: {fileID: 0}
+  m_playerAugmentHandler: {fileID: 0}
   m_playerItemPickupArea: {fileID: 5668204084136973636}
 --- !u!114 &4230743391449152156
 MonoBehaviour:
@@ -230,6 +232,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8fcb227aad8c3804790dc0596b6822f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4058829184689675678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8290247817697547750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28de1b10ac5090642b404df6ebb1509b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &-3202970337432792865

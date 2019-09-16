@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public enum EUIScreen
 {
     NONE = -1,
-    DEBUG_MENU,
+    LOADOUT_MENU,
     INGAME_HUD,
     TITLESCREEN_MENU,
     UPGRADE_MENU,
@@ -19,6 +20,9 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
     [SerializeField] public UIScreenBase[] m_UIScreens = new UIScreenBase[(int)EUIScreen.MAX - 1];
     EUIScreen m_currentUIScreen = EUIScreen.NONE;
     private UI_CanvasManager m_canvasManager = null;
+
+    //spawnables
+    [SerializeField] private GameObject m_spawnable_itemToolTip;
 
     //--Methods--//
     protected override void Awake()
@@ -112,5 +116,26 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
     public UI_CanvasManager GetCanvasManager()
     {
         return m_canvasManager;
+    }
+
+    public void CreateItemToolTip(UI_DragableItem dragableItem, PointerEventData eventData)
+    {
+        //Debug.Log("Tooltip Created");
+        GameObject go = Instantiate(m_spawnable_itemToolTip, UI_CanvasManager.GetCanvas().transform);
+
+        dragableItem.m_currentToolTip = go.GetComponent<UI_ItemToolTip>();
+        if (dragableItem.m_currentToolTip)
+        {
+            dragableItem.m_currentToolTip.SetParentItem(dragableItem.GetParentItem());
+        }
+
+        go.transform.localPosition = dragableItem.m_currentToolTip.GetDesiredPosition();
+        go.transform.localRotation = Quaternion.Euler(0, 0, 0);
+    }
+
+    public void DestroyItemToolTip(UI_DragableItem dragableItem, PointerEventData eventData)
+    {
+        //Debug.Log("Tooltip Destroyed");
+        dragableItem.DestroyToolTip();
     }
 }

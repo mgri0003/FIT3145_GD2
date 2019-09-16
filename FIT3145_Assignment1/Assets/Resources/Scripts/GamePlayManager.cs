@@ -43,13 +43,13 @@ public class GamePlayManager : Singleton<GamePlayManager>
         {
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                if (UIScreen_Manager.Instance.GetCurrentUIScreenAsEnum() == EUIScreen.DEBUG_MENU)
+                if (UIScreen_Manager.Instance.GetCurrentUIScreenAsEnum() == EUIScreen.LOADOUT_MENU)
                 {
                     UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAME_HUD);
                 }
                 else
                 {
-                    UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.DEBUG_MENU);
+                    UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.LOADOUT_MENU);
                 }
             }
 

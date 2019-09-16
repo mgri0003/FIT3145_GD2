@@ -114,6 +114,7 @@ MonoBehaviour:
   m_name: Breaching Hammer
   m_itemType: 0
   m_itemSprite: {fileID: 21300000, guid: d576bbfb4f35f30408c49306ad53aa94, type: 3}
+  m_itemDescription: STOP...Hammer Time!
   m_weaponStats:
   - m_current: 30
     m_max: -1
@@ -126,20 +127,20 @@ MonoBehaviour:
   - m_current: 0
     m_max: -1
   m_weaponType: 0
-  m_upgradePath:
-    m_upgradesSegments:
+  m_improvementPath:
+    m_improvementSegments:
     - StatToImprove: 0
-      Value: 10
+      Value: 20
       ScrapCost: 20
-      SlotUnlock: 0
+      UpgradeSlotIncrease: 0
     - StatToImprove: 0
-      Value: 20
-      ScrapCost: 100
-      SlotUnlock: 0
-    - StatToImprove: 0
-      Value: 20
-      ScrapCost: 300
-      SlotUnlock: 1
+      Value: 40
+      ScrapCost: 50
+      UpgradeSlotIncrease: 0
+    - StatToImprove: 5
+      Value: 0
+      ScrapCost: 150
+      UpgradeSlotIncrease: 1
   m_upgradeVisualLocations:
   - {fileID: 6193690862101191920}
   - {fileID: 3468823291964235471}
