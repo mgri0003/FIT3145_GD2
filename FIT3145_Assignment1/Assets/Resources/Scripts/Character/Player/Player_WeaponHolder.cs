@@ -14,7 +14,7 @@ public enum EPlayerHand
 public class Player_WeaponHolder : MonoBehaviour
 {
     //--Variables--
-    private Transform[] m_handTransforms = new Transform[(int)EPlayerHand.MAX];
+    [SerializeField] private Transform[] m_handTransforms = new Transform[(int)EPlayerHand.MAX];
     private Weapon_Base[] m_currentWeapons = new Weapon_Base[(int)EPlayerHand.MAX];
     [SerializeField] private LayerMask m_aimMask;
     private const float m_MINIMUM_AIM_RANGE = 2.0f;
@@ -36,10 +36,11 @@ public class Player_WeaponHolder : MonoBehaviour
     public void Init()
     {
         //Setup Hand Bones
-        m_handTransforms[(int)EPlayerHand.HAND_RIGHT] = GetComponent<Player_Core>().m_animator.GetBoneTransform(HumanBodyBones.RightHand);
-        m_handTransforms[(int)EPlayerHand.HAND_LEFT] = GetComponent<Player_Core>().m_animator.GetBoneTransform(HumanBodyBones.LeftHand);
-        Debug.Assert(m_handTransforms[(int)EPlayerHand.HAND_RIGHT], "Missing Right Hand Bone!!?!?");
-        Debug.Assert(m_handTransforms[(int)EPlayerHand.HAND_LEFT], "Missing Left Hand Bone!!?!?");
+       //Not Initialising transforms here, as we can only access the specific bones, the ones we need have to be assigned manually
+       // m_handTransforms[(int)EPlayerHand.HAND_RIGHT] = GetComponent<Player_Core>().m_animator.GetBoneTransform(HumanBodyBones.RightHand);
+       // m_handTransforms[(int)EPlayerHand.HAND_LEFT] = GetComponent<Player_Core>().m_animator.GetBoneTransform(HumanBodyBones.LeftHand);
+        Debug.Assert(m_handTransforms[(int)EPlayerHand.HAND_RIGHT], "Right Hand Bone not Assigned!!?!?");
+        Debug.Assert(m_handTransforms[(int)EPlayerHand.HAND_LEFT], " Left Hand Bone not Assigned!!?!?");
     }
 
     public void UpdateRangedWeaponAim()
