@@ -33,7 +33,7 @@ public class Player_Controller : MonoBehaviour
                 m_player.m_playerWeaponHolder.ReloadRangedWeapons();
             }
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 //Reload
                 m_player.PickupNearbyItems();

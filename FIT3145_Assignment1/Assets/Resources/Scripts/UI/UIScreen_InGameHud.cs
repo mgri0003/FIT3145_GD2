@@ -162,7 +162,7 @@ public class UIScreen_InGameHud : UIScreenBase
     {
         if (m_player.IsItemNearby())
         {
-            GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Press 'E' To Pick Up");
+            GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Press 'F' To Pick Up");
         }
     }
 
