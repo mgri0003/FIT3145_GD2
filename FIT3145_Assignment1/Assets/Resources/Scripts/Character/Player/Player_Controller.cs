@@ -18,11 +18,11 @@ public class Player_Controller : MonoBehaviour
     {
         if(GetInputEnabled() && !m_player.IsDead())
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (GameOptions.GetSwapRightLeftClick() ? Input.GetKeyDown(KeyCode.Mouse0) : Input.GetKeyDown(KeyCode.Mouse1))
             {
                 m_player.PrimaryAction();
             }
-            if (Input.GetKeyDown(KeyCode.Mouse1))
+            if (GameOptions.GetSwapRightLeftClick() ? Input.GetKeyDown(KeyCode.Mouse1) : Input.GetKeyDown(KeyCode.Mouse0))
             {
                 m_player.SecondaryAction();
             }

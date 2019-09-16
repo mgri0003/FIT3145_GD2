@@ -8,13 +8,18 @@ using UnityEngine.UI;
 
 public class UIScreen_MainMenu : UIScreenBase
 {
+    //--UI ELEMENTS--//
     [SerializeField] private Button m_startGameButton;
+    [SerializeField] private Button m_optionsButton;
+    [SerializeField] private Button m_quitButton;
     [SerializeField] private UI_Fader m_fader;
 
 
     protected override void RegisterMethods()
     {
         m_startGameButton.onClick.AddListener(() => { OnStartGamePressed(); });
+        m_optionsButton.onClick.AddListener(() => { OnOptionsButtonPressed(); });
+        m_quitButton.onClick.AddListener(() => { OnQuitButtonPressed(); });
     }
 
     protected override void OnEnable()
@@ -47,5 +52,15 @@ public class UIScreen_MainMenu : UIScreenBase
     private void StartMainScreenFadeOut()
     {
         m_fader.StartFade();
+    }
+
+    void OnOptionsButtonPressed()
+    {
+        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.GAMEOPTIONS_MENU);
+    }
+
+    void OnQuitButtonPressed()
+    {
+        Application.Quit(0);
     }
 }
