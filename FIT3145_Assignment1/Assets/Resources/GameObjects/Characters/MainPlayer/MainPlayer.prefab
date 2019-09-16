@@ -262,7 +262,7 @@ MonoBehaviour:
     m_current: 100
     m_max: 100
   m_movementSpeed:
-    m_current: 0.05
+    m_current: 3.6
     m_max: -1
 --- !u!114 &-1889737827967805000
 MonoBehaviour:

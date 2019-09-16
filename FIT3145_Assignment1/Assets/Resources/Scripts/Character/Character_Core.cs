@@ -81,7 +81,7 @@ public abstract class Character_Core : MonoBehaviour
     public void MoveCharacter(Vector3 dir, Space spaceType)
     {
         dir.Normalize();
-        transform.Translate(dir * m_characterStats.AccessMovementSpeedStat().GetCurrent(), spaceType);
+        transform.Translate(dir * m_characterStats.AccessMovementSpeedStat().GetCurrent() * Time.deltaTime, spaceType);
     }
 
     public void ReceiveHit(float damage, List<Effect> effectsToApply = null)
