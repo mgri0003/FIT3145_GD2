@@ -84,7 +84,7 @@ public abstract class Character_Core : MonoBehaviour
         transform.Translate(dir * m_characterStats.AccessMovementSpeedStat().GetCurrent() * Time.deltaTime, spaceType);
     }
 
-    public void ReceiveHit(float damage, List<Effect> effectsToApply = null)
+    public virtual void ReceiveHit(float damage, List<Effect> effectsToApply = null)
     {
         //only receive hits if your alive :P
         if(!IsDead())
@@ -102,7 +102,7 @@ public abstract class Character_Core : MonoBehaviour
 
             //deal damage to health
             m_characterStats.AccessHealthStat().AddCurrent(-damage);
-            FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.HIT, transform.position + new Vector3(0,0,0));
+            FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.HIT, transform.position);
 
             if (m_characterStats.AccessHealthStat().GetCurrent() == 0)
             {

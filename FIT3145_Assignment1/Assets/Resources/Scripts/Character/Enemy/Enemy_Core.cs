@@ -12,6 +12,7 @@ public class Enemy_Core : Character_Core
     private float m_minDistanceToAttack = 0.8f;
     private float m_minDistanceToMove = 5.0f;
     [SerializeField] private GameObject[] m_itemDrops;
+    private bool m_aggro = false;
 
     //--Methods--//
     protected override void Start()
@@ -21,6 +22,9 @@ public class Enemy_Core : Character_Core
         //Debug.Assert(m_targetCharacter, "Missing Target Character, should be set when enemy is spawned!");
         m_characterAimer.Init(m_targetCharacter.transform);
     }
+
+    public void TriggerAggro() { m_aggro = true; }
+    public bool IsAggro() { return m_aggro; }
 
     public void FindPlayerToTarget()
     {
@@ -35,7 +39,7 @@ public class Enemy_Core : Character_Core
         {
             if(m_targetCharacter)
             {
-                if(IsCloseEnoughToAct())
+                if(IsCloseEnoughToAct() || IsAggro())
                 {
                     //look at player
                     m_characterAimer.SetEnabled(true);
@@ -101,5 +105,12 @@ public class Enemy_Core : Character_Core
 
         gameObject.SetActive(false);
         base.Die();
+    }
+
+    public override void ReceiveHit(float damage, List<Effect> effectsToApply = null)
+    {
+        base.ReceiveHit(damage, effectsToApply);
+
+        TriggerAggro();
     }
 }
