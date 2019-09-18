@@ -35,6 +35,17 @@ public abstract class Item : MonoBehaviour
         SetPhysicsActive(false);
     }
 
+    public void MoveItemToLocation(in Vector3 worldPos, bool enablePhysics = true)
+    {
+        transform.localPosition = Vector3.zero;
+        transform.position = worldPos;
+
+        if(enablePhysics)
+        {
+            SetPhysicsActive(true);
+        }
+    }
+
     public void SetPhysicsActive(bool enablePhysics)
     {
         Debug.Assert(m_physicsRigidbody, "Missing Rigidbody!?!?");

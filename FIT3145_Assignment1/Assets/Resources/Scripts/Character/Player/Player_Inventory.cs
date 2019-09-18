@@ -34,4 +34,19 @@ public class Player_Inventory : MonoBehaviour
     {
         m_inventory.Remove(go);
     }
+
+    public void RemoveAllItemsFromInventory()
+    {
+        m_inventory.Clear();
+    }
+
+    public void DropAllItemsInInventory()
+    {
+        foreach(Item item in AccessInventoryList())
+        {
+            item.MoveItemToLocation(transform.position + new Vector3(Random.Range(-2,2),0, Random.Range(-2, 2)));
+        }
+
+        RemoveAllItemsFromInventory();
+    }
 }

@@ -101,7 +101,7 @@ public class Enemy_Core : Character_Core
 
     protected override void Die()
     {
-        Invoke("OnDeathComplete", 3.0f);
+        Invoke("OnDeathComplete", 2.0f);
 
         DropItems();
 
@@ -120,6 +120,7 @@ public class Enemy_Core : Character_Core
 
     private void OnDeathComplete()
     {
+        FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.HIT, transform.position - new Vector3(0,0.5f,0));
         gameObject.SetActive(false);
     }
 

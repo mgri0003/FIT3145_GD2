@@ -253,6 +253,13 @@ public class Player_Core : Character_Core
     {
         base.Die();
 
+        DropUnsafeItems();
+
         GamePlayManager.Instance.OnPlayerDeath();
+    }
+
+    private void DropUnsafeItems()
+    {
+        m_playerInventory.DropAllItemsInInventory();
     }
 }
