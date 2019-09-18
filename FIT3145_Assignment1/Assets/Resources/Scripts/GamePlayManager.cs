@@ -41,22 +41,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     {
         if(IsGameplayActive())
         {
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                if (UIScreen_Manager.Instance.GetCurrentUIScreenAsEnum() == EUIScreen.LOADOUT_MENU)
-                {
-                    UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAME_HUD);
-                }
-                else
-                {
-                    UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.LOADOUT_MENU);
-                }
-            }
-
-            if(m_current_mainPlayer.GetComponent<Player_Core>().IsDead())
-            {
-                EndGame();
-            }
+            OnGameplayUpdate();
         }
     }
 
@@ -80,7 +65,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         SetupSpawnPoints();
         SpawnPlayer();
 
-        Enemy_Core[] enemies = FindObjectsOfType<Enemy_Core>();
+        Enemy_Core[] enemies = GetAllEnemiesInScene();
         if(enemies != null)
         {
             foreach(Enemy_Core enemy in enemies)
@@ -103,13 +88,56 @@ public class GamePlayManager : Singleton<GamePlayManager>
         m_current_mainPlayer.GetComponent<Player_Controller>().SetEnableInput(true);
     }
 
+    public void DisableAggroOnAllEnemies()
+    {
+        Enemy_Core[] enemies = GetAllEnemiesInScene();
+        if (enemies != null)
+        {
+            foreach (Enemy_Core enemy in enemies)
+            {
+                enemy.DisableAggro();
+            }
+        }
+    }
+
+    public Enemy_Core[] GetAllEnemiesInScene()
+    {
+        return FindObjectsOfType<Enemy_Core>();
+    }
+
+    private void RespawnPlayer()
+    {
+        //revive player
+        m_current_mainPlayer.GetComponent<Player_Core>().Revive();
+
+        //reset position
+        m_current_mainPlayer.transform.SetPositionAndRotation(m_spawnPoint.position, m_current_mainPlayer.transform.rotation);
+    }
+
+    void OnGameplayUpdate()
+    {
+
+    }
+
+    public void OnPlayerDeath()
+    {
+        DisableAggroOnAllEnemies();
+        Invoke("RespawnPlayer", 5.0f);
+    }
+
     public void EndGame()
     {
-        m_gameplayActive = false;
-        SceneManager.LoadScene("MainMenu");
-        m_current_mainPlayer = null;
-        m_current_inventoryZone = null;
-        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.TITLESCREEN_MENU);
+        if(IsGameplayActive())
+        {
+            m_gameplayActive = false;
+
+            m_current_mainPlayer = null;
+            m_current_inventoryZone = null;
+
+            SceneManager.LoadScene("MainMenu");
+
+            UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.TITLESCREEN_MENU);
+        }
     }
 
     public bool IsGameplayActive()

@@ -23,6 +23,7 @@ public class Enemy_Core : Character_Core
         m_characterAimer.Init(m_targetCharacter.transform);
     }
 
+    public void DisableAggro() { m_aggro = false; }
     public void TriggerAggro() { m_aggro = true; }
     public bool IsAggro() { return m_aggro; }
 
@@ -31,34 +32,36 @@ public class Enemy_Core : Character_Core
         SetTargetCharacter(GameObject.Find("MainPlayer").GetComponent<Player_Core>());
     }
 
-    private void Update()
+    override protected void Update()
     {
+        base.Update();
+        m_characterAimer.SetEnabled(false);
+
         bool isMoving = false;
 
         if (!IsDead())
         {
             if(m_targetCharacter)
             {
-                if(IsCloseEnoughToAct() || IsAggro())
+                if(!m_targetCharacter.IsDead())
                 {
-                    //look at player
-                    m_characterAimer.SetEnabled(true);
-                    transform.LookAt(m_targetCharacter.transform);
+                    if (IsCloseEnoughToAct() || IsAggro())
+                    {
+                        //look at player
+                        m_characterAimer.SetEnabled(true);
+                        transform.LookAt(m_targetCharacter.transform);
 
-                    if (IsCloseEnoughToAttack())
-                    {
-                        m_animator.Play("Attack_MeleeWeapon", 1);
+                        if (IsCloseEnoughToAttack())
+                        {
+                            m_animator.Play("Attack_MeleeWeapon", 1);
+                        }
+                        else
+                        {
+                            Vector3 vecToTarget = (m_targetCharacter.transform.position - transform.position);
+                            MoveCharacter(vecToTarget, Space.World);
+                            isMoving = true;
+                        }
                     }
-                    else
-                    {
-                        Vector3 vecToTarget = (m_targetCharacter.transform.position - transform.position);
-                        MoveCharacter(vecToTarget, Space.World);
-                        isMoving = true;
-                    }
-                }
-                else
-                {
-                    m_characterAimer.SetEnabled(false);
                 }
             }
         }
@@ -74,10 +77,15 @@ public class Enemy_Core : Character_Core
 
     protected override void SendMeleeAttack(in int AE_handIndex)
     {
-        GameObject goHit = m_MeleeHitbox.GetFirstGameObjectCollided();
-        if (goHit && goHit.CompareTag("Character"))
+        foreach(GameObject goHit in m_MeleeHitbox.GetAllGameObjectsCollided())
         {
-            goHit.GetComponent<Character_Core>().ReceiveHit(m_meleeDamage);
+            if (goHit && goHit.CompareTag("Character"))
+            {
+                if (goHit.GetComponent<Character_Core>().IsPlayer())
+                {
+                    goHit.GetComponent<Character_Core>().ReceiveHit(m_meleeDamage);
+                }
+            }
         }
     }
 
@@ -93,17 +101,13 @@ public class Enemy_Core : Character_Core
 
     protected override void Die()
     {
-        if(m_itemDrops.Length > 0)
-        {
-            int i = 0;
-            foreach (GameObject go in m_itemDrops)
-            {
-                GameObject droppedGO = Instantiate(go, transform.position + new Vector3(0 + (i * 0.5f), 0.5f, 0), Quaternion.Euler(0, 0, 0));
-                ++i;
-            }
-        }
+        Invoke("OnDeathComplete", 3.0f);
 
-        gameObject.SetActive(false);
+        DropItems();
+
+        GetComponent<Collider>().enabled = false;
+        m_rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+
         base.Die();
     }
 
@@ -112,5 +116,23 @@ public class Enemy_Core : Character_Core
         base.ReceiveHit(damage, effectsToApply);
 
         TriggerAggro();
+    }
+
+    private void OnDeathComplete()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void DropItems()
+    {
+        if (m_itemDrops.Length > 0)
+        {
+            int i = 0;
+            foreach (GameObject go in m_itemDrops)
+            {
+                GameObject droppedGO = Instantiate(go, transform.position + new Vector3(0 + (i * 0.5f), 0.5f, 0), Quaternion.Euler(0, 0, 0));
+                ++i;
+            }
+        }
     }
 }

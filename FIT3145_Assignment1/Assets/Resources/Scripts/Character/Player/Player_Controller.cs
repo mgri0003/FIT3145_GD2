@@ -75,6 +75,20 @@ public class Player_Controller : MonoBehaviour
             }
         }
 
+
+        //loadout
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (UIScreen_Manager.Instance.GetCurrentUIScreenAsEnum() == EUIScreen.LOADOUT_MENU)
+            {
+                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAME_HUD);
+            }
+            else if (!m_player.IsDead())
+            {
+                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.LOADOUT_MENU);
+            }
+        }
+
         //updated desired rotation (should work whilst dead)
         m_player.m_playerRotator.AddDesiredRotation(Input.GetAxis("Mouse X"));
         Camera_Main.GetMainCamera().MinusCurrentRotationY(Input.GetAxis("Mouse Y"));

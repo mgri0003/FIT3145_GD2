@@ -15,6 +15,24 @@ public abstract class Character_Core : MonoBehaviour
 
     //--Methods--//
 
+    protected virtual void Update()
+    {
+        ProcessEffects();
+    }
+
+    protected virtual void LateUpdate()
+    {
+        if (!IsDead())
+        {
+            m_characterAimer.UpdateCharacterAimer();
+        }
+    }
+
+    public bool IsPlayer()
+    {
+        return ((Player_Core)this != null);
+    }
+
     public void AddEffect(Effect newEffect)
     {
         m_currentEffects.Add(newEffect);
@@ -53,11 +71,6 @@ public abstract class Character_Core : MonoBehaviour
     protected virtual void Start()
     {
         SetupComponents();
-    }
-
-    private void LateUpdate()
-    {
-        ProcessEffects();
     }
 
     protected virtual void SetupComponents()
@@ -113,14 +126,16 @@ public abstract class Character_Core : MonoBehaviour
         }
     }
 
-    protected virtual void Revive()
+    public virtual void Revive()
     {
-        
+        m_characterStats.AccessHealthStat().ResetCurrent();
+        m_animator.Play("Idle", 0, 0.0f);
     }
 
     protected virtual void Die()
     {
         //Debug.Log(transform.name + " has died");
+        m_animator.Play("Death", 0, 0.0f);
     }
 
     public bool IsDead()

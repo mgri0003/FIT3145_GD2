@@ -48,8 +48,15 @@ public class Player_Core : Character_Core
     }
 
     // Update is called once per frame
-    void Update()
+    override protected void Update()
     {
+        base.Update();
+
+        if(!IsDead())
+        {
+            m_playerRotator.UpdatePlayerRotation();
+        }
+
         UpdateMovement();
     }
 
@@ -75,12 +82,15 @@ public class Player_Core : Character_Core
 
     public void SubtleMove()
     {
-        //If your not in the middle of a transition
-        //If your not already in the Move State
-        if (!m_animator.IsInTransition(0) && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("Move"))
+        if(!IsDead())
         {
-            //play the move state sublty :P
-            m_animator.CrossFade("Move", 0.05f);
+            //If your not in the middle of a transition
+            //If your not already in the Move State
+            if (!m_animator.IsInTransition(0) && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("Move"))
+            {
+                //play the move state sublty :P
+                m_animator.CrossFade("Move", 0.05f);
+            }
         }
     }
 
@@ -237,5 +247,12 @@ public class Player_Core : Character_Core
             m_playerAugmentHandler.AttachAugment(EAugmentSlot.SPACE, possibleAugmentToEquip);
             m_playerInventory.RemoveItemFromInventory(possibleAugmentToEquip);
         }
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+
+        GamePlayManager.Instance.OnPlayerDeath();
     }
 }

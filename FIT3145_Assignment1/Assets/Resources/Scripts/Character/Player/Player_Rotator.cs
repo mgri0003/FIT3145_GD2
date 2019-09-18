@@ -14,9 +14,9 @@ public class Player_Rotator : MonoBehaviour
     public const float PLAYER_ROTATION_SPEED = 8;
 
     // Update is called once per frame
-    void LateUpdate()
+    public void UpdatePlayerRotation()
     {
-        if(!GetDisabledRotation())
+        if (!GetDisabledRotation())
         {
             SmoothRotatePlayer();
         }

@@ -24,9 +24,9 @@ public class Character_Aimer : MonoBehaviour
         m_hasInit = true;
     }
 
-    private void LateUpdate()
+    public void UpdateCharacterAimer()
     {
-        if(m_hasInit && IsEnabled())
+        if (m_hasInit && IsEnabled())
         {
             Vector3 posToLook = m_aimTarget.transform.position;
             m_chestBone.LookAt(posToLook);
