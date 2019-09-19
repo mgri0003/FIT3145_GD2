@@ -9,7 +9,7 @@ public struct ImprovementSegment
 {
     [SerializeField] public EWeaponStat StatToImprove;
     [SerializeField] public float Value;
-    [SerializeField] public float ScrapCost;
+    [SerializeField] public uint ScrapCost;
     [SerializeField] public bool UpgradeSlotIncrease;
 }
 
@@ -68,5 +68,22 @@ public struct ImprovementPath
     public ImprovementSegment[] GetImprovementSegments()
     {
         return m_improvementSegments;
+    }
+
+    public ImprovementSegment GetNextAvailableImprovementSegment()
+    {
+        Debug.Assert(!IsFullyImproved(), "Cannot get the latest Improvement Segment, no Improvements left");
+
+        if (!IsFullyImproved())
+        {
+            return m_improvementSegments[m_currentImprovementIndex];
+        }
+
+        return new ImprovementSegment();
+    }
+
+    public bool IsFullyImproved()
+    {
+        return m_currentImprovementIndex == m_improvementSegments.Length;
     }
 }

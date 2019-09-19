@@ -27,6 +27,8 @@ public class UIScreen_InGameHud : UIScreenBase
     [SerializeField] private Image[] m_augmentsDisplay_Cooldown = new Image[(int)EAugmentSlot.MAX];
     [SerializeField] private Image[] m_augmentsDisplay_Frame = new Image[(int)EAugmentSlot.MAX];
 
+    [SerializeField] private Text m_scrapValueText;
+
 
     //--Methods--//
     protected override void RegisterMethods()
@@ -58,11 +60,18 @@ public class UIScreen_InGameHud : UIScreenBase
         
         UI_UpdateHealthBar();
         UI_UpdateHandDisplays();
+
+        UI_UpdateScrapValue();
     }
 
     protected override void OnBack()
     {
         throw new System.NotImplementedException();
+    }
+
+    private void UI_UpdateScrapValue()
+    {
+        m_scrapValueText.text = GamePlayManager.Instance.GetScrap().ToString();
     }
 
     private void UI_UpdateHandDisplays()

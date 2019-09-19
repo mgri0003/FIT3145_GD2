@@ -116,6 +116,7 @@ MonoBehaviour:
   m_MeleeHitbox: {fileID: 4751069298201004492}
   m_meleeDamage: 10
   m_itemDrops: []
+  m_scrapDrop: 30
 --- !u!95 &3011257416459508142
 Animator:
   serializedVersion: 3

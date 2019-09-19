@@ -119,6 +119,7 @@ MonoBehaviour:
   - {fileID: 8754039348771881063, guid: 3c663b2cd5f756f42975f934943562f1, type: 3}
   - {fileID: 1223309658493280330, guid: 443bc84cacac32746ac306a44db3fe30, type: 3}
   - {fileID: 1725078717245774645, guid: ef14605b30e98f64882367d7648b02a7, type: 3}
+  m_scrapDrop: 50
 --- !u!95 &3011257416459508142
 Animator:
   serializedVersion: 3

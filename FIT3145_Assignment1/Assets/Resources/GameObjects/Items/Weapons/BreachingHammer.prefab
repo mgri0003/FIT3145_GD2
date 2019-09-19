@@ -131,15 +131,15 @@ MonoBehaviour:
     m_improvementSegments:
     - StatToImprove: 0
       Value: 20
-      ScrapCost: 20
+      ScrapCost: 50
       UpgradeSlotIncrease: 0
     - StatToImprove: 0
       Value: 40
-      ScrapCost: 50
+      ScrapCost: 100
       UpgradeSlotIncrease: 0
     - StatToImprove: 5
       Value: 0
-      ScrapCost: 150
+      ScrapCost: 180
       UpgradeSlotIncrease: 1
   m_upgradeVisualLocations:
   - {fileID: 6193690862101191920}

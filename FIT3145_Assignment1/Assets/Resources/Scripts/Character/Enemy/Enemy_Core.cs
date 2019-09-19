@@ -13,6 +13,7 @@ public class Enemy_Core : Character_Core
     private float m_minDistanceToMove = 5.0f;
     [SerializeField] private GameObject[] m_itemDrops;
     private bool m_aggro = false;
+    [SerializeField] private uint m_scrapDrop = 0;
 
     //--Methods--//
     protected override void Start()
@@ -107,6 +108,8 @@ public class Enemy_Core : Character_Core
 
         GetComponent<Collider>().enabled = false;
         m_rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+
+        GamePlayManager.Instance.AddScrap((int)m_scrapDrop);
 
         base.Die();
     }

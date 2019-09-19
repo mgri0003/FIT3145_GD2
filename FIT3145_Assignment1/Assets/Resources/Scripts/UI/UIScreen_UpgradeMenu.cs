@@ -12,9 +12,10 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     //ui elements
     [SerializeField] private UnityEngine.UI.Button m_backButton;
     [SerializeField] private UnityEngine.UI.Button m_removeAllUpgradesButton;
-    [SerializeField] private UnityEngine.UI.Button m_upgradeButton;
+    [SerializeField] private UnityEngine.UI.Button m_improvementButton;
     [SerializeField] private UnityEngine.UI.Text m_weaponInformationText;
     [SerializeField] private UnityEngine.UI.Text m_weaponInformationText_Upgrades;
+    [SerializeField] private UnityEngine.UI.Text m_scrapValueText;
 
     //refs
     [SerializeField] Canvas m_canvas;
@@ -22,7 +23,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     [SerializeField] private GameObject m_upgradeScrollViewContentGO;
     [SerializeField] private Transform m_upgradeSegmentsListTransform;
     [SerializeField] private GameObject m_spawnable_upgradeElement;
-    [SerializeField] private GameObject m_spawnable_upgradeSegment;
+    [SerializeField] private GameObject m_spawnable_improvementSegment;
     [SerializeField] private UnityEngine.UI.Image m_upgradeApplyArea;
 
     //dynamic refs
@@ -44,11 +45,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     {
         m_backButton.onClick.AddListener(() => { OnBack(); });
         m_removeAllUpgradesButton.onClick.AddListener(() => { RemoveAllAttachedUpgrades(); });
-        m_upgradeButton.onClick.AddListener(() => {
-            m_weaponToUpgrade.ImproveWeapon();
-            RefreshUpgradeSegments();
-            RefreshWeaponInformation();
-        });
+        m_improvementButton.onClick.AddListener(() => { OnImprovementButtonPressed(); });
     }
 
     protected override void OnEnable()
@@ -120,11 +117,47 @@ public class UIScreen_UpgradeMenu : UIScreenBase
                 }
             }
         }
+
+        UI_UpdateScrapValue();
     }
 
     protected override void OnBack()
     {
         UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.LOADOUT_MENU);
+    }
+
+    private void OnImprovementButtonPressed()
+    {
+        if(CanAffordImprovement())
+        {
+            //spend scrap!
+            SpendScrapOnNextImprovement();
+
+            m_weaponToUpgrade.ImproveWeapon();
+            RefreshImprovementSegments();
+            RefreshWeaponInformation();
+        }
+    }
+
+    private void SpendScrapOnNextImprovement()
+    {
+        int costOfNextImprovement = (int)m_weaponToUpgrade.GetImprovementPath().GetNextAvailableImprovementSegment().ScrapCost;
+        GamePlayManager.Instance.AddScrap(-costOfNextImprovement);
+    }
+
+    private bool CanAffordImprovement()
+    {
+        if(!m_weaponToUpgrade.GetImprovementPath().IsFullyImproved())
+        {
+            return GamePlayManager.Instance.GetScrap() >= m_weaponToUpgrade.GetImprovementPath().GetNextAvailableImprovementSegment().ScrapCost;
+        }
+
+        return false;
+    }
+
+    private void UI_UpdateScrapValue()
+    {
+        m_scrapValueText.text = GamePlayManager.Instance.GetScrap().ToString();
     }
 
     private void SetupWeaponDisplay()
@@ -252,80 +285,80 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
     private void PopulateUpgradeSegments()
     {
-        if (m_spawnable_upgradeSegment)
+        if (m_spawnable_improvementSegment)
         {
             float positionY = 0.0f;
             foreach (ImprovementSegment upSeg in m_weaponToUpgrade.GetImprovementPath().GetImprovementSegments())
             {
                 //Debug.Log("Upgrade Element Created");
-                GameObject go = Instantiate(m_spawnable_upgradeSegment);
+                GameObject go = Instantiate(m_spawnable_improvementSegment);
                 go.transform.SetParent(m_upgradeSegmentsListTransform.transform, false);
                 go.transform.localPosition = new Vector3(0, positionY, 0);
                 m_improvementSegments.Add(go);
                 positionY -= 35.0f;
             }
 
-            RefreshUpgradeSegments();
+            RefreshImprovementSegments();
         }
     }
 
-    private void RefreshUpgradeSegments()
+    private void RefreshImprovementSegments()
     {
-        int upgradeIndex = 0;
+        int improvementIndex = 0;
         foreach (GameObject upSegGO in m_improvementSegments)
         {
             //Debug.Log("Upgrade Element Created");
-            UI_ImprovementSegment uiUpSeg = upSegGO.GetComponent<UI_ImprovementSegment>();
-            ImprovementSegment upSeg = m_weaponToUpgrade.GetImprovementPath().GetImprovementSegments()[upgradeIndex];
-            if (uiUpSeg)
+            UI_ImprovementSegment uiImpSeg = upSegGO.GetComponent<UI_ImprovementSegment>();
+            ImprovementSegment impSeg = m_weaponToUpgrade.GetImprovementPath().GetImprovementSegments()[improvementIndex];
+            if (uiImpSeg)
             {
-                uiUpSeg.AccessImprovementSegmentText().text = (upSeg.StatToImprove != EWeaponStat.MAX) ? (m_weaponToUpgrade.AccessWeaponStat(upSeg.StatToImprove).GetName() + ((upSeg.Value > 0) ? (" +") : (" ") ) + upSeg.Value.ToString()) : "";
+                uiImpSeg.AccessImprovementSegmentText().text = (impSeg.StatToImprove != EWeaponStat.MAX) ? (m_weaponToUpgrade.AccessWeaponStat(impSeg.StatToImprove).GetName() + ((impSeg.Value > 0) ? (" +") : (" ") ) + impSeg.Value.ToString()) : "";
 
-                if (upSeg.UpgradeSlotIncrease)
+                if (impSeg.UpgradeSlotIncrease)
                 {
-                    uiUpSeg.AccessImprovementSegmentText().text += ((uiUpSeg.AccessImprovementSegmentText().text == "") ? "" : " | " ) + "Upgrade Slot +1";
+                    uiImpSeg.AccessImprovementSegmentText().text += ((uiImpSeg.AccessImprovementSegmentText().text == "") ? "" : " | " ) + "Upgrade Slot +1";
                 }
 
-                if (upSeg.ScrapCost > 0)
+                if (impSeg.ScrapCost > 0)
                 {
-                    uiUpSeg.AccessImprovementSegmentCostText().text = upSeg.ScrapCost.ToString();
+                    uiImpSeg.AccessImprovementSegmentCostText().text = impSeg.ScrapCost.ToString();
                 }
                 else
                 {
-                    uiUpSeg.AccessImprovementSegmentCostText().text = "FREE";
+                    uiImpSeg.AccessImprovementSegmentCostText().text = "FREE";
                 }
 
-                if(m_weaponToUpgrade.GetImprovementPath().GetCurrentImprovementIndex() >= upgradeIndex)
+                if(m_weaponToUpgrade.GetImprovementPath().GetCurrentImprovementIndex() >= improvementIndex)
                 {
-                    uiUpSeg.SetUISegmentOpacity(1.0f);
+                    uiImpSeg.SetUISegmentOpacity(1.0f);
 
-                    if(m_weaponToUpgrade.GetImprovementPath().GetCurrentImprovementIndex() > upgradeIndex)
+                    if(m_weaponToUpgrade.GetImprovementPath().GetCurrentImprovementIndex() > improvementIndex)
                     {
-                        uiUpSeg.AccessImprovementSegmentText().color = Color.green;
-                        uiUpSeg.AccessImprovementSegmentCostText().color = Color.green;
+                        uiImpSeg.AccessImprovementSegmentText().color = Color.green;
+                        uiImpSeg.AccessImprovementSegmentCostText().color = Color.green;
                     }
                 }
                 else
                 {
-                    uiUpSeg.SetUISegmentOpacity(0.1f);
+                    uiImpSeg.SetUISegmentOpacity(0.1f);
                 }
             }
-            ++upgradeIndex;
+            ++improvementIndex;
         }
 
         //reposition Upgrade Button to latest position
         if(m_weaponToUpgrade.GetImprovementPath().GetCurrentImprovementIndex() < m_weaponToUpgrade.GetImprovementPath().GetImprovementSegmentCount())
         {
-            m_upgradeButton.gameObject.SetActive(true);
+            m_improvementButton.gameObject.SetActive(true);
 
-            m_upgradeButton.transform.localPosition = new Vector3(
+            m_improvementButton.transform.localPosition = new Vector3(
                 m_upgradeSegmentsListTransform.localPosition.x - 50.0f, 
                 m_upgradeSegmentsListTransform.transform.localPosition.y - (0.0f) - (m_weaponToUpgrade.GetImprovementPath().GetCurrentImprovementIndex() * 35.0f), 
                 0);
         }
         else
         {
-            m_upgradeButton.gameObject.SetActive(false);
+            m_improvementButton.gameObject.SetActive(false);
         }
     }
 

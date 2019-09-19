@@ -23,7 +23,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     private bool m_gameplayActive = false;
 
     //gameplay vars
-    private uint m_scrap;
+    private int m_scrap;
 
     //--Methods--//
 
@@ -45,9 +45,9 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
     }
 
-    public void SetScrap(uint newValue) { m_scrap = newValue; }
-    public uint GetScrap() { return m_scrap; }
-    public void AddScrap(uint newValue) { SetScrap(GetScrap() + newValue); }
+    public void SetScrap(int newValue) { m_scrap = newValue; }
+    public int GetScrap() { return m_scrap; }
+    public void AddScrap(int newValue) { SetScrap(GetScrap() + newValue); }
 
     public void OnSceneLoadedToGameplay(Scene scene, LoadSceneMode mode)
     {
