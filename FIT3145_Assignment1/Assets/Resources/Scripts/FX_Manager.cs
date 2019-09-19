@@ -5,6 +5,7 @@ using UnityEngine;
 public enum EParticleEffect
 {
     HIT,
+    LIGHTNING_IMPACT,
 
     MAX
 }

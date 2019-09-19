@@ -45,3 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_particleEffects:
   - {fileID: 3492624862093053425, guid: be49bbce15055fd4a9103449b2ed45eb, type: 3}
+  - {fileID: 7539420459107209283, guid: b5aee409700ba4a4aadc5b9f22bea9db, type: 3}
