@@ -90,8 +90,11 @@ public class Player_Controller : MonoBehaviour
         }
 
         //updated desired rotation (should work whilst dead)
-        m_player.m_playerRotator.AddDesiredRotation(Input.GetAxis("Mouse X"));
-        Camera_Main.GetMainCamera().MinusCurrentRotationY(Input.GetAxis("Mouse Y"));
+        if(IsHUDActive())
+        {
+            m_player.m_playerRotator.AddDesiredRotation(Input.GetAxis("Mouse X"));
+            Camera_Main.GetMainCamera().MinusCurrentRotationY(Input.GetAxis("Mouse Y"));
+        }
 
         //freecam mode
         if (Input.GetKeyDown(KeyCode.C))
@@ -99,6 +102,11 @@ public class Player_Controller : MonoBehaviour
             m_player.m_playerRotator.SetDisabledRotation(!m_player.m_playerRotator.GetDisabledRotation());
             SetEnableInput(!m_player.m_playerRotator.GetDisabledRotation());
         }
+    }
+
+    public bool IsHUDActive()
+    {
+        return UIScreen_Manager.Instance.GetCurrentUIScreenAsEnum() == EUIScreen.INGAME_HUD;
     }
 
     public void SetEnableInput(in bool enabled)
