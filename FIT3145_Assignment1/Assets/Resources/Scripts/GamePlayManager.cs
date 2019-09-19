@@ -147,7 +147,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     void SpawnPlayer()
     {
-        m_current_mainPlayer = Instantiate(m_spawnable_mainPlayer, m_spawnPoint.position, Quaternion.Euler(0, 0, 0));
+        m_current_mainPlayer = Instantiate(m_spawnable_mainPlayer, m_spawnPoint.position, m_spawnPoint.rotation);
         Debug.Assert(m_current_mainPlayer, "Player Failed to Instantiate?!!??!");
         if (m_current_mainPlayer)
         {
