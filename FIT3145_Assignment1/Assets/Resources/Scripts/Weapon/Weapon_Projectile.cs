@@ -71,14 +71,29 @@ public class Weapon_Projectile : MonoBehaviour
         List<GameObject> gameObjectsHit = m_hitbox.GetAllGameObjectsCollided();
         if (gameObjectsHit.Count > 0)
         {
+            bool validCollision = false;
+
             foreach (GameObject go in gameObjectsHit)
             {
                 if (go.tag == "Character")
                 {
                     go.GetComponent<Character_Core>().ReceiveHit(m_damage, m_projectileEffects);
-                    DestroySelf();
+                    validCollision = true;
                     break;
                 }
+            }
+
+            foreach (GameObject go in gameObjectsHit)
+            {
+                if (go.transform.root.tag == "World")
+                {
+                    validCollision = true;
+                }
+            }
+
+            if(validCollision)
+            {
+                DestroySelf();
             }
         }
     }

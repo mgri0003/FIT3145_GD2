@@ -8,6 +8,7 @@ TagManager:
   - PlayerSpawn
   - EnemySpawn
   - Item
+  - World
   layers:
   - Default
   - TransparentFX
