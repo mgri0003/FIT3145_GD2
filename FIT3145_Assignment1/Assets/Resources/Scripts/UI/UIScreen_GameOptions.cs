@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+#pragma warning disable 649
+
 enum EGameOption
 {
     TOGGLE_SWAPLEFTRIGHTCLICK,

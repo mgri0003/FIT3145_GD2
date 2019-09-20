@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
+#pragma warning disable 649
+
 public enum EUIScreen
 {
     NONE = -1,
