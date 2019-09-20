@@ -20,12 +20,25 @@ public class Weapon_Ranged : Weapon_Base
     {
         if(CanFire())
         {
-            FireSingleProjectile();
+            FireRangedWeapon();
             ResetFireRateCooldown();
             return true;
         }
+        else
+        {
+            //if firing failed, auto reload
+            if(OutOfAmmo())
+            {
+                Reload();
+            }
+        }
 
         return false;
+    }
+
+    protected virtual void FireRangedWeapon()
+    {
+        FireSingleProjectile();
     }
 
     private void FireSingleProjectile()
@@ -103,6 +116,11 @@ public class Weapon_Ranged : Weapon_Base
                 m_currentReloadTime = -1;
             }
         }
+    }
+
+    private bool OutOfAmmo()
+    {
+        return m_currentAmmo == 0;
     }
 
     private bool CanFire()
