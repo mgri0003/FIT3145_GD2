@@ -52,7 +52,6 @@ public class Character_Aimer : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        bool disableLookAtIK = false;
         Character_Core player = GetComponent<Character_Core>();
 
         if (player.m_characterAimer.GetAimTarget())
@@ -60,17 +59,8 @@ public class Character_Aimer : MonoBehaviour
             player.m_animator.SetLookAtWeight(0.3f);
             player.m_animator.SetLookAtPosition(player.m_characterAimer.GetAimTarget().position);
         }
-        else
-        {
-            disableLookAtIK = true;
-        }
 
-        if(!IsEnabled())
-        {
-            disableLookAtIK = true;
-        }
-
-        if (disableLookAtIK)
+        if (!IsEnabled() || player.IsDead())
         {
             player.m_animator.SetLookAtWeight(0.0f);
         }
