@@ -29,6 +29,15 @@ public class Player_Controller : MonoBehaviour
                 {
                     m_player.SecondaryAction();
                 }
+                if (GameOptions.GetSwapRightLeftClick() ? Input.GetKey(KeyCode.Mouse0) : Input.GetKey(KeyCode.Mouse1))
+                {
+                    m_player.AutoPrimaryAction();
+                }
+                if (GameOptions.GetSwapRightLeftClick() ? Input.GetKey(KeyCode.Mouse1) : Input.GetKey(KeyCode.Mouse0))
+                {
+                    m_player.AutoSecondaryAction();
+                }
+
 
                 //Reload
                 if (Input.GetKeyDown(KeyCode.R))

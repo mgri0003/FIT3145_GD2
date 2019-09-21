@@ -10,6 +10,16 @@ public class Weapon_Melee : Weapon_Base
         return true;
     }
 
+    public override bool AutoUse()
+    {
+        if(IsAutoUseAllowed())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public void SendAttack(Character_Core characterToHit)
     {
         characterToHit.ReceiveHit(AccessWeaponStat((int)EWeaponStat.ALL_DAMAGE).GetCurrent(), GetOnHitEffectsFromUpgrades());

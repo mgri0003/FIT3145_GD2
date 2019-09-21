@@ -37,6 +37,16 @@ public abstract class Weapon_Ranged : Weapon_Base
         return false;
     }
 
+    public override bool AutoUse()
+    {
+        if(IsAutoUseAllowed())
+        {
+            return Use();
+        }
+
+        return false;
+    }
+
     protected GameObject FireSingleProjectile(in bool consumeAmmo = true, Vector3 firingDirectionOffset = default)
     {
         GameObject retVal = null;

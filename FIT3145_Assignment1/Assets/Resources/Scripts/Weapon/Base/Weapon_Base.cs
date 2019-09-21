@@ -34,6 +34,7 @@ public abstract class Weapon_Base : Item
     [SerializeField] private Transform[] m_upgradeVisualLocations = new Transform[m_totalUpgradeLimit];
     [SerializeField] private Vector3 m_weaponHoldOffset = Vector3.zero;
     [SerializeField] protected float m_upgradeBalanceScale = 1.0f;
+    [SerializeField] protected bool m_autoUseAllowed = false;
 
     //--methods--
     protected Weapon_Base()
@@ -55,6 +56,7 @@ public abstract class Weapon_Base : Item
     public Vector3 GetWeaponHoldOffset() { return m_weaponHoldOffset; }
 
     public abstract bool Use();
+    public abstract bool AutoUse();
 
     public EWeaponType GetWeaponType() { return m_weaponType; }
     public ref Stat AccessWeaponStat(EWeaponStat stat)
@@ -190,4 +192,6 @@ public abstract class Weapon_Base : Item
     {
         return GetWeaponStatDescription();
     }
+
+    public bool IsAutoUseAllowed() { return m_autoUseAllowed; }
 }

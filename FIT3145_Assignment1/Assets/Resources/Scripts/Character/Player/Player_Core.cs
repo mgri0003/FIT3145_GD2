@@ -116,14 +116,22 @@ public class Player_Core : Character_Core
 
     public void PrimaryAction()
     {
-        ExecuteHandAction(EPlayerHand.HAND_RIGHT);
+        ExecuteHandAction(EPlayerHand.HAND_RIGHT, false);
     }
     public void SecondaryAction()
     {
-        ExecuteHandAction(EPlayerHand.HAND_LEFT);
+        ExecuteHandAction(EPlayerHand.HAND_LEFT, false);
+    }
+    public void AutoPrimaryAction()
+    {
+        ExecuteHandAction(EPlayerHand.HAND_RIGHT, true);
+    }
+    public void AutoSecondaryAction()
+    {
+        ExecuteHandAction(EPlayerHand.HAND_LEFT, true);
     }
 
-    private void ExecuteHandAction(in EPlayerHand hand)
+    private void ExecuteHandAction(in EPlayerHand hand, in bool isAuto)
     {
         if (m_playerWeaponHolder.IsHoldingWeaponInHand(hand))
         {
@@ -132,12 +140,12 @@ public class Player_Core : Character_Core
             {
                 case EWeaponType.MELEE:
                 {
-                    UseMeleeWeapon(weapon, hand);
+                    UseMeleeWeapon(weapon, hand, isAuto);
                 }
                 break;
                 case EWeaponType.RANGED:
                 {
-                    UseRangedWeapon(weapon, hand);
+                    UseRangedWeapon(weapon, hand, isAuto);
                 }
                 break;
             }
@@ -167,18 +175,21 @@ public class Player_Core : Character_Core
         }
     }
 
-    private void UseMeleeWeapon(in Weapon_Base weaponToUse, in EPlayerHand hand)
+    private void UseMeleeWeapon(in Weapon_Base weaponToUse, in EPlayerHand hand, in bool isAuto)
     {
         uint animLayer = hand == EPlayerHand.HAND_RIGHT ? 1u : 2u;
-        m_animator.Play("Attack_MeleeWeapon", (int)animLayer);
+        if (isAuto ? weaponToUse.AutoUse() : weaponToUse.Use())
+        {
+            m_animator.Play("Attack_MeleeWeapon", (int)animLayer);
+        }
     }
-    private void UseRangedWeapon(in Weapon_Base weaponToUse, in EPlayerHand hand)
+    private void UseRangedWeapon(in Weapon_Base weaponToUse, in EPlayerHand hand, in bool isAuto)
     {
         uint animLayer = hand == EPlayerHand.HAND_RIGHT ? 1u : 2u;
 
         m_playerWeaponHolder.UpdateRangedWeaponAim();
 
-        if (weaponToUse.Use())
+        if (isAuto ? weaponToUse.AutoUse() : weaponToUse.Use())
         {
             m_animator.Play("Attack_RangedWeapon", (int)animLayer, 0.0f);
         }
