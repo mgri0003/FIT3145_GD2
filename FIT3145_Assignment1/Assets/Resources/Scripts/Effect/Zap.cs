@@ -6,7 +6,7 @@ public class Zap : Effect
 {
     public override void UpdateEffect()
     {
-        m_parentCharacter.ReceiveHit(20);
+        m_parentCharacter.ReceiveHit(20.0f * GetBalanceScale());
         FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.LIGHTNING_IMPACT, m_parentCharacter.transform.position);
         SetLifeTime(0);
     }

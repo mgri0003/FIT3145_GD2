@@ -10,6 +10,7 @@ public abstract class Effect : MonoBehaviour
     [SerializeField] private string m_effectName;
     protected Character_Core m_parentCharacter;
     [SerializeField] private float m_lifetime = 0.0f;
+    private float m_balanceScale = 1.0f;
 
     //--Methods--//
     private void Awake()
@@ -29,4 +30,8 @@ public abstract class Effect : MonoBehaviour
     public void AddLifeTime(float newValue) { SetLifeTime(GetLifeTime() + newValue); }
 
     public string GetEffectName() { return m_effectName; }
+
+    public void SetBalanceScale(float newBalanceValue) { m_balanceScale = newBalanceValue; }
+    public void ResetBalanceScale() { m_balanceScale = 1.0f; }
+    public float GetBalanceScale() { return m_balanceScale; }
 }

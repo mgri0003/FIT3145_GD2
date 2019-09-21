@@ -230,6 +230,7 @@ MonoBehaviour:
   - {fileID: 1610480828322002602}
   - {fileID: 1181065800607963071}
   m_weaponHoldOffset: {x: 0.1290123, y: 0.01199647, z: 0.0570095}
+  m_upgradeBalanceScale: 0.2
   m_projectile: {fileID: 604645328828819334, guid: 66a13259f93288a4e8682c05d9763072,
     type: 3}
   m_firingTransform: {fileID: 9044369817375108693}

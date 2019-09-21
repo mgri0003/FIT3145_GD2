@@ -33,6 +33,7 @@ public abstract class Weapon_Base : Item
     private const uint m_totalUpgradeLimit = 3;
     [SerializeField] private Transform[] m_upgradeVisualLocations = new Transform[m_totalUpgradeLimit];
     [SerializeField] private Vector3 m_weaponHoldOffset = Vector3.zero;
+    [SerializeField] protected float m_upgradeBalanceScale = 1.0f;
 
     //--methods--
     protected Weapon_Base()
@@ -90,6 +91,8 @@ public abstract class Weapon_Base : Item
             newUpgrade.transform.localPosition = m_upgradeVisualLocations[m_currentUpgrades.Count - 1].localPosition;
             newUpgrade.transform.rotation = transform.rotation;
 
+            newUpgrade.SetBalanceScale(m_upgradeBalanceScale);
+
             return true;
         }
 
@@ -97,6 +100,7 @@ public abstract class Weapon_Base : Item
     }
     public void RemoveUpgrade(int index)
     {
+        m_currentUpgrades[index].ResetBalanceScale();
         m_currentUpgrades[index].transform.SetParent(null);
         m_currentUpgrades.RemoveAt(index);
     }
@@ -111,12 +115,18 @@ public abstract class Weapon_Base : Item
     public List<Effect> GetOnHitEffectsFromUpgrades()
     {
         List<Effect> effectsToApply = new List<Effect>();
+
         foreach (Upgrade up in m_currentUpgrades)
         {
             if (up.GetOnHitEffect() != null)
             {
                 effectsToApply.Add(up.GetOnHitEffect());
             }
+        }
+
+        foreach(Effect effect in effectsToApply)
+        {
+            effect.SetBalanceScale(m_upgradeBalanceScale);
         }
 
         return effectsToApply;
