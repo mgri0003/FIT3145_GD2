@@ -39,7 +39,16 @@ public abstract class Upgrade : Item
     }
 
     //public abstract void OnUpgradeWeaponUsed();
-    //public abstract void OnUpgradeAttached();
+    public void OnUpgradeAttached()
+    {
+        ApplyUpgradeSettings();
+    }
+    public void OnUpgradeDettached()
+    {
+        ResetUpgradeSettings();
+    }
 
+    protected abstract void ApplyUpgradeSettings();
+    protected abstract void ResetUpgradeSettings();
 
 }
