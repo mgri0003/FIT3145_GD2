@@ -12,7 +12,7 @@ public class Hitbox : MonoBehaviour
         //hack to fix garb exit
         for(int i = 0; i < m_collidingObjects.Count; ++i)
         {
-            if(!m_collidingObjects[i].activeInHierarchy)
+            if(m_collidingObjects[i] && !m_collidingObjects[i].activeInHierarchy)
             {
                 OnTriggerExit(m_collidingObjects[i].GetComponent<Collider>());
             }

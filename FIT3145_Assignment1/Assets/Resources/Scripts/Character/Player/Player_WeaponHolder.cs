@@ -119,7 +119,7 @@ public class Player_WeaponHolder : MonoBehaviour
 
                 //set the current weapon on the hand
                 m_currentWeapons[(int)hand] = weapon;
-                m_currentWeapons[(int)hand].transform.localPosition = new Vector3(0, 0, 0);
+                m_currentWeapons[(int)hand].transform.localPosition = m_currentWeapons[(int)hand].GetWeaponHoldOffset();
 
                 //set the current weapons rotation to point towards the aim target
                 UpdateWeaponRotationInHand(hand);

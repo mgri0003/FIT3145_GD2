@@ -31,6 +31,7 @@ public abstract class Weapon_Base : Item
     private uint m_upgradeLimit = 1;
     private const uint m_totalUpgradeLimit = 3;
     [SerializeField] private Transform[] m_upgradeVisualLocations = new Transform[m_totalUpgradeLimit];
+    [SerializeField] private Vector3 m_weaponHoldOffset = Vector3.zero;
 
     //--methods--
     protected Weapon_Base()
@@ -47,6 +48,8 @@ public abstract class Weapon_Base : Item
         m_weaponStats[(int)EWeaponStat.RANGED_RELOAD_TIME].SetNameAndDefaultParams("Reload Time");
         m_weaponStats[(int)EWeaponStat.RANGED_FIRE_RATE_COOLDOWN].SetNameAndDefaultParams("Fire Rate");
     }
+
+    public Vector3 GetWeaponHoldOffset() { return m_weaponHoldOffset; }
 
     public abstract bool Use();
 

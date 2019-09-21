@@ -24,6 +24,8 @@ public class Weapon_Projectile : MonoBehaviour
         m_hasInit = true;
     }
 
+    public void SetLifeTime(float newLifeTime) { m_currentLifeTime = newLifeTime; }
+
     public void AddProjectileEffect(Effect projEffect)
     {
         m_projectileEffects.Add(projEffect);
@@ -75,19 +77,25 @@ public class Weapon_Projectile : MonoBehaviour
 
             foreach (GameObject go in gameObjectsHit)
             {
-                if (go.tag == "Character")
+                if(go)
                 {
-                    go.GetComponent<Character_Core>().ReceiveHit(m_damage, m_projectileEffects);
-                    validCollision = true;
-                    break;
+                    if (go.tag == "Character")
+                    {
+                        go.GetComponent<Character_Core>().ReceiveHit(m_damage, m_projectileEffects);
+                        validCollision = true;
+                        break;
+                    }
                 }
             }
 
             foreach (GameObject go in gameObjectsHit)
             {
-                if (go.transform.root.tag == "World")
+                if (go)
                 {
-                    validCollision = true;
+                    if (go.transform.root.tag == "World")
+                    {
+                        validCollision = true;
+                    }
                 }
             }
 
@@ -102,6 +110,7 @@ public class Weapon_Projectile : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
 
 
 }
