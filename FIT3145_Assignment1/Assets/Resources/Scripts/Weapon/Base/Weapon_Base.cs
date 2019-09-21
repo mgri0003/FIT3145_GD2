@@ -6,7 +6,7 @@ public enum EWeaponType
 {
     MELEE,
     RANGED,
-    NONE,
+    INVALID,
     MAX
 }
 
@@ -17,6 +17,7 @@ public enum EWeaponStat
     RANGED_CLIP_SIZE,
     RANGED_RELOAD_TIME,
     RANGED_FIRE_RATE_COOLDOWN,
+    RANGED_PROJECTILE_LIFETIME,
 
     MAX
 }
@@ -25,7 +26,7 @@ public abstract class Weapon_Base : Item
 {
     //--Variables--
     [SerializeField] protected Stat[] m_weaponStats = new Stat[(int)EWeaponStat.MAX];
-    [SerializeField] private EWeaponType m_weaponType = EWeaponType.NONE;
+    [SerializeField] private EWeaponType m_weaponType = EWeaponType.INVALID;
     [SerializeField] private ImprovementPath m_improvementPath;
     protected List<Upgrade> m_currentUpgrades = new List<Upgrade>();
     private uint m_upgradeLimit = 1;
@@ -47,6 +48,7 @@ public abstract class Weapon_Base : Item
         m_weaponStats[(int)EWeaponStat.RANGED_CLIP_SIZE].SetNameAndDefaultParams("Clip Size");
         m_weaponStats[(int)EWeaponStat.RANGED_RELOAD_TIME].SetNameAndDefaultParams("Reload Time");
         m_weaponStats[(int)EWeaponStat.RANGED_FIRE_RATE_COOLDOWN].SetNameAndDefaultParams("Fire Rate");
+        m_weaponStats[(int)EWeaponStat.RANGED_PROJECTILE_LIFETIME].SetNameAndDefaultParams("Projectile Lifetime");
     }
 
     public Vector3 GetWeaponHoldOffset() { return m_weaponHoldOffset; }
@@ -151,7 +153,8 @@ public abstract class Weapon_Base : Item
             "PROJECTILE SPEED",
             "CLIP SIZE",
             "RELOAD TIME",
-            "FIRE RATE"
+            "FIRE RATE",
+            "PROJECTILE LIFETIME"
         };
 
         return WeaponStatNames[(int)stat];

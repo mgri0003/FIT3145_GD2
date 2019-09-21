@@ -210,11 +210,13 @@ MonoBehaviour:
     m_max: -1
   - m_current: 16
     m_max: -1
-  - m_current: 5
+  - m_current: 10
     m_max: -1
   - m_current: 1.5
     m_max: -1
   - m_current: 0.4
+    m_max: -1
+  - m_current: 5
     m_max: -1
   m_weaponType: 1
   m_improvementPath:
@@ -227,6 +229,7 @@ MonoBehaviour:
   - {fileID: 107821848212228709}
   - {fileID: 1610480828322002602}
   - {fileID: 1181065800607963071}
+  m_weaponHoldOffset: {x: 0, y: 0, z: 0}
   m_projectile: {fileID: 604645328828819334, guid: 66a13259f93288a4e8682c05d9763072,
     type: 3}
   m_firingTransform: {fileID: 9044369817375108693}

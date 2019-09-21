@@ -9,17 +9,18 @@ public class Weapon_Projectile : MonoBehaviour
     private float m_damage = 0;
     private float m_speed = 0;
     private Vector3 m_direction = Vector3.zero;
-    private const float PROJECTILE_LIFETIME = 5;
-    private float m_currentLifeTime = PROJECTILE_LIFETIME;
+    private const float PROJECTILE_DEFAULT_LIFETIME = 5;
+    private float m_currentLifeTime = PROJECTILE_DEFAULT_LIFETIME;
     [SerializeField] private Hitbox m_hitbox = null;
     private List<Effect> m_projectileEffects = new List<Effect>();
 
     //--Methods--
 
-    public void Init(float newDamage, float newSpeed, Vector3 newDirection)
+    public void Init(float newDamage, float newSpeed, float newLifeTime, Vector3 newDirection)
     {
         m_damage = newDamage;
         m_speed = newSpeed;
+        m_currentLifeTime = newLifeTime;
         m_direction = newDirection;
         m_hasInit = true;
     }

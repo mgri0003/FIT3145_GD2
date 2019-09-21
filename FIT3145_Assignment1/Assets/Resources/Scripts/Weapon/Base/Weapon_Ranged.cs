@@ -56,7 +56,12 @@ public abstract class Weapon_Ranged : Weapon_Base
                 {
                     //initialise the projectile (and off it goes!)
                     Vector3 firingDir = (m_lookAtPos + firingDirectionOffset) - m_firingTransform.position;
-                    projectile.Init(AccessWeaponStat((int)EWeaponStat.ALL_DAMAGE).GetCurrent(), AccessWeaponStat(EWeaponStat.RANGED_PROJECTILE_SPEED).GetCurrent(), firingDir.normalized);
+                    projectile.Init(
+                        AccessWeaponStat((int)EWeaponStat.ALL_DAMAGE).GetCurrent(), 
+                        AccessWeaponStat(EWeaponStat.RANGED_PROJECTILE_SPEED).GetCurrent(), 
+                        AccessWeaponStat(EWeaponStat.RANGED_PROJECTILE_LIFETIME).GetCurrent(), 
+                        firingDir.normalized);
+
                     projectile.AddProjectileEffects(GetOnHitEffectsFromUpgrades());
 
                     retVal = newProjectileGO;
