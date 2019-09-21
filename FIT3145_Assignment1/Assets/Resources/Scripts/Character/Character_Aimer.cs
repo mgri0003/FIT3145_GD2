@@ -49,4 +49,20 @@ public class Character_Aimer : MonoBehaviour
     }
 
     public bool IsEnabled() { return m_enabled; }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+        Character_Core player = GetComponent<Character_Core>();
+
+        if (player.m_characterAimer.GetAimTarget())
+        {
+            player.m_animator.SetLookAtWeight(0.3f);
+            player.m_animator.SetLookAtPosition(player.m_characterAimer.GetAimTarget().position);
+        }
+
+        if (!IsEnabled() || player.IsDead())
+        {
+            player.m_animator.SetLookAtWeight(0.0f);
+        }
+    }
 }

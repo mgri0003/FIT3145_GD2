@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon_Ranged : Weapon_Base
+public abstract class Weapon_Ranged : Weapon_Base
 {
     //--Variables--
     [SerializeField] private GameObject m_projectile = null;
     [SerializeField] private Transform m_firingTransform = null;
-    [SerializeField] private Vector3 m_lookAtPos = Vector3.zero;
+    private Vector3 m_lookAtPos = Vector3.zero;
 
     //Current Variables
-    private uint m_currentAmmo = 0;
+    private int m_currentAmmo = 0;
     private float m_currentReloadTime = 0;
     private float m_currentFireRateCooldown = 0;
 
     //--Methods--
+    protected abstract void FireRangedWeapon();
 
     public override bool Use()
     {
@@ -36,13 +37,10 @@ public class Weapon_Ranged : Weapon_Base
         return false;
     }
 
-    protected virtual void FireRangedWeapon()
+    protected GameObject FireSingleProjectile(in bool consumeAmmo = true, Vector3 firingDirectionOffset = default)
     {
-        FireSingleProjectile();
-    }
+        GameObject retVal = null;
 
-    private void FireSingleProjectile()
-    {
         Debug.Assert(m_projectile, "Ranged Weapon Does Not Have A Projectile!?!?");
         if (m_projectile)
         {
@@ -57,20 +55,32 @@ public class Weapon_Ranged : Weapon_Base
                 if (projectile)
                 {
                     //initialise the projectile (and off it goes!)
-                    Vector3 firingDir = m_lookAtPos - m_firingTransform.position;
-                    projectile.Init(AccessWeaponStat((int)EWeaponStat.ALL_DAMAGE).GetCurrent(), AccessWeaponStat(EWeaponStat.RANGED_PROJECTILE_SPEED).GetCurrent(), firingDir.normalized);
+                    Vector3 firingDir = (m_lookAtPos + firingDirectionOffset) - m_firingTransform.position;
+                    projectile.Init(
+                        AccessWeaponStat((int)EWeaponStat.ALL_DAMAGE).GetCurrent(), 
+                        AccessWeaponStat(EWeaponStat.RANGED_PROJECTILE_SPEED).GetCurrent(), 
+                        AccessWeaponStat(EWeaponStat.RANGED_PROJECTILE_LIFETIME).GetCurrent(), 
+                        firingDir.normalized);
+
                     projectile.AddProjectileEffects(GetOnHitEffectsFromUpgrades());
+
+                    retVal = newProjectileGO;
                 }
             }
         }
 
         //reduce ammo by 1
-        m_currentAmmo--;
+        if(consumeAmmo)
+        {
+            ConsumeAmmo(1);
+        }
+
+        return retVal;
     }
 
     void Start()
     {
-        m_currentAmmo = (uint)AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent();
+        m_currentAmmo = (int)AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent();
     }
 
     void Update()
@@ -147,7 +157,16 @@ public class Weapon_Ranged : Weapon_Base
         m_currentFireRateCooldown = AccessWeaponStat(EWeaponStat.RANGED_FIRE_RATE_COOLDOWN).GetCurrent();
     }
 
-    public uint GetCurrentAmmo()
+    public void ConsumeAmmo(int ammoAmount)
+    {
+        m_currentAmmo -= ammoAmount;
+        if(m_currentAmmo < 0)
+        {
+            m_currentAmmo = 0;
+        }
+    }
+
+    public int GetCurrentAmmo()
     {
         return m_currentAmmo;
     }
@@ -159,6 +178,6 @@ public class Weapon_Ranged : Weapon_Base
 
     public void ResetAmmo()
     {
-        m_currentAmmo = (uint)AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent();
+        m_currentAmmo = (int)AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent();
     }
 }

@@ -177,7 +177,8 @@ public class Player_Core : Character_Core
         uint animLayer = hand == EPlayerHand.HAND_RIGHT ? 1u : 2u;
 
         m_playerWeaponHolder.UpdateRangedWeaponAim();
-        if(weaponToUse.Use())
+
+        if (weaponToUse.Use())
         {
             m_animator.Play("Attack_RangedWeapon", (int)animLayer, 0.0f);
         }

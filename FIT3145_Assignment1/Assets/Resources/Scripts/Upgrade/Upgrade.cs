@@ -16,6 +16,11 @@ public abstract class Upgrade : Item
     [SerializeField] GameObject m_spawnable_particleEffect = null;
     private GameObject m_particleEffect = null;
 
+    private float m_balanceScale = 1.0f;
+    public void SetBalanceScale(float newBalanceValue) { m_balanceScale = newBalanceValue; }
+    public void ResetBalanceScale() { m_balanceScale = 1.0f; }
+    public float GetBalanceScale() { return m_balanceScale; }
+
     public void SetParticleEffectScale(float scaleValue)
     {
         if(m_particleEffect)
@@ -23,7 +28,6 @@ public abstract class Upgrade : Item
             m_particleEffect.transform.localScale = new Vector3(scaleValue, scaleValue, scaleValue);
         }
     }
-
 
     private void Awake()
     {
@@ -35,7 +39,16 @@ public abstract class Upgrade : Item
     }
 
     //public abstract void OnUpgradeWeaponUsed();
-    //public abstract void OnUpgradeAttached();
+    public void OnUpgradeAttached()
+    {
+        ApplyUpgradeSettings();
+    }
+    public void OnUpgradeDettached()
+    {
+        ResetUpgradeSettings();
+    }
 
+    protected abstract void ApplyUpgradeSettings();
+    protected abstract void ResetUpgradeSettings();
 
 }

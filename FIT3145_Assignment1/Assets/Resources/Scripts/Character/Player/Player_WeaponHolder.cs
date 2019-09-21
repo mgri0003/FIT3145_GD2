@@ -30,7 +30,7 @@ public class Player_WeaponHolder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void Init()
@@ -119,10 +119,10 @@ public class Player_WeaponHolder : MonoBehaviour
 
                 //set the current weapon on the hand
                 m_currentWeapons[(int)hand] = weapon;
-                m_currentWeapons[(int)hand].transform.localPosition = new Vector3(0, 0, 0);
+                m_currentWeapons[(int)hand].transform.localPosition = m_currentWeapons[(int)hand].GetWeaponHoldOffset();
 
                 //set the current weapons rotation to point towards the aim target
-                m_currentWeapons[(int)hand].transform.LookAt(GetComponent<Character_Aimer>().GetAimTarget());
+                UpdateWeaponRotationInHand(hand);
 
                 //disable physics for weapon when in hand
                 m_currentWeapons[(int)hand].SetPhysicsActive(false);
@@ -132,6 +132,18 @@ public class Player_WeaponHolder : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void UpdateWeaponRotationInHand(in EPlayerHand hand)
+    {
+        if(IsHoldingWeaponInHand(hand))
+        {
+            Weapon_Base weapon = GetWeaponInHand(hand);
+            if(weapon)
+            {
+                weapon.transform.LookAt(GetComponent<Character_Aimer>().GetAimTarget());
+            }
+        }
     }
 
     public void DetachWeaponFromHand(in EPlayerHand hand)

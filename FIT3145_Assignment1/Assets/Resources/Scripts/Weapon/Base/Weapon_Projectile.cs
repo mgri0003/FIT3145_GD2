@@ -9,20 +9,23 @@ public class Weapon_Projectile : MonoBehaviour
     private float m_damage = 0;
     private float m_speed = 0;
     private Vector3 m_direction = Vector3.zero;
-    private const float PROJECTILE_LIFETIME = 5;
-    private float m_currentLifeTime = PROJECTILE_LIFETIME;
+    private const float PROJECTILE_DEFAULT_LIFETIME = 5;
+    private float m_currentLifeTime = PROJECTILE_DEFAULT_LIFETIME;
     [SerializeField] private Hitbox m_hitbox = null;
     private List<Effect> m_projectileEffects = new List<Effect>();
 
     //--Methods--
 
-    public void Init(float newDamage, float newSpeed, Vector3 newDirection)
+    public void Init(float newDamage, float newSpeed, float newLifeTime, Vector3 newDirection)
     {
         m_damage = newDamage;
         m_speed = newSpeed;
+        m_currentLifeTime = newLifeTime;
         m_direction = newDirection;
         m_hasInit = true;
     }
+
+    public void SetLifeTime(float newLifeTime) { m_currentLifeTime = newLifeTime; }
 
     public void AddProjectileEffect(Effect projEffect)
     {
@@ -75,19 +78,25 @@ public class Weapon_Projectile : MonoBehaviour
 
             foreach (GameObject go in gameObjectsHit)
             {
-                if (go.tag == "Character")
+                if(go)
                 {
-                    go.GetComponent<Character_Core>().ReceiveHit(m_damage, m_projectileEffects);
-                    validCollision = true;
-                    break;
+                    if (go.tag == "Character")
+                    {
+                        go.GetComponent<Character_Core>().ReceiveHit(m_damage, m_projectileEffects);
+                        validCollision = true;
+                        break;
+                    }
                 }
             }
 
             foreach (GameObject go in gameObjectsHit)
             {
-                if (go.transform.root.tag == "World")
+                if (go)
                 {
-                    validCollision = true;
+                    if (go.transform.root.tag == "World")
+                    {
+                        validCollision = true;
+                    }
                 }
             }
 
@@ -102,6 +111,7 @@ public class Weapon_Projectile : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
 
 
 }

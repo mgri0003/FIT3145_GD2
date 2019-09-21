@@ -69,9 +69,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5534518717771857130}
-  - component: {fileID: -7953556568845490859}
   - component: {fileID: -4255810572145031668}
   - component: {fileID: -8007725881098290701}
+  - component: {fileID: -4800708472243553683}
   m_Layer: 0
   m_Name: BreachingHammer
   m_TagString: Item
@@ -97,54 +97,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-7953556568845490859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8754039348771881063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c0dd61f35f6ed145be4889863c68ca9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_physicsRigidbody: {fileID: -4255810572145031668}
-  m_physicsCollider: {fileID: -8007725881098290701}
-  m_name: Breaching Hammer
-  m_itemType: 0
-  m_itemSprite: {fileID: 21300000, guid: d576bbfb4f35f30408c49306ad53aa94, type: 3}
-  m_itemDescription: STOP...Hammer Time!
-  m_weaponStats:
-  - m_current: 30
-    m_max: -1
-  - m_current: 0
-    m_max: -1
-  - m_current: 0
-    m_max: -1
-  - m_current: 0
-    m_max: -1
-  - m_current: 0
-    m_max: -1
-  m_weaponType: 0
-  m_improvementPath:
-    m_improvementSegments:
-    - StatToImprove: 0
-      Value: 20
-      ScrapCost: 50
-      UpgradeSlotIncrease: 0
-    - StatToImprove: 0
-      Value: 40
-      ScrapCost: 100
-      UpgradeSlotIncrease: 0
-    - StatToImprove: 5
-      Value: 0
-      ScrapCost: 180
-      UpgradeSlotIncrease: 1
-  m_upgradeVisualLocations:
-  - {fileID: 6193690862101191920}
-  - {fileID: 3468823291964235471}
-  - {fileID: 2463400617611781155}
 --- !u!54 &-4255810572145031668
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -174,6 +126,49 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.15, y: 1.33, z: 0.4}
   m_Center: {x: 0, y: 0.45, z: 0}
+--- !u!114 &-4800708472243553683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8754039348771881063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c060969f387b7741ad0e9b43f134dc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_physicsRigidbody: {fileID: -4255810572145031668}
+  m_physicsCollider: {fileID: -8007725881098290701}
+  m_name: Breaching Hammer
+  m_itemType: 0
+  m_itemSprite: {fileID: 21300000, guid: d576bbfb4f35f30408c49306ad53aa94, type: 3}
+  m_itemDescription: STOP...HAMMER TIME!
+  m_weaponStats:
+  - m_current: 20
+    m_max: -1
+  - m_current: 0
+    m_max: -1
+  - m_current: 0
+    m_max: -1
+  - m_current: 0
+    m_max: -1
+  - m_current: 0
+    m_max: -1
+  - m_current: 0
+    m_max: -1
+  m_weaponType: 0
+  m_improvementPath:
+    m_improvementSegments:
+    - StatToImprove: 0
+      Value: 20
+      ScrapCost: 50
+      UpgradeSlotIncrease: 0
+  m_upgradeVisualLocations:
+  - {fileID: 6193690862101191920}
+  - {fileID: 3468823291964235471}
+  - {fileID: 2463400617611781155}
+  m_weaponHoldOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &8944497974133236241
 GameObject:
   m_ObjectHideFlags: 0
