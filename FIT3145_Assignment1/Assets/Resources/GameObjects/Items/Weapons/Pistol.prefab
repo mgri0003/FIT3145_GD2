@@ -129,9 +129,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5534518717771857130}
-  - component: {fileID: 4252530515627706265}
   - component: {fileID: 1295313564781236068}
   - component: {fileID: 5961892357635601912}
+  - component: {fileID: 6402031675230056507}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Item
@@ -158,66 +158,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4252530515627706265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8754039348771881063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07f47395a7bd1ab4baa3236a29a161d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_physicsRigidbody: {fileID: 1295313564781236068}
-  m_physicsCollider: {fileID: 5961892357635601912}
-  m_name: Pistol
-  m_itemType: 0
-  m_itemSprite: {fileID: 21300000, guid: 64ab8e5b8f230114abb9598d84e09842, type: 3}
-  m_itemDescription: They call them pistols but I've never seen them pist ;)
-  m_weaponStats:
-  - m_current: 10
-    m_max: -1
-  - m_current: 16
-    m_max: -1
-  - m_current: 5
-    m_max: -1
-  - m_current: 1
-    m_max: -1
-  - m_current: 0.3
-    m_max: -1
-  m_weaponType: 1
-  m_improvementPath:
-    m_improvementSegments:
-    - StatToImprove: 2
-      Value: 5
-      ScrapCost: 30
-      UpgradeSlotIncrease: 0
-    - StatToImprove: 1
-      Value: 5
-      ScrapCost: 60
-      UpgradeSlotIncrease: 0
-    - StatToImprove: 0
-      Value: 10
-      ScrapCost: 90
-      UpgradeSlotIncrease: 0
-    - StatToImprove: 3
-      Value: -0.5
-      ScrapCost: 120
-      UpgradeSlotIncrease: 0
-    - StatToImprove: 5
-      Value: 0
-      ScrapCost: 200
-      UpgradeSlotIncrease: 1
-  m_upgradeVisualLocations:
-  - {fileID: 107821848212228709}
-  - {fileID: 1610480828322002602}
-  - {fileID: 1181065800607963071}
-  m_projectile: {fileID: 604645328828819334, guid: 66a13259f93288a4e8682c05d9763072,
-    type: 3}
-  m_firingTransform: {fileID: 9044369817375108693}
-  m_lookAtPos: {x: 0, y: 0, z: 0}
 --- !u!54 &1295313564781236068
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -247,6 +187,49 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.15, y: 0.4, z: 0.4}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6402031675230056507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8754039348771881063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6ea0342922df8346b4b32c465ddd2b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_physicsRigidbody: {fileID: 1295313564781236068}
+  m_physicsCollider: {fileID: 5961892357635601912}
+  m_name: Pistol
+  m_itemType: 0
+  m_itemSprite: {fileID: 21300000, guid: 64ab8e5b8f230114abb9598d84e09842, type: 3}
+  m_itemDescription: They call them pistols but I've never seen them pist ;)
+  m_weaponStats:
+  - m_current: 10
+    m_max: -1
+  - m_current: 16
+    m_max: -1
+  - m_current: 5
+    m_max: -1
+  - m_current: 1
+    m_max: -1
+  - m_current: 0.4
+    m_max: -1
+  m_weaponType: 1
+  m_improvementPath:
+    m_improvementSegments:
+    - StatToImprove: 0
+      Value: 5
+      ScrapCost: 35
+      UpgradeSlotIncrease: 0
+  m_upgradeVisualLocations:
+  - {fileID: 107821848212228709}
+  - {fileID: 1610480828322002602}
+  - {fileID: 1181065800607963071}
+  m_projectile: {fileID: 604645328828819334, guid: 66a13259f93288a4e8682c05d9763072,
+    type: 3}
+  m_firingTransform: {fileID: 9044369817375108693}
 --- !u!1001 &8192575480292873504
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon_Ranged : Weapon_Base
+public abstract class Weapon_Ranged : Weapon_Base
 {
     //--Variables--
     [SerializeField] private GameObject m_projectile = null;
     [SerializeField] private Transform m_firingTransform = null;
-    [SerializeField] private Vector3 m_lookAtPos = Vector3.zero;
+    private Vector3 m_lookAtPos = Vector3.zero;
 
     //Current Variables
     private uint m_currentAmmo = 0;
@@ -36,12 +36,9 @@ public class Weapon_Ranged : Weapon_Base
         return false;
     }
 
-    protected virtual void FireRangedWeapon()
-    {
-        FireSingleProjectile();
-    }
+    protected abstract void FireRangedWeapon();
 
-    private void FireSingleProjectile()
+    protected void FireSingleProjectile()
     {
         Debug.Assert(m_projectile, "Ranged Weapon Does Not Have A Projectile!?!?");
         if (m_projectile)
