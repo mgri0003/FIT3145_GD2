@@ -253,11 +253,23 @@ public class Player_Core : Character_Core
             }
         }
 
-        if (possibleAugmentToEquip && !m_playerAugmentHandler.HasAugment(EAugmentSlot.SPACE))
+        //auto equip first active augment
+        if (possibleAugmentToEquip && possibleAugmentToEquip.GetAugmentType() == EAugmentType.ACTIVE)
         {
             //equip and remove from inventory
-            m_playerAugmentHandler.AttachAugment(EAugmentSlot.SPACE, possibleAugmentToEquip);
-            m_playerInventory.RemoveItemFromInventory(possibleAugmentToEquip);
+            if(m_playerAugmentHandler.AttachAugment(EAugmentSlot.SPACE, possibleAugmentToEquip))
+            {
+                m_playerInventory.RemoveItemFromInventory(possibleAugmentToEquip);
+            }
+        }
+        //auto equip first passive augment
+        else if (possibleAugmentToEquip && possibleAugmentToEquip.GetAugmentType() == EAugmentType.PASSIVE)
+        {   
+            //equip and remove from inventory
+            if(m_playerAugmentHandler.AttachAugment(EAugmentSlot.PASSIVE_1, possibleAugmentToEquip))
+            {
+                m_playerInventory.RemoveItemFromInventory(possibleAugmentToEquip);
+            }
         }
     }
 
@@ -265,9 +277,14 @@ public class Player_Core : Character_Core
     {
         base.Die();
 
-        DropUnsafeItems();
+        //activate augment on deaths
+        m_playerAugmentHandler.CallOnAllAugments_AugmentOnDeath();
 
-        GamePlayManager.Instance.OnPlayerDeath();
+        if(IsDead())
+        {
+            DropUnsafeItems();
+            GamePlayManager.Instance.OnPlayerDeath();
+        }
     }
 
     private void DropUnsafeItems()

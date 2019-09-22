@@ -30,7 +30,14 @@ public abstract class Character_Core : MonoBehaviour
 
     public bool IsPlayer()
     {
-        return ((Player_Core)this != null);
+        Player_Core player = null;
+
+        if (this != null)
+        {
+            player = (this as Player_Core);
+        }
+
+        return (player != null);
     }
 
     public void AddEffect(Effect newEffect)

@@ -27,4 +27,9 @@ public class Dash : Augment
             m_dashValue = new Vector3(0, 0, 0);
         }
     }
+
+    public override void AugmentOnDeath()
+    {
+        
+    }
 }

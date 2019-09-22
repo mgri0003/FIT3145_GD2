@@ -137,7 +137,7 @@ public class UIScreen_Loadout : UIScreenBase
 
                         if (UI_CanvasManager.IsPointInsideRect(m_augmentSlots[i].rectTransform, dragableItem.GetParentTransform().localPosition))
                         {
-                            if(CanAugmentBeSlotted(augSlot, aug.GetAugmentType()))
+                            if(m_player.m_playerAugmentHandler.CanAttachAugmentToSlot(augSlot, aug))
                             {
                                 m_augmentSlots_Frame[i].color = Color.green;
                             }
@@ -279,7 +279,7 @@ public class UIScreen_Loadout : UIScreenBase
                 //if item dropped on AUGMENT SLOT
                 if (UI_CanvasManager.IsPointInsideRect(m_augmentSlots[i].rectTransform, dragableItem.GetParentTransform().localPosition))
                 {
-                    if(CanAugmentBeSlotted(augSlot, aug.GetAugmentType()))
+                    if (m_player.m_playerAugmentHandler.CanAttachAugmentToSlot(augSlot, aug))
                     {
                         //if a augment is already slotted in slot, its about to get replaced, so detach it and put it back into inventory
                         if (m_player.m_playerAugmentHandler.HasAugment(augSlot))
@@ -402,10 +402,5 @@ public class UIScreen_Loadout : UIScreenBase
                 m_augmentSlots[i].sprite = m_sprite_defaultEmptyAugment;
             }
         }
-    }
-
-    private bool CanAugmentBeSlotted(in EAugmentSlot augSlot, in EAugmentType augType)
-    {
-        return (augType == EAugmentType.ACTIVE && augSlot < EAugmentSlot.PASSIVE_1) || (augType == EAugmentType.PASSIVE && augSlot >= EAugmentSlot.PASSIVE_1);
     }
 }

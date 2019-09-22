@@ -21,6 +21,10 @@ public abstract class Augment : Item
 
 
     //--Methods--//
+    protected abstract void AugmentUpdate();
+    protected abstract bool AugmentAbility();
+    public abstract void AugmentOnDeath();
+
     public bool IsAugmentActive() { return m_augmentActive; }
     public void SetAugmentActive(bool val) { m_augmentActive = val; }
     private void Update()
@@ -33,18 +37,16 @@ public abstract class Augment : Item
             AugmentUpdate();
         }
     }
-    public void Use()
+    public void ActivateAugmentAbility()
     {
-        if(m_cooldown == 0)
+        if (m_cooldown == 0)
         {
-            if(AugmentAbility())
+            if (AugmentAbility())
             {
                 m_cooldown = m_maxCooldown;
             }
         }
     }
-    protected abstract void AugmentUpdate();
-    protected abstract bool AugmentAbility();
     public void SetPlayer(Player_Core player) { m_player = player; }
     public float GetCooldown() { return m_cooldown; }
     public float GetMaxCooldown() { return m_maxCooldown; }

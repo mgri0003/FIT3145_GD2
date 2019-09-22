@@ -50,19 +50,22 @@ public class Player_AugmentHandler : MonoBehaviour
 
         if (HasAugment(augmentSlot))
         {
-            GetAugment(augmentSlot).Use();
+            GetAugment(augmentSlot).ActivateAugmentAbility();
         }
     }
 
-    public void AttachAugment(in EAugmentSlot augmentSlot, Augment newAugment)
+    public bool AttachAugment(in EAugmentSlot augmentSlot, Augment newAugment)
     {
         Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
-        if (CanAttachAugment(augmentSlot))
+        if (CanAttachAugmentToSlot(augmentSlot, newAugment))
         {
             m_augments[(int)augmentSlot] = newAugment;
             m_augments[(int)augmentSlot].SetAugmentActive(true);
             m_augments[(int)augmentSlot].SetPlayer(GetComponent<Player_Core>());
+            return true;
         }
+
+        return false;
     }
 
     public void DetachAugment(in EAugmentSlot augmentSlot)
@@ -76,10 +79,24 @@ public class Player_AugmentHandler : MonoBehaviour
         }
     }
 
-    public bool CanAttachAugment(in EAugmentSlot augmentSlot)
+    public bool CanAttachAugmentToSlot(in EAugmentSlot augmentSlot, in Augment aug)
     {
         Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
-        return !HasAugment(augmentSlot);
+
+        bool validSlotForActive = ((int)augmentSlot < (int)EAugmentSlot.PASSIVE_1) && (aug.GetAugmentType() == EAugmentType.ACTIVE);
+        bool validSlotForPassive = ((int)augmentSlot >= (int)EAugmentSlot.PASSIVE_1) && (aug.GetAugmentType() == EAugmentType.PASSIVE);
+
+        return !HasAugment(augmentSlot) && (validSlotForActive || validSlotForPassive);
     }
 
+    public void CallOnAllAugments_AugmentOnDeath()
+    {
+        foreach(Augment aug in m_augments)
+        {
+            if(aug)
+            {
+                aug.AugmentOnDeath();
+            }
+        }
+    }
 }
