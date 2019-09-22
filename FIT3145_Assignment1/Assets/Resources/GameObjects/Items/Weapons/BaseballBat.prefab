@@ -161,9 +161,21 @@ MonoBehaviour:
   m_improvementPath:
     m_improvementSegments:
     - StatToImprove: 0
-      Value: 20
-      ScrapCost: 50
+      Value: 5
+      ScrapCost: 10
       UpgradeSlotIncrease: 0
+    - StatToImprove: 0
+      Value: 5
+      ScrapCost: 20
+      UpgradeSlotIncrease: 0
+    - StatToImprove: 0
+      Value: 5
+      ScrapCost: 30
+      UpgradeSlotIncrease: 0
+    - StatToImprove: 6
+      Value: 0
+      ScrapCost: 40
+      UpgradeSlotIncrease: 1
   m_upgradeVisualLocations:
   - {fileID: 6193690862101191920}
   - {fileID: 3468823291964235471}
