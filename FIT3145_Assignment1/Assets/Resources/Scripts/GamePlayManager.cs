@@ -6,8 +6,10 @@ using UnityEngine.SceneManagement;
 public class GamePlayManager : Singleton<GamePlayManager>
 {
     //--Variables--//
+    public const uint NUMBER_OF_LEVELS = 2;
     private Transform m_spawnPoint = null;
     //private Transform[] m_enemySpawnPoints = null;
+    private Transform[] m_elevatorTeleportTransforms = new Transform[NUMBER_OF_LEVELS];
 
     //Spawnables (Do not change values in these objects)
     [SerializeField] private GameObject m_spawnable_mainPlayer = null;
@@ -64,6 +66,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         SpawnInventoryZone();
         SetupSpawnPoints();
         SpawnPlayer();
+        SetupElevators();
 
         Enemy_Core[] enemies = GetAllEnemiesInScene();
         if(enemies != null)
@@ -103,6 +106,11 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public Enemy_Core[] GetAllEnemiesInScene()
     {
         return FindObjectsOfType<Enemy_Core>();
+    }
+
+    public ElevatorPanel[] GetAllElevatorsPanelsInScene()
+    {
+        return FindObjectsOfType<ElevatorPanel>();
     }
 
     private void RespawnPlayer()
@@ -202,6 +210,25 @@ public class GamePlayManager : Singleton<GamePlayManager>
     //    }
     //}
 
+    private void SetupElevators()
+    {
+        ElevatorPanel[] elevators = GetAllElevatorsPanelsInScene();
+        if (elevators != null)
+        {
+            foreach (ElevatorPanel ep in elevators)
+            {
+                if(ep)
+                {
+                    Debug.Assert(m_elevatorTeleportTransforms[ep.m_levelFrom] == null, "Elevator Already Assigned for level!");
+                    if (m_elevatorTeleportTransforms[ep.m_levelFrom] == null)
+                    {
+                        m_elevatorTeleportTransforms[ep.m_levelFrom] = ep.GetPlayerTeleportTransform();
+                    }
+                }
+            }
+        }
+    }
+
     public Player_Core GetCurrentPlayer()
     {
         if(m_current_mainPlayer)
@@ -225,19 +252,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     public void MovePlayerToLevel(uint level)
     {
-        switch(level)
+        Debug.Assert(level < NUMBER_OF_LEVELS, "Invalid Level");
+        if(level < NUMBER_OF_LEVELS)
         {
-            case 0:
-            {
-                
-            }
-            break;
-
-            case 1:
-            {
-
-            }
-            break;
+            m_current_mainPlayer.transform.position = m_elevatorTeleportTransforms[level].position;
         }
     }
 }
