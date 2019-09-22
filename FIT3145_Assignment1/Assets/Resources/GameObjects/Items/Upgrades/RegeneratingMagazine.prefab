@@ -79,7 +79,7 @@ MonoBehaviour:
   m_physicsCollider: {fileID: 1725078717245774647}
   m_name: Regenerating Magazine
   m_itemType: 2
-  m_itemSprite: {fileID: 21300000, guid: e154f8a7fc32bad4aa0e8c4f94793fe9, type: 3}
+  m_itemSprite: {fileID: 21300000, guid: 6103976608b7e204185bd5b7da8affa1, type: 3}
   m_itemDescription: Yee, More Bullets!
   m_onHitEffect: {fileID: 0}
   m_spawnable_particleEffect: {fileID: 0}

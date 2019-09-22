@@ -79,12 +79,14 @@ MonoBehaviour:
   m_physicsCollider: {fileID: 1725078717245774647}
   m_name: Electric Generator
   m_itemType: 2
-  m_itemSprite: {fileID: 0}
-  m_itemDescription: 
+  m_itemSprite: {fileID: 21300000, guid: 05e68fc7faaa53f49a1fc607b1cf8da9, type: 3}
+  m_itemDescription: Electric Boogaloo
   m_onHitEffect: {fileID: 139301493673717843, guid: 63ebfff9b30e1694093ac6ac325f33ff,
     type: 3}
   m_spawnable_particleEffect: {fileID: 7539420459107209283, guid: 6c55ba629cf43f643bf9ddf0a00aacda,
     type: 3}
+  m_weaponTypeRestriction: 0
+  m_OnHitDamage: 20
 --- !u!1001 &844461643850675135
 PrefabInstance:
   m_ObjectHideFlags: 0
