@@ -220,7 +220,11 @@ MonoBehaviour:
   - m_current: 3
     m_max: -1
   m_improvementPath:
-    m_improvementSegments: []
+    m_improvementSegments:
+    - StatToImprove: 0
+      Value: 3
+      ScrapCost: 40
+      UpgradeSlotIncrease: 0
   m_upgradeVisualLocations:
   - {fileID: 107821848212228709}
   - {fileID: 1610480828322002602}
