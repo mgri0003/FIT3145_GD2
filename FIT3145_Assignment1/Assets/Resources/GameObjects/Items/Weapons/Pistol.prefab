@@ -222,7 +222,7 @@ MonoBehaviour:
   m_improvementPath:
     m_improvementSegments:
     - StatToImprove: 3
-      Value: -1
+      Value: -0.5
       ScrapCost: 20
       UpgradeSlotIncrease: 0
     - StatToImprove: 4
