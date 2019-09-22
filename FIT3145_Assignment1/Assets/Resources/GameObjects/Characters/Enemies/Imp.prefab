@@ -150,6 +150,7 @@ MonoBehaviour:
   m_minDistanceToSpecial: 6
   m_minDistanceToMove: 7
   m_itemDrops: []
+  m_isFlyingEnemy: 1
   m_scrapDrop: 40
   m_fireballProjectile: {fileID: 604645328828819334, guid: bad43eb11b270b245bec0a2ca5dd2e97,
     type: 3}
