@@ -109,7 +109,7 @@ public abstract class Character_Core : MonoBehaviour
         //only receive hits if your alive :P
         if(!IsDead())
         {
-            Debug.Log(transform.name +  " | Hit Received | DMG: " + damage);
+            //Debug.Log(transform.name +  " | Hit Received | DMG: " + damage);
 
             //add effects
             if(effectsToApply != null)

@@ -1,3 +1,4 @@
 https://wiki.unity3d.com/index.php/Singleton - Singletons with Unity C#
 https://github.com/marijnz/unity-toolbar-extender - UI Editor Extensions
 https://freesound.org/people/cylon8472/sounds/249686/ - Cuthulu Sound
+https://wiki.unity3d.com/index.php/CameraFacingBillboard - billboarding for healthbars

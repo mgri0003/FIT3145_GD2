@@ -16,6 +16,9 @@ public abstract class Enemy_Core : Character_Core
     private bool m_aggro = false;
     [SerializeField] private bool m_isFlyingEnemy = false;
     [SerializeField] private uint m_scrapDrop = 0;
+    private FloatingHealthbar m_floatingHealthBar;
+    [SerializeField] private GameObject m_spawnable_floatingHealthBar;
+    [SerializeField] private float m_floatingHealthbarHeight = 0.0f;
 
     //--Methods--//
     protected override void Start()
@@ -32,6 +35,23 @@ public abstract class Enemy_Core : Character_Core
         else
         {
             m_animator.SetFloat("FlyingAnimation", 0.0f);
+        }
+
+        if(m_spawnable_floatingHealthBar)
+        {
+            GameObject go = Instantiate(m_spawnable_floatingHealthBar, Vector3.zero, Quaternion.Euler(0, 0, 0));
+            if(go)
+            {
+                //go.transform.SetParent(transform);
+                //go.transform.localPosition = new Vector3(0, m_floatingHealthbarHeight, 0);
+                m_floatingHealthBar = go.GetComponent<FloatingHealthbar>();
+            }
+
+            if(m_floatingHealthBar)
+            {
+                m_floatingHealthBar.SetCharacter(this);
+                m_floatingHealthBar.SetHealthBarOffset(new Vector3(0,m_floatingHealthbarHeight,0));
+            }
         }
     }
 

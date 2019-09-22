@@ -119,7 +119,11 @@ MonoBehaviour:
   m_minDistanceToSpecial: 0.8
   m_minDistanceToMove: 5
   m_itemDrops: []
+  m_isFlyingEnemy: 0
   m_scrapDrop: 30
+  m_spawnable_floatingHealthBar: {fileID: 3105921162441277294, guid: 9316788c5cd781f4bb8325d66fb84ea5,
+    type: 3}
+  m_floatingHealthbarHeight: 1
 --- !u!95 &3011257416459508142
 Animator:
   serializedVersion: 3
