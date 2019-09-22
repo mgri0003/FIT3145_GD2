@@ -146,7 +146,7 @@ MonoBehaviour:
   m_itemDescription: STOP...HAMMER TIME!
   m_weaponType: 0
   m_weaponStats:
-  - m_current: 20
+  - m_current: 30
     m_max: -1
   - m_current: 0
     m_max: -1
