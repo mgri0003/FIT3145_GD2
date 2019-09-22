@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5668204084136973636}
   - component: {fileID: 5267765243281213323}
   m_Layer: 0
-  m_Name: ItemPickupArea
+  m_Name: InteractionArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_collidingTags:
   - Item
+  - Interactable
 --- !u!65 &5267765243281213323
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -183,7 +184,7 @@ MonoBehaviour:
   m_playerWeaponHolder: {fileID: 0}
   m_playerInventory: {fileID: 0}
   m_playerAugmentHandler: {fileID: 0}
-  m_playerItemPickupArea: {fileID: 5668204084136973636}
+  m_playerInteractionArea: {fileID: 5668204084136973636}
 --- !u!114 &4230743391449152156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,7 +284,6 @@ MonoBehaviour:
   m_handTransforms:
   - {fileID: 4868965049448236376}
   - {fileID: 9081958317526318214}
-  m_offset: {x: 0, y: 0, z: 0}
 --- !u!114 &-1889737827967805000
 MonoBehaviour:
   m_ObjectHideFlags: 0

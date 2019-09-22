@@ -222,4 +222,22 @@ public class GamePlayManager : Singleton<GamePlayManager>
         Debug.Assert(m_current_inventoryZone, "Inventory Zone not created!?!?!");
         return m_current_inventoryZone.transform.position;
     }
+
+    public void MovePlayerToLevel(uint level)
+    {
+        switch(level)
+        {
+            case 0:
+            {
+                
+            }
+            break;
+
+            case 1:
+            {
+
+            }
+            break;
+        }
+    }
 }

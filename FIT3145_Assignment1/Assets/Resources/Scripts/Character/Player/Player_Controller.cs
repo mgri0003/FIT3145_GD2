@@ -48,7 +48,7 @@ public class Player_Controller : MonoBehaviour
                 //Pickup items
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    m_player.PickupNearbyItems();
+                    m_player.AttemptInteraction();
                 }
 
                 if (Input.GetKeyDown(KeyCode.Q))

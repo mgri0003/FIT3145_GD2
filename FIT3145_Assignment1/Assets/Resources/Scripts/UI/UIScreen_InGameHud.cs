@@ -55,7 +55,7 @@ public class UIScreen_InGameHud : UIScreenBase
 
     protected override void OnGUI()
     {
-        UI_DisplayPickupable();
+        UI_DisplayInteractions();
         UI_UpdateDisplayAugments();
         
         UI_UpdateHealthBar();
@@ -167,11 +167,15 @@ public class UIScreen_InGameHud : UIScreenBase
         }
     }
 
-    private void UI_DisplayPickupable()
+    private void UI_DisplayInteractions()
     {
         if (m_player.IsItemNearby())
         {
             GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Press 'F' To Pick Up");
+        }
+        else if (m_player.IsInteractableNearby())
+        {
+            GUI.Box(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 30), "Press 'F' To Interact");
         }
     }
 

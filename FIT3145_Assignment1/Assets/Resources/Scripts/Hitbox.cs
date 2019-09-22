@@ -69,8 +69,35 @@ public class Hitbox : MonoBehaviour
         return m_collidingObjects.Count > 0;
     }
 
+    public bool IsCollidingWithTag(string tag)
+    {
+        bool retVal = false;
+
+        if(m_collidingObjects.Count > 0)
+        {
+            foreach(GameObject go in m_collidingObjects)
+            {
+                if(go)
+                {
+                    if(go.CompareTag(tag))
+                    {
+                        retVal = true;
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
     public void ClearCollidingObjects()
     {
         m_collidingObjects.Clear();
+    }
+
+    //should only be used for hacky purposes
+    public void RemoveCollidingObject(GameObject collidingGO)
+    {
+        m_collidingObjects.Remove(collidingGO);
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - EnemySpawn
   - Item
   - World
+  - Interactable
   layers:
   - Default
   - TransparentFX

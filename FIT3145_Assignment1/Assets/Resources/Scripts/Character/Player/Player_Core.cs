@@ -14,7 +14,7 @@ public class Player_Core : Character_Core
     [HideInInspector] public Player_WeaponHolder m_playerWeaponHolder;
     [HideInInspector] public Player_Inventory m_playerInventory;
     [HideInInspector] public Player_AugmentHandler m_playerAugmentHandler;
-    [SerializeField] public Hitbox m_playerItemPickupArea;
+    [SerializeField] public Hitbox m_playerInteractionArea;
 
 
     //-Methods-
@@ -44,7 +44,7 @@ public class Player_Core : Character_Core
         Debug.Assert(m_playerAugmentHandler != null, "Player Augment Handler Is Null");
 
 
-        Debug.Assert(m_playerItemPickupArea != null, "Player Item Pickup Are Is Null");
+        Debug.Assert(m_playerInteractionArea != null, "Player Interaction Area Is Null");
     }
 
     // Update is called once per frame
@@ -197,21 +197,65 @@ public class Player_Core : Character_Core
 
     public bool IsItemNearby()
     {
-        return m_playerItemPickupArea.IsColliding();
+        return m_playerInteractionArea.IsCollidingWithTag("Item");
     }
-    
-    public void PickupNearbyItems()
+
+    public bool IsInteractableNearby()
+    {
+        return m_playerInteractionArea.IsCollidingWithTag("Interactable");
+    }
+
+    public void AttemptInteraction()
+    {
+        if (IsItemNearby())
+        {
+            PickupNearbyItems();
+        }
+        else if (IsInteractableNearby())
+        {
+            InteractWithNearbyInteractables();
+        }
+    }
+
+    private void InteractWithNearbyInteractables()
+    {
+        if (IsInteractableNearby())
+        {
+            for (int i = 0; i < m_playerInteractionArea.GetAllGameObjectsCollided().Count; ++i)
+            {
+                GameObject go = m_playerInteractionArea.GetAllGameObjectsCollided()[i];
+                if (go)
+                {
+                    if (go.CompareTag("Interactable"))
+                    {
+                        go.GetComponent<Interactable>().Interact();
+                    }
+                }
+            }
+        }
+    }
+
+    private void PickupNearbyItems()
     {
         if(IsItemNearby())
         {
             //add items to inventory
             List<Item> items = new List<Item>();
-            foreach(GameObject go in m_playerItemPickupArea.GetAllGameObjectsCollided())
+            for(int i = 0; i < m_playerInteractionArea.GetAllGameObjectsCollided().Count; ++i)
             {
-                items.Add(go.GetComponent<Item>());
+                GameObject go = m_playerInteractionArea.GetAllGameObjectsCollided()[i];
+                if(go)
+                {
+                    if (go.GetComponent<Item>())
+                    {
+                        items.Add(go.GetComponent<Item>());
+                        m_playerInteractionArea.RemoveCollidingObject(go);
+                        i = 0; //reset loop
+                    }
+                }
             }
+
             m_playerInventory.AddItemsToInventory(items);
-            m_playerItemPickupArea.ClearCollidingObjects();
 
             //auto-equip first weapon to right hand if empty handed
             MaybeAutoEquipWeapon(items);
