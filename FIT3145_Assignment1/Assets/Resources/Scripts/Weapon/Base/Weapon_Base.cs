@@ -25,8 +25,8 @@ public enum EWeaponStat
 public abstract class Weapon_Base : Item
 {
     //--Variables--
-    [SerializeField] protected Stat[] m_weaponStats = new Stat[(int)EWeaponStat.MAX];
     [SerializeField] private EWeaponType m_weaponType = EWeaponType.INVALID;
+    [SerializeField] protected Stat[] m_weaponStats = new Stat[(int)EWeaponStat.MAX];
     [SerializeField] private ImprovementPath m_improvementPath;
     protected List<Upgrade> m_currentUpgrades = new List<Upgrade>();
     private uint m_upgradeLimit = 1;
