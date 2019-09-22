@@ -2,6 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EUpgradeWeaponTypeRestriction
+{
+    NONE,
+    MELEE_ONLY,
+    RANGED_ONLY,
+
+    MAX
+}
+
 public abstract class Upgrade : Item
 {
     Weapon_Base m_parentWeapon;
@@ -20,6 +29,9 @@ public abstract class Upgrade : Item
     public void SetBalanceScale(float newBalanceValue) { m_balanceScale = newBalanceValue; }
     public void ResetBalanceScale() { m_balanceScale = 1.0f; }
     public float GetBalanceScale() { return m_balanceScale; }
+
+    [SerializeField] private EUpgradeWeaponTypeRestriction m_weaponTypeRestriction = EUpgradeWeaponTypeRestriction.NONE;
+    public EUpgradeWeaponTypeRestriction GetWeaponTypeRestriction() { return m_weaponTypeRestriction; }
 
     public void SetParticleEffectScale(float scaleValue)
     {

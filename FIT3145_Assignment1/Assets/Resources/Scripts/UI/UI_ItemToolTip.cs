@@ -49,6 +49,26 @@ public class UI_ItemToolTip : MonoBehaviour
             m_typeText.text = (m_parentItem as Augment).GetAugmentType().ToString() + " ";
         }
 
+        if (m_parentItem.GetItemType() == EItemType.UPGRADE)
+        {
+            switch ((m_parentItem as Upgrade).GetWeaponTypeRestriction())
+            {
+                case EUpgradeWeaponTypeRestriction.MELEE_ONLY:
+                {
+                    m_typeText.text = "MELEE ";
+                }
+                break;
+
+                case EUpgradeWeaponTypeRestriction.RANGED_ONLY:
+                {
+                    m_typeText.text = "RANGED ";
+                }
+                break;
+            }
+
+            m_typeText.text += " ";
+        }
+
         m_typeText.text += m_parentItem.GetItemType().ToString();
 
         m_typeDescriptionText.text = m_parentItem.GetItemTypeDescription();

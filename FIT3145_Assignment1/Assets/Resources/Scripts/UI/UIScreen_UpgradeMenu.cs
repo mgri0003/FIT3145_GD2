@@ -101,7 +101,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
 
                     if(UI_CanvasManager.IsPointInsideRect(m_upgradeApplyArea.rectTransform, UI_CanvasManager.ConvertScreenPositionToCanvasLocalPosition(UI_CanvasManager.GetMousePositionFromScreenCentre())))
                     {
-                        if(m_weaponToUpgrade.CanAddUpgrade())
+                        if(m_weaponToUpgrade.CanAddUpgrade(dragableItem.GetParentItem() as Upgrade))
                         {
                             m_upgradeApplyArea.color = Color.green;
                         }

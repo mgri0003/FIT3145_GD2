@@ -76,14 +76,32 @@ public abstract class Weapon_Base : Item
         ++m_upgradeLimit;
     }
 
-    public bool CanAddUpgrade()
+    public bool CanAddUpgrade(Upgrade newUpgrade)
     {
-        return m_currentUpgrades.Count < m_upgradeLimit;
+        bool isValidWeaponToUpgrade = false;
+
+        //a melee upgrade on melee weapon?
+        if((newUpgrade.GetWeaponTypeRestriction() == EUpgradeWeaponTypeRestriction.MELEE_ONLY) && (GetWeaponType() == EWeaponType.MELEE))
+        {
+            isValidWeaponToUpgrade = true;
+        }
+        //a ranged upgrade on ranged weapon?
+        else if ((newUpgrade.GetWeaponTypeRestriction() == EUpgradeWeaponTypeRestriction.RANGED_ONLY) && (GetWeaponType() == EWeaponType.RANGED))
+        {
+            isValidWeaponToUpgrade = true;
+        }
+        //if the upgrade can be applied to either weapon
+        else if ((newUpgrade.GetWeaponTypeRestriction() == EUpgradeWeaponTypeRestriction.NONE))
+        {
+            isValidWeaponToUpgrade = true;
+        }
+
+        return (m_currentUpgrades.Count < m_upgradeLimit) && isValidWeaponToUpgrade;
     }
 
     public bool AddUpgrade(Upgrade newUpgrade)
     {
-        if(CanAddUpgrade())
+        if(CanAddUpgrade(newUpgrade))
         {
             m_currentUpgrades.Add(newUpgrade);
             newUpgrade.SetParentWeapon(this);
