@@ -7,6 +7,7 @@ public enum EParticleEffect
     HIT,
     LIGHTNING_IMPACT,
     SECOND_WIND,
+    ELEVATOR_TELEPORT,
 
     MAX
 }

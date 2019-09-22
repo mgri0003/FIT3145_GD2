@@ -13,6 +13,8 @@ public class ElevatorPanel : Interactable
     public override void Interact()
     {
         GamePlayManager.Instance.MovePlayerToLevel(m_levelToMoveTo);
+
+        FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.ELEVATOR_TELEPORT, GamePlayManager.Instance.GetElevatorPanelLocation(m_levelToMoveTo));
     }
 
     public Transform GetPlayerTeleportTransform() { return m_playerTeleportTransform; }

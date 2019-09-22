@@ -9,7 +9,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
     public const uint NUMBER_OF_LEVELS = 2;
     private Transform m_spawnPoint = null;
     //private Transform[] m_enemySpawnPoints = null;
-    private Transform[] m_elevatorTeleportTransforms = new Transform[NUMBER_OF_LEVELS];
+    private ElevatorPanel[] m_elevatorPanels = new ElevatorPanel[NUMBER_OF_LEVELS];
 
     //Spawnables (Do not change values in these objects)
     [SerializeField] private GameObject m_spawnable_mainPlayer = null;
@@ -219,10 +219,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
             {
                 if(ep)
                 {
-                    Debug.Assert(m_elevatorTeleportTransforms[ep.m_levelFrom] == null, "Elevator Already Assigned for level!");
-                    if (m_elevatorTeleportTransforms[ep.m_levelFrom] == null)
+                    Debug.Assert(m_elevatorPanels[ep.m_levelFrom] == null, "Elevator Already Assigned for level!");
+                    if (m_elevatorPanels[ep.m_levelFrom] == null)
                     {
-                        m_elevatorTeleportTransforms[ep.m_levelFrom] = ep.GetPlayerTeleportTransform();
+                        m_elevatorPanels[ep.m_levelFrom] = ep;
                     }
                 }
             }
@@ -255,7 +255,29 @@ public class GamePlayManager : Singleton<GamePlayManager>
         Debug.Assert(level < NUMBER_OF_LEVELS, "Invalid Level");
         if(level < NUMBER_OF_LEVELS)
         {
-            m_current_mainPlayer.transform.position = m_elevatorTeleportTransforms[level].position;
+            m_current_mainPlayer.transform.position = m_elevatorPanels[level].GetPlayerTeleportTransform().position;
         }
+    }
+
+    public Vector3 GetElevatorTeleportLocation(uint level)
+    {
+        Debug.Assert(level < NUMBER_OF_LEVELS, "Invalid Level");
+        if (level < NUMBER_OF_LEVELS)
+        {
+           return m_elevatorPanels[level].GetPlayerTeleportTransform().position;
+        }
+
+        return Vector3.zero;
+    }
+
+    public Vector3 GetElevatorPanelLocation(uint level)
+    {
+        Debug.Assert(level < NUMBER_OF_LEVELS, "Invalid Level");
+        if (level < NUMBER_OF_LEVELS)
+        {
+            return m_elevatorPanels[level].transform.position;
+        }
+
+        return Vector3.zero;
     }
 }
