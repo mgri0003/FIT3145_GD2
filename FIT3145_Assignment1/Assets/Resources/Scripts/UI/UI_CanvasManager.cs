@@ -36,7 +36,7 @@ public class UI_CanvasManager : MonoBehaviour
             Debug.Assert(m_camera, "Failed To Find Camera");
             if (m_camera)
             {
-                //m_canvas.worldCamera = m_camera;
+                m_canvas.worldCamera = m_camera;
                 m_canvas.planeDistance = m_planeDistance;
             }
         }
