@@ -155,7 +155,7 @@ public class UIScreen_InGameHud : UIScreenBase
                 }
                 else
                 {
-                    m_augmentsDisplay_Frame[i].color = Color.white;
+                    m_augmentsDisplay_Frame[i].color = Color.red;
                 }
             }
             else
