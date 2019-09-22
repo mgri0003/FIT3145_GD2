@@ -82,7 +82,7 @@ public abstract class Weapon_Ranged : Weapon_Base
         //reduce ammo by 1
         if(consumeAmmo)
         {
-            ConsumeAmmo(1);
+            AddCurrentAmmo(-1);
         }
 
         return retVal;
@@ -167,13 +167,15 @@ public abstract class Weapon_Ranged : Weapon_Base
         m_currentFireRateCooldown = AccessWeaponStat(EWeaponStat.RANGED_FIRE_RATE_COOLDOWN).GetCurrent();
     }
 
-    public void ConsumeAmmo(int ammoAmount)
+    public void SetCurrentAmmo(int ammoAmonut)
     {
-        m_currentAmmo -= ammoAmount;
-        if(m_currentAmmo < 0)
-        {
-            m_currentAmmo = 0;
-        }
+        m_currentAmmo = ammoAmonut;
+        ClampAmmo();
+    }
+
+    public void AddCurrentAmmo(int ammoAmonut)
+    {
+        SetCurrentAmmo(GetCurrentAmmo() + ammoAmonut);
     }
 
     public int GetCurrentAmmo()
@@ -189,5 +191,10 @@ public abstract class Weapon_Ranged : Weapon_Base
     public void ResetAmmo()
     {
         m_currentAmmo = (int)AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent();
+    }
+
+    private void ClampAmmo()
+    {
+        m_currentAmmo = Mathf.Clamp(m_currentAmmo, 0, (int)AccessWeaponStat(EWeaponStat.RANGED_CLIP_SIZE).GetCurrent());
     }
 }

@@ -107,6 +107,7 @@ public abstract class Weapon_Base : Item
             newUpgrade.SetParentWeapon(this);
             newUpgrade.SetBalanceScale(m_upgradeBalanceScale);
             newUpgrade.OnUpgradeAttached();
+            newUpgrade.SetUpgradeActive(true);
 
             newUpgrade.transform.parent = transform;
             newUpgrade.transform.localPosition = m_upgradeVisualLocations[m_currentUpgrades.Count - 1].localPosition;
@@ -119,6 +120,7 @@ public abstract class Weapon_Base : Item
     }
     public void RemoveUpgrade(int index)
     {
+        m_currentUpgrades[index].SetUpgradeActive(false);
         m_currentUpgrades[index].OnUpgradeDettached();
         m_currentUpgrades[index].ResetBalanceScale();
         m_currentUpgrades[index].transform.SetParent(null);

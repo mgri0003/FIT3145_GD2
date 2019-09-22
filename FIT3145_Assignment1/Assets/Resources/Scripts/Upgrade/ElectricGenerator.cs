@@ -17,6 +17,11 @@ public class ElectricGenerator : Upgrade
         RecalculateDamageBasedOffBalanceScale();
     }
 
+    protected override void OnUpgradeUpdate()
+    {
+        
+    }
+
     protected override void ResetUpgradeSettings()
     {
         m_OnHitDamage = m_DefaultOnHitDamage;

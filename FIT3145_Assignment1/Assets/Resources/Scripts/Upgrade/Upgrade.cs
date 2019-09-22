@@ -18,6 +18,7 @@ public abstract class Upgrade : Item
     {
         m_parentWeapon = newWeapon;
     }
+    public Weapon_Base GetParentWeapon() { return m_parentWeapon; }
 
     [SerializeField] Effect m_onHitEffect = null;
     public Effect GetOnHitEffect() { return m_onHitEffect; }
@@ -29,6 +30,10 @@ public abstract class Upgrade : Item
     public void SetBalanceScale(float newBalanceValue) { m_balanceScale = newBalanceValue; }
     public void ResetBalanceScale() { m_balanceScale = 1.0f; }
     public float GetBalanceScale() { return m_balanceScale; }
+
+    private bool m_upgradeActive;
+    public void SetUpgradeActive(bool value) { m_upgradeActive = value; }
+    public bool GetUpgradeActive() { return m_upgradeActive; }
 
     [SerializeField] private EUpgradeWeaponTypeRestriction m_weaponTypeRestriction = EUpgradeWeaponTypeRestriction.NONE;
     public EUpgradeWeaponTypeRestriction GetWeaponTypeRestriction() { return m_weaponTypeRestriction; }
@@ -60,7 +65,16 @@ public abstract class Upgrade : Item
         ResetUpgradeSettings();
     }
 
+    private void Update()
+    {
+        if(GetUpgradeActive())
+        {
+            OnUpgradeUpdate();
+        }
+    }
+
     protected abstract void ApplyUpgradeSettings();
     protected abstract void ResetUpgradeSettings();
+    protected abstract void OnUpgradeUpdate();
 
 }

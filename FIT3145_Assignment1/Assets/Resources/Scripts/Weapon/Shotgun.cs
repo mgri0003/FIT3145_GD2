@@ -15,6 +15,6 @@ public class Shotgun : Weapon_Ranged
             GameObject projGO = FireSingleProjectile(false, new Vector3(randX + Random.Range(-0.5f , 0.5f), randY + Random.Range(-0.5f, 0.5f), 0));
         }
 
-        ConsumeAmmo(1);
+        AddCurrentAmmo(-1);
     }
 }
