@@ -146,6 +146,9 @@ public abstract class Enemy_Core : Character_Core
 
         GamePlayManager.Instance.AddScrap((int)m_scrapDrop);
 
+        Destroy(m_floatingHealthBar.gameObject);
+        m_floatingHealthBar = null;
+
         base.Die();
     }
 

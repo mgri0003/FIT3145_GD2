@@ -142,7 +142,7 @@ MonoBehaviour:
   m_physicsCollider: {fileID: -8007725881098290701}
   m_name: Baseball Bat
   m_itemType: 0
-  m_itemSprite: {fileID: 21300000, guid: e154f8a7fc32bad4aa0e8c4f94793fe9, type: 3}
+  m_itemSprite: {fileID: 21300000, guid: 40a898b2270a2bf4c88c2c0431c65460, type: 3}
   m_itemDescription: Baby got bat!
   m_weaponType: 0
   m_weaponStats:
@@ -220,11 +220,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5534518717771857130}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: fbe164c6ea55c5144bc5d4a04d1fd00d,
-        type: 3}
-      propertyPath: m_Name
-      value: Model_BaseballBat
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: fbe164c6ea55c5144bc5d4a04d1fd00d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -294,6 +289,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 6.8399997
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: fbe164c6ea55c5144bc5d4a04d1fd00d,
+        type: 3}
+      propertyPath: m_Name
+      value: Model_BaseballBat
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbe164c6ea55c5144bc5d4a04d1fd00d, type: 3}
