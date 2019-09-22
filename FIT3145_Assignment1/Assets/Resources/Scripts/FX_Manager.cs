@@ -6,6 +6,7 @@ public enum EParticleEffect
 {
     HIT,
     LIGHTNING_IMPACT,
+    SECOND_WIND,
 
     MAX
 }
