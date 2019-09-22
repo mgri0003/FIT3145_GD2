@@ -4,13 +4,14 @@ using UnityEngine;
 
 #pragma warning disable 649
 
-public class Enemy_Core : Character_Core
+public abstract class Enemy_Core : Character_Core
 {
     //--Variables--//
-    Character_Core m_targetCharacter = null;
+    protected Character_Core m_targetCharacter = null;
     [SerializeField] private float m_meleeDamage = 1.0f;
-    private float m_minDistanceToAttack = 0.8f;
-    private float m_minDistanceToMove = 5.0f;
+    [SerializeField] private float m_minDistanceToAttack = 0.8f;
+    [SerializeField] private float m_minDistanceToSpecial = 0.8f;
+    [SerializeField] private float m_minDistanceToMove = 5.0f;
     [SerializeField] private GameObject[] m_itemDrops;
     private bool m_aggro = false;
     [SerializeField] private uint m_scrapDrop = 0;
@@ -27,6 +28,19 @@ public class Enemy_Core : Character_Core
     public void DisableAggro() { m_aggro = false; }
     public void TriggerAggro() { m_aggro = true; }
     public bool IsAggro() { return m_aggro; }
+
+    public Vector3 GetDirectionToTarget()
+    {
+        Vector3 retVal = Vector3.zero;
+
+        if (m_targetCharacter)
+        {
+            retVal = (m_targetCharacter.transform.position - transform.position);
+            retVal.Normalize();
+        }
+
+        return retVal;
+    }
 
     public void FindPlayerToTarget()
     {
@@ -46,23 +60,7 @@ public class Enemy_Core : Character_Core
             {
                 if(!m_targetCharacter.IsDead())
                 {
-                    if (IsCloseEnoughToAct() || IsAggro())
-                    {
-                        //look at player
-                        m_characterAimer.SetEnabled(true);
-                        transform.LookAt(m_targetCharacter.transform);
-
-                        if (IsCloseEnoughToAttack())
-                        {
-                            m_animator.Play("Attack_MeleeWeapon", 1);
-                        }
-                        else
-                        {
-                            Vector3 vecToTarget = (m_targetCharacter.transform.position - transform.position);
-                            MoveCharacter(vecToTarget, Space.World);
-                            isMoving = true;
-                        }
-                    }
+                    isMoving = UpdateEnemyAct();
                 }
             }
         }
@@ -70,6 +68,8 @@ public class Enemy_Core : Character_Core
         //Update anim vars
         m_animator.SetBool("AP_isMoving", isMoving);
     }
+
+    protected abstract bool UpdateEnemyAct();
 
     public void SetTargetCharacter(in Character_Core targetCharacter)
     {
@@ -90,14 +90,19 @@ public class Enemy_Core : Character_Core
         }
     }
 
-    public bool IsCloseEnoughToAct()
+    protected bool IsCloseEnoughToAct()
     {
         return Vector3.Distance(transform.position, m_targetCharacter.transform.position) < m_minDistanceToMove;
     }
 
-    public bool IsCloseEnoughToAttack()
+    protected bool IsCloseEnoughToAttack()
     {
         return Vector3.Distance(transform.position, m_targetCharacter.transform.position) < m_minDistanceToAttack;
+    }
+
+    protected bool IsCloseEnoughToSpecial()
+    {
+        return Vector3.Distance(transform.position, m_targetCharacter.transform.position) < m_minDistanceToSpecial;
     }
 
     protected override void Die()
