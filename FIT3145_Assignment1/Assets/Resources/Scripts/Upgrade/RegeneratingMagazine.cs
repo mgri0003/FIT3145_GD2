@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class RegeneratingMagazine : Upgrade
 {
-    private const int BULLET_REGEN = 1;
+    private const int BULLET_REGEN_AMOUNT = 1;
     private const int REGEN_TIME_INTERVAL = 2;
     private float m_regenTime = REGEN_TIME_INTERVAL;
 
     public override string GetItemTypeDescription()
     {
-        return "Regenerates " + BULLET_REGEN + " ammo every " + REGEN_TIME_INTERVAL + " seconds";
+        return "Regenerates " + BULLET_REGEN_AMOUNT + " ammo every " + REGEN_TIME_INTERVAL + " seconds";
     }
 
     protected override void ApplyUpgradeSettings()
@@ -40,7 +40,7 @@ public class RegeneratingMagazine : Upgrade
 
     private void RegenAmmo()
     {
-        (GetParentWeapon() as Weapon_Ranged).AddCurrentAmmo(1);
+        (GetParentWeapon() as Weapon_Ranged).AddCurrentAmmo(BULLET_REGEN_AMOUNT);
     }
 
 }
