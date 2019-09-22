@@ -6,11 +6,11 @@ public class Imp : Enemy_Core
 {
     [SerializeField] GameObject m_fireballProjectile = null;
     [SerializeField] Transform m_firingTransform = null;
-    private const float m_FIREBALL_MAX_COOLDOWN = 4.0f;
-    private const float m_FIREBALL_DAMAGE = 20.0f;
-    private const float m_FIREBALL_SPEED = 5.0f;
-    private const float m_FIREBALL_LIFETIME = 2.0f;
-    private float m_fireballCooldown = m_FIREBALL_MAX_COOLDOWN;
+    [SerializeField] private float m_FIREBALL_MAX_COOLDOWN = 4.0f;
+    [SerializeField] private float m_FIREBALL_DAMAGE = 20.0f;
+    [SerializeField] private float m_FIREBALL_SPEED = 5.0f;
+    [SerializeField] private float m_FIREBALL_LIFETIME = 2.0f;
+    private float m_fireballCooldown = 0.0f;
 
     protected override bool UpdateEnemyAct()
     {

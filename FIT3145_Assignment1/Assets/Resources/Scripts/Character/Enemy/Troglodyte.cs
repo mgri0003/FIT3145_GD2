@@ -21,6 +21,7 @@ public class Troglodyte : Enemy_Core
             else
             {
                 Vector3 vecToTarget = (m_targetCharacter.transform.position - transform.position);
+                vecToTarget.y = 0;
                 MoveCharacter(vecToTarget, Space.World);
                 retval = true;
             }

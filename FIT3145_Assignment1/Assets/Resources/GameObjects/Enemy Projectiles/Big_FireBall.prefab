@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5089459851527268916}
   - component: {fileID: 5596398725980364915}
   m_Layer: 0
-  m_Name: FireBall
+  m_Name: Big_FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,6 @@ Transform:
   m_Children:
   - {fileID: 1060354218281543298}
   - {fileID: 5783496302003236585}
-  - {fileID: 5179215388402910641}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -61,7 +60,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
+  m_Size: {x: 0.7, y: 0.7, z: 0.7}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5089459851527268916
 Rigidbody:
@@ -104,7 +103,7 @@ GameObject:
   - component: {fileID: 7151457344573893807}
   - component: {fileID: 6642066776111585587}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: additionalfireeffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,8 +120,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 604645328828819335}
-  m_RootOrder: 2
+  m_Father: {fileID: 5783496302003236585}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &7151457344573893807
 ParticleSystem:
@@ -838,7 +837,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.06
+      value: 0.37
       mode: 0
       spread: 0
       speed:
@@ -4856,7 +4855,6 @@ GameObject:
   - component: {fileID: 1060354218281543298}
   - component: {fileID: 8397272510813665594}
   - component: {fileID: 1596443523528554141}
-  - component: {fileID: 2236019591224995723}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -4873,7 +4871,7 @@ Transform:
   m_GameObject: {fileID: 6125092729161024226}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children: []
   m_Father: {fileID: 604645328828819335}
   m_RootOrder: 0
@@ -4924,19 +4922,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &2236019591224995723
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6125092729161024226}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8795041281689620260
 GameObject:
   m_ObjectHideFlags: 0
@@ -4949,7 +4934,7 @@ GameObject:
   - component: {fileID: 6998677421740472058}
   - component: {fileID: 8534871008929794892}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Fireeffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4965,7 +4950,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 5179215388402910641}
   m_Father: {fileID: 604645328828819335}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5683,7 +5669,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.06
+      value: 0.37
       mode: 0
       spread: 0
       speed:

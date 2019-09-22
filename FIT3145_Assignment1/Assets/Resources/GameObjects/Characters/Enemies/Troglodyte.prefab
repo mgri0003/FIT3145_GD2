@@ -119,7 +119,7 @@ MonoBehaviour:
   m_minDistanceToSpecial: 0.8
   m_minDistanceToMove: 5
   m_itemDrops: []
-  m_scrapDrop: 0
+  m_scrapDrop: 30
 --- !u!95 &3011257416459508142
 Animator:
   serializedVersion: 3
