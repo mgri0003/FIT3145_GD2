@@ -153,6 +153,7 @@ MonoBehaviour:
   m_itemDrops:
   - {fileID: 8754039348771881063, guid: d00cc7f2b1a725441b18049b1215cb19, type: 3}
   - {fileID: 1725078717245774645, guid: 544f002000d13a8448aca65859a1cc1f, type: 3}
+  m_isFlyingEnemy: 1
   m_scrapDrop: 300
   m_fireballProjectile: {fileID: 604645328828819334, guid: 93df7d5fca0fcc44f9393bda5e18f997,
     type: 3}

@@ -14,6 +14,7 @@ public abstract class Enemy_Core : Character_Core
     [SerializeField] private float m_minDistanceToMove = 5.0f;
     [SerializeField] private GameObject[] m_itemDrops;
     private bool m_aggro = false;
+    [SerializeField] private bool m_isFlyingEnemy = false;
     [SerializeField] private uint m_scrapDrop = 0;
 
     //--Methods--//
@@ -23,6 +24,15 @@ public abstract class Enemy_Core : Character_Core
 
         //Debug.Assert(m_targetCharacter, "Missing Target Character, should be set when enemy is spawned!");
         m_characterAimer.Init(m_targetCharacter.transform);
+
+        if(m_isFlyingEnemy)
+        {
+            m_animator.SetFloat("FlyingAnimation", 1.0f);
+        }
+        else
+        {
+            m_animator.SetFloat("FlyingAnimation", 0.0f);
+        }
     }
 
     public void DisableAggro() { m_aggro = false; }
