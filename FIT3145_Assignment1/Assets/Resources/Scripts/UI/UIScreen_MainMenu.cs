@@ -11,6 +11,7 @@ public class UIScreen_MainMenu : UIScreenBase
     //--UI ELEMENTS--//
     [SerializeField] private Button m_startGameButton;
     [SerializeField] private Button m_optionsButton;
+    [SerializeField] private Button m_controlsButton;
     [SerializeField] private Button m_quitButton;
     [SerializeField] private UI_Fader m_fader;
 
@@ -19,6 +20,7 @@ public class UIScreen_MainMenu : UIScreenBase
     {
         m_startGameButton.onClick.AddListener(() => { OnStartGamePressed(); });
         m_optionsButton.onClick.AddListener(() => { OnOptionsButtonPressed(); });
+        m_controlsButton.onClick.AddListener(() => { OnControlsButtonPressed(); });
         m_quitButton.onClick.AddListener(() => { OnQuitButtonPressed(); });
     }
 
@@ -54,6 +56,10 @@ public class UIScreen_MainMenu : UIScreenBase
         m_fader.StartFade();
     }
 
+    void OnControlsButtonPressed()
+    {
+        UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.CONTROLS_MENU);
+    }
     void OnOptionsButtonPressed()
     {
         UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.GAMEOPTIONS_MENU);

@@ -14,6 +14,7 @@ public enum EUIScreen
     TITLESCREEN_MENU,
     UPGRADE_MENU,
     GAMEOPTIONS_MENU,
+    CONTROLS_MENU,
     MAX
 }
 
