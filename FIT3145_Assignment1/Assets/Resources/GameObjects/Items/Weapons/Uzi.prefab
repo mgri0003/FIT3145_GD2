@@ -211,7 +211,7 @@ MonoBehaviour:
     m_max: -1
   - m_current: 16
     m_max: -1
-  - m_current: 16
+  - m_current: 20
     m_max: -1
   - m_current: 2
     m_max: -1
@@ -221,10 +221,30 @@ MonoBehaviour:
     m_max: -1
   m_improvementPath:
     m_improvementSegments:
-    - StatToImprove: 0
-      Value: 3
-      ScrapCost: 40
+    - StatToImprove: 3
+      Value: -1
+      ScrapCost: 25
       UpgradeSlotIncrease: 0
+    - StatToImprove: 4
+      Value: -0.1
+      ScrapCost: 35
+      UpgradeSlotIncrease: 0
+    - StatToImprove: 1
+      Value: 8
+      ScrapCost: 45
+      UpgradeSlotIncrease: 0
+    - StatToImprove: 2
+      Value: 10
+      ScrapCost: 55
+      UpgradeSlotIncrease: 0
+    - StatToImprove: 0
+      Value: 10
+      ScrapCost: 65
+      UpgradeSlotIncrease: 0
+    - StatToImprove: 6
+      Value: 0
+      ScrapCost: 75
+      UpgradeSlotIncrease: 1
   m_upgradeVisualLocations:
   - {fileID: 107821848212228709}
   - {fileID: 1610480828322002602}
@@ -242,11 +262,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5534518717771857130}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 0387d1c831c26814391c803d6bc61431,
-        type: 3}
-      propertyPath: m_Name
-      value: Model_Uzi
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0387d1c831c26814391c803d6bc61431,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -316,6 +331,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 5.116066
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0387d1c831c26814391c803d6bc61431,
+        type: 3}
+      propertyPath: m_Name
+      value: Model_Uzi
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0387d1c831c26814391c803d6bc61431, type: 3}
