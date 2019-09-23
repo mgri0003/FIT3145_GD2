@@ -18,7 +18,7 @@ public static class GameOptions
     public static void SetQualitySetting(int newValue)
     {
         m_qualitySetting = newValue;
-        QualitySettings.SetQualityLevel(GetQualitySetting());
+        QualitySettings.SetQualityLevel(GetQualitySetting(), true);
     }
 
     //--Toggles--//
