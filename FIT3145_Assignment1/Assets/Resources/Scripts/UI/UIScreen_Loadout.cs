@@ -9,8 +9,6 @@ using UnityEngine.UI;
 public class UIScreen_Loadout : UIScreenBase
 {
     //UI Elements
-    [SerializeField] private Button m_unequipAllWeaponsButton;
-    [SerializeField] private Button[] m_unequipHandButtons = new Button[(int)EPlayerHand.MAX];
     [SerializeField] private Button[] m_detachAugmentButtons = new Button[(int)EAugmentSlot.MAX];
     [SerializeField] private Image[] m_loadout_hands = new Image[(int)EPlayerHand.MAX];
     [SerializeField] private Image[] m_loadout_handFrames = new Image[(int)EPlayerHand.MAX];
@@ -31,16 +29,11 @@ public class UIScreen_Loadout : UIScreenBase
 
     protected override void RegisterMethods()
     {
-        m_unequipAllWeaponsButton.onClick.AddListener(() => { UnequipAllWeapons(); });
-
-        m_unequipHandButtons[(int)EPlayerHand.HAND_RIGHT].onClick.AddListener(() => { UnequipPlayerHand(EPlayerHand.HAND_RIGHT); });
-        m_unequipHandButtons[(int)EPlayerHand.HAND_LEFT].onClick.AddListener(() => { UnequipPlayerHand(EPlayerHand.HAND_LEFT); });
-
-        m_detachAugmentButtons[(int)EAugmentSlot.Q].onClick.AddListener(() => { OnAugmentElementDropped(EAugmentSlot.Q);});
-        m_detachAugmentButtons[(int)EAugmentSlot.E].onClick.AddListener(() => { OnAugmentElementDropped(EAugmentSlot.E); });
-        m_detachAugmentButtons[(int)EAugmentSlot.SPACE].onClick.AddListener(() => { OnAugmentElementDropped(EAugmentSlot.SPACE); });
-        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_1].onClick.AddListener(() => { OnAugmentElementDropped(EAugmentSlot.PASSIVE_1); });
-        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_2].onClick.AddListener(() => { OnAugmentElementDropped(EAugmentSlot.PASSIVE_2); });
+        m_detachAugmentButtons[(int)EAugmentSlot.Q].onClick.AddListener(() => { OnAugmentDetached(EAugmentSlot.Q);});
+        m_detachAugmentButtons[(int)EAugmentSlot.E].onClick.AddListener(() => { OnAugmentDetached(EAugmentSlot.E); });
+        m_detachAugmentButtons[(int)EAugmentSlot.SPACE].onClick.AddListener(() => { OnAugmentDetached(EAugmentSlot.SPACE); });
+        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_1].onClick.AddListener(() => { OnAugmentDetached(EAugmentSlot.PASSIVE_1); });
+        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_2].onClick.AddListener(() => { OnAugmentDetached(EAugmentSlot.PASSIVE_2); });
     }
 
     protected override void OnEnable()
@@ -148,11 +141,12 @@ public class UIScreen_Loadout : UIScreenBase
         }
     }
 
-    private void OnAugmentElementDropped(in EAugmentSlot augSlot)
+    private void OnAugmentDetached(in EAugmentSlot augSlot)
     {
         DetachPlayerAugment(augSlot);
         UpdateAugmentSlotsUI();
         RepopulateItemElementsInScrollView();
+        RepopulateItemElementsInHands();
     }
 
     private void RepopulateItemElementsInHands()
