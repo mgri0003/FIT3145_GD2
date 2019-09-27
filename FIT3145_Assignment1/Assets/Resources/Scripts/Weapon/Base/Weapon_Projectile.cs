@@ -13,6 +13,7 @@ public class Weapon_Projectile : MonoBehaviour
     private float m_currentLifeTime = PROJECTILE_DEFAULT_LIFETIME;
     [SerializeField] private Hitbox m_hitbox = null;
     private List<Effect> m_projectileEffects = new List<Effect>();
+    private GameObject m_owner = null;
 
     //--Methods--
 
@@ -35,6 +36,9 @@ public class Weapon_Projectile : MonoBehaviour
     {
         m_projectileEffects.AddRange(projEffects);
     }
+
+    public void SetOwner(in GameObject newOwner) { m_owner = newOwner; }
+    public GameObject GetOwner() { return m_owner; }
 
     // Start is called before the first frame update
     void Start()
@@ -80,7 +84,7 @@ public class Weapon_Projectile : MonoBehaviour
             {
                 if(go)
                 {
-                    if (go.tag == "Character")
+                    if (go.tag == "Character" && (go.transform.root.gameObject != GetOwner()))
                     {
                         go.GetComponent<Character_Core>().ReceiveHit(m_damage, m_projectileEffects);
                         validCollision = true;

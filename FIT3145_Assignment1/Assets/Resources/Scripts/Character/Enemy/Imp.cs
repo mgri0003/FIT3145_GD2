@@ -54,6 +54,8 @@ public class Imp : Enemy_Core
                                     m_FIREBALL_SPEED,
                                     m_FIREBALL_LIFETIME,
                                     firingDir.normalized);
+
+                                projectile.SetOwner(gameObject);
                             }
                         }
                     }

@@ -72,6 +72,8 @@ public abstract class Weapon_Ranged : Weapon_Base
                         AccessWeaponStat(EWeaponStat.RANGED_PROJECTILE_LIFETIME).GetCurrent(), 
                         firingDir.normalized);
 
+                    projectile.SetOwner(GamePlayManager.Instance.GetCurrentPlayer().gameObject);
+
                     projectile.AddProjectileEffects(GetOnHitEffectsFromUpgrades());
 
                     retVal = newProjectileGO;
