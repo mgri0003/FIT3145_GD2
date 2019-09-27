@@ -241,11 +241,23 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     private void RepositionUpgradeElementsInScrollView()
     {
         float upgradePositionY = 0;
-        foreach(GameObject go in m_upgradeElements)
+        foreach (GameObject go in m_upgradeElements)
         {
-            go.transform.localPosition = new Vector3(100, -30 - upgradePositionY, 0);
+            float sizeY = 0.0f;
+            UI_DragableItem dragableItem = go.GetComponentInChildren<UI_DragableItem>();
+            if (dragableItem)
+            {
+                RectTransform rectTransform = dragableItem.GetComponent<RectTransform>();
+                if (rectTransform)
+                {
+                    sizeY = rectTransform.rect.height * 1.20f;
+                }
+            }
 
-            upgradePositionY += 50.0f;
+            go.transform.localPosition = new Vector3(100, -sizeY - upgradePositionY, 0);
+
+
+            upgradePositionY += sizeY;
         }
     }
 

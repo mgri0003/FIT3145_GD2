@@ -88,8 +88,11 @@ public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnPointerUp(PointerEventData eventData)
     {
         m_delegate_OnDrop?.Invoke(this, eventData);
-        DestroyToolTip();
     }
 
+    private void OnDestroy()
+    {
+        UIScreen_Manager.Instance.DestroyItemToolTip(this, null);
+    }
 
 }
