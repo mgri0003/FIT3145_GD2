@@ -9,7 +9,6 @@ enum EGameOption
 {
     TOGGLE_SWAPLEFTRIGHTCLICK,
     DROPDOWN_QUALITYSETTING,
-    TOGGLE_FULLSCREEN,
 
     MAX
 }
@@ -20,7 +19,6 @@ public class UIScreen_GameOptions : UIScreenBase
     //--UI Elements--//
     [SerializeField] private Toggle m_toggle_SwapLeftRightClick;
     [SerializeField] private Dropdown m_dropdown_qualitySettings;
-    [SerializeField] private Toggle m_toggle_fullscreen;
 
     [SerializeField] private Button m_backButton;
 
@@ -30,7 +28,6 @@ public class UIScreen_GameOptions : UIScreenBase
 
         m_toggle_SwapLeftRightClick.onValueChanged.AddListener((bool val) => { OnOptionChanged(EGameOption.TOGGLE_SWAPLEFTRIGHTCLICK); });
         m_dropdown_qualitySettings.onValueChanged.AddListener((int val) => { OnOptionChanged(EGameOption.DROPDOWN_QUALITYSETTING); });
-        m_toggle_fullscreen.onValueChanged.AddListener((bool val) => { OnOptionChanged(EGameOption.TOGGLE_FULLSCREEN); });
     }
 
     protected override void OnDisable()
@@ -76,12 +73,6 @@ public class UIScreen_GameOptions : UIScreenBase
             {
                 GameOptions.SetQualitySetting(m_dropdown_qualitySettings.value);
                 //Debug.Log("Option Changed to : " + GameOptions.GetQualitySettingName() + "(" + GameOptions.GetQualitySetting() + ")"); 
-            }
-            break;
-
-            case EGameOption.TOGGLE_FULLSCREEN:
-            {
-                Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.Windowed);
             }
             break;
         }
