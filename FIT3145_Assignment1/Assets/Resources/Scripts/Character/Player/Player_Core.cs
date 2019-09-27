@@ -335,4 +335,30 @@ public class Player_Core : Character_Core
     {
         m_playerInventory.DropAllItemsInInventory();
     }
+
+    public void SimpleEquipWeapon(in Item weaponItem, in EPlayerHand hand)
+    {
+        //attach new weapon to hand!
+        m_playerWeaponHolder.AttachWeaponToHand(hand, weaponItem as Weapon_Base);
+
+        //remove the weapon from the inventory!
+        m_playerInventory.RemoveItemFromInventory(weaponItem);
+    }
+
+    public void SimpleUnequipWeapon(in EPlayerHand hand)
+    {
+        if (m_playerWeaponHolder.IsHoldingWeaponInHand(hand))
+        {
+            Weapon_Base weapon = m_playerWeaponHolder.GetWeaponInHand(hand);
+
+            //remove weapon from hand
+            m_playerWeaponHolder.DetachWeaponFromHand(hand);
+
+            //add weapon back into inventory
+            if (weapon)
+            {
+                m_playerInventory.AddItemToInventory(weapon);
+            }
+        }
+    }
 }

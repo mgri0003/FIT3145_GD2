@@ -26,7 +26,8 @@ public class UIScreen_Loadout : UIScreenBase
 
     //dynamic refs
     private Player_Core m_player = null;
-    private List<GameObject> m_itemElements = new List<GameObject>();
+    private List<GameObject> m_inventoryitemElements = new List<GameObject>();
+    private GameObject[] m_handItemElements = new GameObject[(int)EPlayerHand.MAX];
 
     protected override void RegisterMethods()
     {
@@ -35,11 +36,11 @@ public class UIScreen_Loadout : UIScreenBase
         m_unequipHandButtons[(int)EPlayerHand.HAND_RIGHT].onClick.AddListener(() => { UnequipPlayerHand(EPlayerHand.HAND_RIGHT); });
         m_unequipHandButtons[(int)EPlayerHand.HAND_LEFT].onClick.AddListener(() => { UnequipPlayerHand(EPlayerHand.HAND_LEFT); });
 
-        m_detachAugmentButtons[(int)EAugmentSlot.Q].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.Q); UpdateAugmentSlotsUI(); RepopulateItemElementsInScrollView(); });
-        m_detachAugmentButtons[(int)EAugmentSlot.E].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.E); UpdateAugmentSlotsUI(); RepopulateItemElementsInScrollView(); });
-        m_detachAugmentButtons[(int)EAugmentSlot.SPACE].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.SPACE); UpdateAugmentSlotsUI(); RepopulateItemElementsInScrollView(); });
-        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_1].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.PASSIVE_1); UpdateAugmentSlotsUI(); RepopulateItemElementsInScrollView(); });
-        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_2].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.PASSIVE_2); UpdateAugmentSlotsUI(); RepopulateItemElementsInScrollView(); });
+        m_detachAugmentButtons[(int)EAugmentSlot.Q].onClick.AddListener(() => { OnAugmentElementDropped(EAugmentSlot.Q);});
+        m_detachAugmentButtons[(int)EAugmentSlot.E].onClick.AddListener(() => { OnAugmentElementDropped(EAugmentSlot.E); });
+        m_detachAugmentButtons[(int)EAugmentSlot.SPACE].onClick.AddListener(() => { OnAugmentElementDropped(EAugmentSlot.SPACE); });
+        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_1].onClick.AddListener(() => { OnAugmentElementDropped(EAugmentSlot.PASSIVE_1); });
+        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_2].onClick.AddListener(() => { OnAugmentElementDropped(EAugmentSlot.PASSIVE_2); });
     }
 
     protected override void OnEnable()
@@ -47,7 +48,7 @@ public class UIScreen_Loadout : UIScreenBase
         m_player = GamePlayManager.Instance.GetCurrentPlayer();
 
         RepopulateItemElementsInScrollView();
-        UpdateLoadoutUIHands();
+        RepopulateItemElementsInHands();
         UpdateAugmentSlotsUI();
     }
 
@@ -71,7 +72,7 @@ public class UIScreen_Loadout : UIScreenBase
             m_augmentSlots_Frame[i].color = Color.white;
         }
 
-        foreach (GameObject go in m_itemElements)
+        foreach (GameObject go in m_inventoryitemElements)
         {
             UI_DragableItem dragableItem = go.GetComponentInChildren<UI_DragableItem>();
             HandleItemDragging(dragableItem);
@@ -148,9 +149,16 @@ public class UIScreen_Loadout : UIScreenBase
         }
     }
 
+    private void OnAugmentElementDropped(in EAugmentSlot augSlot)
+    {
+        DetachPlayerAugment(augSlot);
+        UpdateAugmentSlotsUI();
+        RepopulateItemElementsInScrollView();
+    }
+
     private void CleanUpToolTips()
     {
-        foreach (GameObject go in m_itemElements)
+        foreach (GameObject go in m_inventoryitemElements)
         {
             UI_DragableItem dragableItem = go.GetComponentInChildren<UI_DragableItem>();
             if(dragableItem)
@@ -158,6 +166,25 @@ public class UIScreen_Loadout : UIScreenBase
                 dragableItem.DestroyToolTip();
             }
         }
+    }
+
+    private void RepopulateItemElementsInHands()
+    {
+        CleanUpItemElementsInHands();
+
+        if (m_player)
+        {
+            for(uint i = 0; i < (uint)EPlayerHand.MAX; ++i)
+            {
+                if(m_player.m_playerWeaponHolder.IsHoldingWeaponInHand((EPlayerHand)i))
+                {
+                    Item weaponItem = m_player.m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)i);
+                    PopulateItemElement(weaponItem, m_loadout_hands[i].transform);
+                }
+            }
+        }
+
+        RepositionItemElementsInHands();
     }
 
     private void RepopulateItemElementsInScrollView()
@@ -168,49 +195,76 @@ public class UIScreen_Loadout : UIScreenBase
         {
             foreach (Item item in m_player.m_playerInventory.AccessInventoryList())
             {
-                GameObject go = Instantiate(m_spawnable_itemElement);
-
-                go.transform.SetParent(m_inventoryScrollViewContentGO.transform, false);
-
-                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnDrop = OnItemElementDropped;
-                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverEnter = UIScreen_Manager.Instance.CreateItemToolTip;
-                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverExit = UIScreen_Manager.Instance.DestroyItemToolTip;
-                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnPointerDown = GoToWeaponUpgradeScreen;
-                go.GetComponentInChildren<UI_DragableItem>().SetParentItem(item);
-
-                m_itemElements.Add(go);
+                PopulateItemElement(item, m_inventoryScrollViewContentGO.transform);
             }
         }
 
         RepositionItemElementsInScrollView();
     }
 
+    private void PopulateItemElement(in Item item, in Transform parentTransform)
+    {
+        GameObject go = Instantiate(m_spawnable_itemElement);
+
+        go.transform.SetParent(parentTransform, false);
+
+        go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnDrop = OnItemElementDropped;
+        go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverEnter = UIScreen_Manager.Instance.CreateItemToolTip;
+        go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverExit = UIScreen_Manager.Instance.DestroyItemToolTip;
+        go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnPointerDown = GoToWeaponUpgradeScreen;
+        go.GetComponentInChildren<UI_DragableItem>().SetParentItem(item);
+
+        m_inventoryitemElements.Add(go);
+    }
+
     private void RemoveItemElement(GameObject itemElement)
     {
-        if(m_itemElements.Contains(itemElement))
+        if(m_inventoryitemElements.Contains(itemElement))
         {
-            m_itemElements.Remove(itemElement);
+            m_inventoryitemElements.Remove(itemElement);
             Destroy(itemElement);
+        }
+    }
+
+    private void CleanUpItemElementsInHands()
+    {
+        for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+        {
+            if(m_handItemElements[i])
+            {
+                Destroy(m_handItemElements[i]);
+            }
         }
     }
 
     private void CleanUpItemElementsInScrollView()
     {
-        while (m_itemElements.Count > 0)
+        while (m_inventoryitemElements.Count > 0)
         {
-            Destroy(m_itemElements[0]);
-            m_itemElements.RemoveAt(0);
+            Destroy(m_inventoryitemElements[0]);
+            m_inventoryitemElements.RemoveAt(0);
         }
     }
 
     private void RepositionItemElementsInScrollView()
     {
         float upgradePositionY = 0;
-        foreach (GameObject go in m_itemElements)
+        foreach (GameObject go in m_inventoryitemElements)
         {
             go.transform.localPosition = new Vector3(100, -30 - upgradePositionY, 0);
 
             upgradePositionY += 50.0f;
+        }
+    }
+
+    private void RepositionItemElementsInHands()
+    {
+        for(uint i = 0; i < m_handItemElements.Length; ++i)
+        {
+            if(m_handItemElements[i])
+            {
+                m_handItemElements[i].transform.localPosition = Vector3.zero;
+            }
         }
     }
 
@@ -219,6 +273,15 @@ public class UIScreen_Loadout : UIScreenBase
         if(dragableItem.GetParentItem().GetItemType() == EItemType.WEAPON)
         {
             bool weaponItemSlotted = false;
+
+            //if this weapon was originally equipped to a hand
+            for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+            {
+                if (m_player.m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)i) == (dragableItem.GetParentItem() as Weapon_Base))
+                {
+                    m_player.SimpleUnequipWeapon((EPlayerHand)i);
+                }
+            }
 
             //if item dropped on HAND SLOT
             for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
@@ -230,17 +293,12 @@ public class UIScreen_Loadout : UIScreenBase
                     //if a weapon is already being held, its about to get replaced, so detach it and put it back into inventory
                     if (m_player.m_playerWeaponHolder.IsHoldingWeaponInHand((EPlayerHand)i))
                     {
-                        UnequipWeapon((EPlayerHand)i);
+                        m_player.SimpleUnequipWeapon((EPlayerHand)i);
                     }
-                    
-                    //attach new weapon to hand!
-                    m_player.m_playerWeaponHolder.AttachWeaponToHand((EPlayerHand)i, dragableItem.GetParentItem() as Weapon_Base);
 
-                    //remove the weapon from the inventory!
-                    m_player.m_playerInventory.RemoveItemFromInventory(dragableItem.GetParentItem());
+                    m_player.SimpleEquipWeapon(dragableItem.GetParentItem(), (EPlayerHand)i);
 
-                    //remove the UI item element
-                    RemoveItemElement(dragableItem.GetParentTransform().gameObject);
+                    break;
                 }
             }
 
@@ -286,9 +344,7 @@ public class UIScreen_Loadout : UIScreenBase
 
         //Repopulate the elements in scroll view
         RepopulateItemElementsInScrollView();
-
-        //update ui hands
-        UpdateLoadoutUIHands();
+        RepopulateItemElementsInHands();
 
         //reset hand frames
         for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
@@ -298,61 +354,20 @@ public class UIScreen_Loadout : UIScreenBase
         }
     }
 
-    private void UpdateLoadoutUIHands()
-    {
-        if(m_player)
-        {
-            for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
-            {
-                //set hand sprite to default hand sprite
-                m_loadout_hands[i].sprite = m_sprite_defaultEmptyHand;
-
-                //if there is a weapon equipped, set the hand sprite to the weapon sprite
-                if (m_player.m_playerWeaponHolder.IsHoldingWeaponInHand((EPlayerHand)i))
-                {
-                    Weapon_Base weapon = m_player.m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)i);
-                    if (weapon)
-                    {
-                        m_loadout_hands[i].sprite = weapon.GetItemSprite();
-                    }
-                }
-            }
-        }
-    }
-
-    private void UnequipWeapon(in EPlayerHand hand)
-    {
-        if (m_player.m_playerWeaponHolder.IsHoldingWeaponInHand(hand))
-        {
-            Weapon_Base weapon = m_player.m_playerWeaponHolder.GetWeaponInHand(hand);
-
-            //remove weapon from hand
-            m_player.m_playerWeaponHolder.DetachWeaponFromHand(hand);
-
-            //add weapon back into inventory
-            if (weapon)
-            {
-                m_player.m_playerInventory.AddItemToInventory(weapon);
-            }
-        }
-    }
-
     private void UnequipAllWeapons()
     {
         for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
         {
-            UnequipWeapon((EPlayerHand)i);
+            m_player.SimpleUnequipWeapon((EPlayerHand)i);
         }
 
         RepopulateItemElementsInScrollView();
-        UpdateLoadoutUIHands();
     }
 
     private void UnequipPlayerHand(in EPlayerHand hand)
     {
-        UnequipWeapon(hand);
+        m_player.SimpleUnequipWeapon(hand);
         RepopulateItemElementsInScrollView();
-        UpdateLoadoutUIHands();
     }
 
     private void DetachPlayerAugment(in EAugmentSlot augmentSlot)
@@ -397,7 +412,20 @@ public class UIScreen_Loadout : UIScreenBase
             //Only a weapon can go to the upgrade screen
             if (dragableItem.GetParentItem().GetItemType() == EItemType.WEAPON)
             {
-                (UIScreen_Manager.Instance.GetUIScreen(EUIScreen.UPGRADE_MENU) as UIScreen_UpgradeMenu).SetWeaponToUpgrade(dragableItem.GetParentItem() as Weapon_Base);
+                //find out if the weapon dropped was originall equipped
+                bool wasWeaponEquipped = false;
+                EPlayerHand whichHandEquipped = EPlayerHand.MAX;
+                for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
+                {
+                    if (m_player.m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)i) == (dragableItem.GetParentItem() as Weapon_Base))
+                    {
+                        wasWeaponEquipped = true;
+                        whichHandEquipped = (EPlayerHand)i;
+                        break;
+                    }
+                }
+
+                (UIScreen_Manager.Instance.GetUIScreen(EUIScreen.UPGRADE_MENU) as UIScreen_UpgradeMenu).InitUpgradeMenuData(dragableItem.GetParentItem() as Weapon_Base, wasWeaponEquipped, whichHandEquipped);
                 UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.UPGRADE_MENU);
             }
         }

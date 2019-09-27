@@ -36,10 +36,29 @@ public class UIScreen_UpgradeMenu : UIScreenBase
     const float m_displayWeaponSize = 400.0f;
     const float m_displayWeaponRotationSpeed = 10.00f;
 
-    public void SetWeaponToUpgrade(Weapon_Base newWeapon)
+    //states
+    private bool m_weaponWasEquipped = false;
+    private EPlayerHand m_weaponHandWasEquipped = EPlayerHand.MAX;
+
+    public void InitUpgradeMenuData(Weapon_Base newWeapon, in bool weaponWasEquipped, in EPlayerHand weaponHandWasEquipped)
     {
         m_weaponToUpgrade = newWeapon;
+
+        if(weaponWasEquipped)
+        {
+            m_weaponWasEquipped = weaponWasEquipped;
+            m_weaponHandWasEquipped = weaponHandWasEquipped;
+        }
     }
+
+    private void ResetUpgradeMenuData()
+    {
+        m_weaponToUpgrade = null;
+        m_weaponWasEquipped = false;
+        m_weaponHandWasEquipped = EPlayerHand.MAX;
+        m_player = null;
+    }
+
 
     protected override void RegisterMethods()
     {
@@ -53,7 +72,15 @@ public class UIScreen_UpgradeMenu : UIScreenBase
         m_player = GamePlayManager.Instance.GetCurrentPlayer();
         if(m_player)
         {
-            Debug.Assert(m_weaponToUpgrade, "Weapon To Upgrade is null, set it before you enter this screen!");
+            Debug.Assert(m_weaponToUpgrade, "Weapon To Upgrade is null, Call InitUpgradeMenuData()!");
+
+            //if the weapon being upgraded was equipped, unequip it for now (will be equipped when screen closes)
+            if(m_weaponWasEquipped)
+            {
+                m_player.SimpleUnequipWeapon(m_weaponHandWasEquipped);
+            }
+
+            //setup the weapon display
             SetupWeaponDisplay();
 
             //Populate upgrade scroll view
@@ -73,8 +100,9 @@ public class UIScreen_UpgradeMenu : UIScreenBase
         CleanUpUpgradeElementsInScrollView();
         CleanUpUpgradeSegments();
 
-        m_weaponToUpgrade = null;
-        m_player = null;
+        ReturnWeaponBackToEquippedHand();
+
+        ResetUpgradeMenuData();
     }
 
     protected override void OnGUI()
@@ -413,5 +441,14 @@ public class UIScreen_UpgradeMenu : UIScreenBase
             }
         }
     }
+
+    private void ReturnWeaponBackToEquippedHand()
+    {
+        if(m_weaponWasEquipped)
+        {
+            m_player.SimpleEquipWeapon(m_weaponToUpgrade, m_weaponHandWasEquipped);
+        }
+    }
+
 
 }
