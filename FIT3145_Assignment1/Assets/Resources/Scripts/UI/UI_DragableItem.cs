@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerUpHandler
+public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private Transform m_parentTransform = null;
     public Transform GetParentTransform() { return m_parentTransform; }
@@ -15,7 +15,7 @@ public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public delegate void ItemDelegate(UI_DragableItem dragableItem, PointerEventData eventData);
     public ItemDelegate m_delegate_OnDrop;
-    public ItemDelegate m_delegate_OnClicked;
+    public ItemDelegate m_delegate_OnPointerDown;
     public ItemDelegate m_delegate_OnHoverEnter;
     public ItemDelegate m_delegate_OnHoverExit;
 
@@ -25,7 +25,7 @@ public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private bool m_isHovered = false;
     public bool IsHovered() { return m_isHovered; }
 
-    public UI_ItemToolTip m_currentToolTip = null;
+    [HideInInspector] public UI_ItemToolTip m_currentToolTip = null;
 
     public void DestroyToolTip()
     {
@@ -80,9 +80,9 @@ public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         m_delegate_OnHoverExit?.Invoke(this, eventData);
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        m_delegate_OnClicked?.Invoke(this, eventData);
+        m_delegate_OnPointerDown?.Invoke(this, eventData);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -90,4 +90,6 @@ public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         m_delegate_OnDrop?.Invoke(this, eventData);
         DestroyToolTip();
     }
+
+
 }

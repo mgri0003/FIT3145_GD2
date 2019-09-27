@@ -14,8 +14,6 @@ public class UIScreen_Loadout : UIScreenBase
     [SerializeField] private Button[] m_detachAugmentButtons = new Button[(int)EAugmentSlot.MAX];
     [SerializeField] private Image[] m_loadout_hands = new Image[(int)EPlayerHand.MAX];
     [SerializeField] private Image[] m_loadout_handFrames = new Image[(int)EPlayerHand.MAX];
-    [SerializeField] private Image m_upgradeSection;
-    [SerializeField] private Image m_upgradeSectionFrame;
 
     [SerializeField] private Image[] m_augmentSlots = new Image[(int)EAugmentSlot.MAX];
     [SerializeField] private Image[] m_augmentSlots_Frame = new Image[(int)EAugmentSlot.MAX];
@@ -37,11 +35,11 @@ public class UIScreen_Loadout : UIScreenBase
         m_unequipHandButtons[(int)EPlayerHand.HAND_RIGHT].onClick.AddListener(() => { UnequipPlayerHand(EPlayerHand.HAND_RIGHT); });
         m_unequipHandButtons[(int)EPlayerHand.HAND_LEFT].onClick.AddListener(() => { UnequipPlayerHand(EPlayerHand.HAND_LEFT); });
 
-        m_detachAugmentButtons[(int)EAugmentSlot.Q].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.Q); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
-        m_detachAugmentButtons[(int)EAugmentSlot.E].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.E); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
-        m_detachAugmentButtons[(int)EAugmentSlot.SPACE].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.SPACE); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
-        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_1].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.PASSIVE_1); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
-        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_2].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.PASSIVE_2); UpdateAugmentSlots(); RepopulateItemElementsInScrollView(); });
+        m_detachAugmentButtons[(int)EAugmentSlot.Q].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.Q); UpdateAugmentSlotsUI(); RepopulateItemElementsInScrollView(); });
+        m_detachAugmentButtons[(int)EAugmentSlot.E].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.E); UpdateAugmentSlotsUI(); RepopulateItemElementsInScrollView(); });
+        m_detachAugmentButtons[(int)EAugmentSlot.SPACE].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.SPACE); UpdateAugmentSlotsUI(); RepopulateItemElementsInScrollView(); });
+        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_1].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.PASSIVE_1); UpdateAugmentSlotsUI(); RepopulateItemElementsInScrollView(); });
+        m_detachAugmentButtons[(int)EAugmentSlot.PASSIVE_2].onClick.AddListener(() => { DetachPlayerAugment(EAugmentSlot.PASSIVE_2); UpdateAugmentSlotsUI(); RepopulateItemElementsInScrollView(); });
     }
 
     protected override void OnEnable()
@@ -50,9 +48,7 @@ public class UIScreen_Loadout : UIScreenBase
 
         RepopulateItemElementsInScrollView();
         UpdateLoadoutUIHands();
-        UpdateAugmentSlots();
-
-        m_upgradeSectionFrame.color = Color.white;
+        UpdateAugmentSlotsUI();
     }
 
     protected override void OnDisable()
@@ -66,7 +62,6 @@ public class UIScreen_Loadout : UIScreenBase
     protected override void OnGUI()
     {
         //reset colours
-        m_upgradeSectionFrame.color = Color.white;
         for (uint i = 0; i < (uint)EPlayerHand.MAX; i++)
         {
             m_loadout_handFrames[i].color = Color.white;
@@ -110,12 +105,6 @@ public class UIScreen_Loadout : UIScreenBase
                             m_loadout_handFrames[i].color = Color.green;
                         }
                     }
-
-                    //Hovering over UPGRADE SECTION
-                    if (UI_CanvasManager.IsPointInsideRect(m_upgradeSection.rectTransform, dragableItem.GetParentTransform().localPosition))
-                    {
-                        m_upgradeSectionFrame.color = Color.green;
-                    }
                 }
                 else
                 {
@@ -123,7 +112,6 @@ public class UIScreen_Loadout : UIScreenBase
                     {
                         m_loadout_handFrames[i].color = Color.red;
                     }
-                    m_upgradeSectionFrame.color = Color.red;
                 }
 
                 if(dragableItem.GetParentItem().GetItemType() == EItemType.AUGMENT)
@@ -187,6 +175,7 @@ public class UIScreen_Loadout : UIScreenBase
                 go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnDrop = OnItemElementDropped;
                 go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverEnter = UIScreen_Manager.Instance.CreateItemToolTip;
                 go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnHoverExit = UIScreen_Manager.Instance.DestroyItemToolTip;
+                go.GetComponentInChildren<UI_DragableItem>().m_delegate_OnPointerDown = GoToWeaponUpgradeScreen;
                 go.GetComponentInChildren<UI_DragableItem>().SetParentItem(item);
 
                 m_itemElements.Add(go);
@@ -255,13 +244,6 @@ public class UIScreen_Loadout : UIScreenBase
                 }
             }
 
-            //if item dropped on UPGRADE SECTION
-            if (UI_CanvasManager.IsPointInsideRect(m_upgradeSection.rectTransform, dragableItem.GetParentTransform().localPosition))
-            {
-                (UIScreen_Manager.Instance.GetUIScreen(EUIScreen.UPGRADE_MENU) as UIScreen_UpgradeMenu).SetWeaponToUpgrade(dragableItem.GetParentItem() as Weapon_Base);
-                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.UPGRADE_MENU);
-            }
-
             if (!weaponItemSlotted)
             {
                 //set the parent of the dragable element back to the scroll view
@@ -299,7 +281,7 @@ public class UIScreen_Loadout : UIScreenBase
             }
 
             //update ui of augments
-            UpdateAugmentSlots();
+            UpdateAugmentSlotsUI();
         }
 
         //Repopulate the elements in scroll view
@@ -389,17 +371,34 @@ public class UIScreen_Loadout : UIScreenBase
         }
     }
 
-    private void UpdateAugmentSlots()
+    private void UpdateAugmentSlotsUI()
     {
-        for (uint i = 0; i < (uint)EAugmentSlot.MAX; i++)
+        if(m_player)
         {
-            if (m_player.m_playerAugmentHandler.HasAugment((EAugmentSlot)i))
+            for (uint i = 0; i < (uint)EAugmentSlot.MAX; i++)
             {
-                m_augmentSlots[i].sprite = m_player.m_playerAugmentHandler.GetAugment((EAugmentSlot)i).GetItemSprite();
+                if (m_player.m_playerAugmentHandler.HasAugment((EAugmentSlot)i))
+                {
+                    m_augmentSlots[i].sprite = m_player.m_playerAugmentHandler.GetAugment((EAugmentSlot)i).GetItemSprite();
+                }
+                else
+                {
+                    m_augmentSlots[i].sprite = m_sprite_defaultEmptyAugment;
+                }
             }
-            else
+        }
+    }
+
+    private void GoToWeaponUpgradeScreen(UI_DragableItem dragableItem, PointerEventData eventData)
+    {
+        //check if a right click occurred
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            //Only a weapon can go to the upgrade screen
+            if (dragableItem.GetParentItem().GetItemType() == EItemType.WEAPON)
             {
-                m_augmentSlots[i].sprite = m_sprite_defaultEmptyAugment;
+                (UIScreen_Manager.Instance.GetUIScreen(EUIScreen.UPGRADE_MENU) as UIScreen_UpgradeMenu).SetWeaponToUpgrade(dragableItem.GetParentItem() as Weapon_Base);
+                UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.UPGRADE_MENU);
             }
         }
     }

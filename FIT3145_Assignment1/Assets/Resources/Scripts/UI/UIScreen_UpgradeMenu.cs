@@ -53,7 +53,7 @@ public class UIScreen_UpgradeMenu : UIScreenBase
         m_player = GamePlayManager.Instance.GetCurrentPlayer();
         if(m_player)
         {
-            //Debug.Assert(m_weaponToUpgrade, "Weapon To Upgrade is null, set it before you enter this screen!");
+            Debug.Assert(m_weaponToUpgrade, "Weapon To Upgrade is null, set it before you enter this screen!");
             SetupWeaponDisplay();
 
             //Populate upgrade scroll view
