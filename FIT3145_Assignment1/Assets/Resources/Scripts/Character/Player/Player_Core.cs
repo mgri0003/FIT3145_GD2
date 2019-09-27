@@ -86,7 +86,7 @@ public class Player_Core : Character_Core
         {
             //If your not in the middle of a transition
             //If your not already in the Move State
-            if (!m_animator.IsInTransition(0) && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("Move"))
+            if (!m_animator.IsInTransition(0) && m_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
             {
                 //play the move state sublty :P
                 m_animator.CrossFade("Move", 0.05f);
