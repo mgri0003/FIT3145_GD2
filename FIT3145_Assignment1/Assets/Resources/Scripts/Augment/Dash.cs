@@ -15,6 +15,32 @@ public class Dash : Augment
         {
             m_dashValue = m_player.GetDirectionInput().normalized;
             m_dashTimer = m_maxDashTime;
+
+            //Play Animation based on Direction
+
+            //Forward
+            if (m_player.GetDirectionInput().z > 0)
+            {
+                m_player.m_animator.Play("Dash_Forward", 0, 0.0f);
+            }
+            //back
+            else if (m_player.GetDirectionInput().z < 0)
+            {
+                m_player.m_animator.Play("Dash_Back", 0, 0.0f);
+            }
+            //Right
+            else if (m_player.GetDirectionInput().x > 0)
+            {
+                m_player.m_animator.Play("Dash_Right", 0, 0.0f);
+            }
+            //Left
+            else if (m_player.GetDirectionInput().x < 0)
+            {
+                m_player.m_animator.Play("Dash_Left", 0, 0.0f);
+            }
+
+
+
             return true;
         }
 
