@@ -100,8 +100,13 @@ public abstract class Character_Core : MonoBehaviour
 
     public void MoveCharacter(Vector3 dir, Space spaceType)
     {
-        dir.Normalize();
-        transform.Translate(dir * m_characterStats.AccessMovementSpeedStat().GetCurrent() * Time.deltaTime, spaceType);
+        if (dir != Vector3.zero)
+        {
+            dir.Normalize();
+
+            Vector3 newMovementVal = (spaceType == Space.Self ? transform.TransformDirection(dir) : dir) * m_characterStats.AccessMovementSpeedStat().GetCurrent() * Time.deltaTime;
+            m_rigidbody.MovePosition(transform.position + newMovementVal);
+        }
     }
 
     public virtual void ReceiveHit(float damage, List<Effect> effectsToApply = null)
