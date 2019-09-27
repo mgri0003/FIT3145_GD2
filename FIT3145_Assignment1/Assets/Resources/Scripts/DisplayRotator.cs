@@ -10,7 +10,7 @@ public class DisplayRotator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(m_rotationSpeed.x, m_rotationSpeed.y, m_rotationSpeed.z, m_space);
+        transform.Rotate(m_rotationSpeed.x * Time.deltaTime, m_rotationSpeed.y * Time.deltaTime, m_rotationSpeed.z * Time.deltaTime, m_space);
     }
 
     public void SetSpace(Space newSpace) { m_space = newSpace; }
