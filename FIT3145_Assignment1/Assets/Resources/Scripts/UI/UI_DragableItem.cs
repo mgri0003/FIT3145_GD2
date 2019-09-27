@@ -27,6 +27,8 @@ public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     [HideInInspector] public UI_ItemToolTip m_currentToolTip = null;
 
+    [SerializeField] private Image m_imageFrame;
+
     public void DestroyToolTip()
     {
         if(m_currentToolTip)
@@ -72,12 +74,14 @@ public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         m_isHovered = true;
         m_delegate_OnHoverEnter?.Invoke(this, eventData);
+        m_imageFrame.color = new Color(0,0.8f,1.0f,1);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         m_isHovered = false;
         m_delegate_OnHoverExit?.Invoke(this, eventData);
+        m_imageFrame.color = Color.white;
     }
 
     public void OnPointerDown(PointerEventData eventData)

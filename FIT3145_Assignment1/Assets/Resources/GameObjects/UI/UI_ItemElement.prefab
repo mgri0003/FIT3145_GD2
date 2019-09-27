@@ -123,6 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_parentTransform: {fileID: 6054189061151031522}
   m_currentToolTip: {fileID: 0}
+  m_imageFrame: {fileID: 4269237395232073060}
 --- !u!1 &3678582647454152173
 GameObject:
   m_ObjectHideFlags: 0
