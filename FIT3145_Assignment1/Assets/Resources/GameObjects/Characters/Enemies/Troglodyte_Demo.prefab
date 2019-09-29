@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 8228198742953390688}
   - component: {fileID: 2239315200456466628}
   m_Layer: 8
-  m_Name: TestEnemy_Demo
+  m_Name: Troglodyte_Demo
   m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,6 +114,7 @@ MonoBehaviour:
   m_rigidbody: {fileID: 0}
   m_characterAimer: {fileID: 0}
   m_MeleeHitbox: {fileID: 4751069298201004492}
+  m_enemyType: 1
   m_meleeDamage: 12
   m_minDistanceToAttack: 0.8
   m_minDistanceToSpecial: 0.8

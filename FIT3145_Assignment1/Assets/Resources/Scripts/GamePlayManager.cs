@@ -3,12 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum EGameEvent
+{
+    LEVEL1_COMPLETE,
+
+    MAX
+}
+
+public enum EEnemySpawnableType
+{
+    Troglodyte,
+    Troglodyte_Demo,
+    Troglodyte_Big,
+    Imp,
+    Imp_Big,
+
+    MAX
+}
+
+public struct EnemySpawnData
+{
+    public EEnemySpawnableType EnemyTypeToSpawn;
+    public Vector3 SpawnLocation;
+    public GameObject[] ItemDrops;
+}
+
 public class GamePlayManager : Singleton<GamePlayManager>
 {
     //--Variables--//
     public const uint NUMBER_OF_LEVELS = 2;
     private Transform m_spawnPoint = null;
-    //private Transform[] m_enemySpawnPoints = null;
+    [SerializeField] GameObject[] m_spawnable_enemies = new GameObject[(int)EEnemySpawnableType.MAX];
+    private List<EnemySpawnData> m_enemySpawnDatas = null;
     private ElevatorPanel[] m_elevatorPanels = new ElevatorPanel[NUMBER_OF_LEVELS];
 
     //Spawnables (Do not change values in these objects)
@@ -68,27 +94,82 @@ public class GamePlayManager : Singleton<GamePlayManager>
         SpawnPlayer();
         SetupElevators();
 
-        Enemy_Core[] enemies = GetAllEnemiesInScene();
-        if(enemies != null)
-        {
-            foreach(Enemy_Core enemy in enemies)
-            {
-                enemy.FindPlayerToTarget();
-            }
-        }
-
-        //if(m_enemySpawnPoints != null)
-        //{
-        //    for (int i = 0; i < m_enemySpawnPoints.Length; ++i)
-        //    {
-        //        SpawnEnemy(i);
-        //    }
-        //}
-
+        RespawnEnemies(true);
 
         UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.INGAME_HUD);
 
         m_current_mainPlayer.GetComponent<Player_Controller>().SetEnableInput(true);
+    }
+
+
+    public void RespawnEnemies(in bool includeBoss)
+    {
+        //generate spawn data based on what enemies are currently in the scene (should only occur once)
+        GenerateSpawnData();
+        RemoveAllEnemiesInScene();
+        SpawnEnemiesFromSpawnData(includeBoss);
+        InitEnemyTargets();
+    }
+
+    private void InitEnemyTargets()
+    {
+        Enemy_Core[] enemies = GetAllEnemiesInScene();
+        if (enemies != null)
+        {
+            foreach (Enemy_Core enemy in enemies)
+            {
+                enemy.FindPlayerToTarget();
+            }
+        }
+    }
+
+    private void SpawnEnemiesFromSpawnData(in bool includeBoss)
+    {
+        foreach(EnemySpawnData esp in m_enemySpawnDatas)
+        {
+            if (includeBoss || esp.EnemyTypeToSpawn != EEnemySpawnableType.Imp_Big)
+            {
+                GameObject newEnemyGO = Instantiate(m_spawnable_enemies[(int)esp.EnemyTypeToSpawn], esp.SpawnLocation, Quaternion.Euler(0, 0, 0));
+
+                Enemy_Core enemy = newEnemyGO.GetComponent<Enemy_Core>();
+                if (enemy)
+                {
+                    enemy.SetItemDrops(esp.ItemDrops);
+                }
+            }
+        }
+    }
+
+    private void RemoveAllEnemiesInScene()
+    {
+        Enemy_Core[] allEnemies = GetAllEnemiesInScene();
+        for(int i = 0; i < allEnemies.Length; ++i)
+        {
+            Destroy(allEnemies[i].gameObject);
+        }
+        allEnemies = null;
+    }
+
+    private void GenerateSpawnData()
+    {
+        if(m_enemySpawnDatas == null)
+        {
+            m_enemySpawnDatas = new List<EnemySpawnData>();
+            if(m_enemySpawnDatas != null)
+            {
+                Enemy_Core[] allEnemies = GetAllEnemiesInScene();
+
+                foreach (Enemy_Core enemy in allEnemies)
+                {
+                    EnemySpawnData newSpawnData;
+                    newSpawnData.EnemyTypeToSpawn = enemy.GetEnemyType();
+                    newSpawnData.SpawnLocation = enemy.transform.position;
+                    newSpawnData.ItemDrops = enemy.GetItemDrops();
+
+                    m_enemySpawnDatas.Add(newSpawnData);
+                }
+            }
+        }
     }
 
     public void DisableAggroOnAllEnemies()
@@ -124,7 +205,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     void OnGameplayUpdate()
     {
-
+        
     }
 
     public void OnPlayerDeath()
@@ -167,18 +248,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
         }
     }
 
-    //void SpawnEnemy(int spawnPointIndex)
-    //{
-    //    GameObject newEnemy = Instantiate(spawnPointIndex == 0? m_spawnable_enemyDemo : m_spawnable_enemy, m_enemySpawnPoints[spawnPointIndex].position, Quaternion.Euler(0, 0, 0));
-    //    if(newEnemy)
-    //    {
-    //        if(m_current_mainPlayer)
-    //        {
-    //            newEnemy.GetComponent<Enemy_Core>().SetTargetCharacter(m_current_mainPlayer.GetComponent<Character_Core>());
-    //        }
-    //    }
-    //}
-
     private void SetupSpawnPoints()
     {
         SetupPlayerSpawn();
@@ -194,21 +263,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
             m_spawnPoint = spawn.transform;
         }
     }
-
-    //private void SetupEnemySpawns()
-    //{
-    //    GameObject[] spawns = GameObject.FindGameObjectsWithTag("EnemySpawn");
-    //    Debug.Assert(spawns.Length > 0, "No Enemy Spawn Set?");
-    //    if (spawns.Length > 0)
-    //    {
-    //        Transform[] transforms = new Transform[spawns.Length];
-    //        for(int i = 0; i < spawns.Length; ++i)
-    //        {
-    //            transforms[i] = spawns[i].transform;
-    //        }
-    //        m_enemySpawnPoints = transforms;
-    //    }
-    //}
 
     private void SetupElevators()
     {
@@ -280,4 +334,21 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
         return Vector3.zero;
     }
+
+    
+    public void ProcessGameEvent(in EGameEvent gameEvent)
+    {
+        Debug.Assert(gameEvent != EGameEvent.MAX, "Invalid Game Event Requested!");
+
+        switch (gameEvent)
+        {
+            case EGameEvent.LEVEL1_COMPLETE:
+            {
+                RespawnEnemies(false);
+            }
+            break;
+        }
+
+    }
+
 }

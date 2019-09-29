@@ -43,11 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c497fdc209e313448394537ebe7fa5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_spawnable_enemies:
+  - {fileID: 5342489822327469273, guid: 7d4f12637a3b2bc41933bfcbd0528003, type: 3}
+  - {fileID: 5342489822327469273, guid: f64cb7488149af9449c5a1919fd2d8eb, type: 3}
+  - {fileID: 5342489822327469273, guid: 689d223dacad16a49b2be9afc20b8dfd, type: 3}
+  - {fileID: 5342489822327469273, guid: 99ec4c516001b3d4da2e405b431db7b1, type: 3}
+  - {fileID: 5342489822327469273, guid: 6ba20a8d554a42b429002bf77072326a, type: 3}
   m_spawnable_mainPlayer: {fileID: 8290247817697547750, guid: 34a921f1cdad6274cad6d86faf506f31,
-    type: 3}
-  m_spawnable_enemy: {fileID: 5342489822327469273, guid: 7d4f12637a3b2bc41933bfcbd0528003,
-    type: 3}
-  m_spawnable_enemyDemo: {fileID: 5342489822327469273, guid: f64cb7488149af9449c5a1919fd2d8eb,
     type: 3}
   m_spawnable_inventoryZone: {fileID: 8278307819504041503, guid: 22c3022ca3736d648a728d681aa355dc,
     type: 3}

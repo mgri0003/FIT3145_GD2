@@ -114,6 +114,7 @@ MonoBehaviour:
   m_rigidbody: {fileID: 0}
   m_characterAimer: {fileID: 0}
   m_MeleeHitbox: {fileID: 4751069298201004492}
+  m_enemyType: 2
   m_meleeDamage: 40
   m_minDistanceToAttack: 2
   m_minDistanceToSpecial: 0.8

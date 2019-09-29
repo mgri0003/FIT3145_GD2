@@ -7,6 +7,7 @@ using UnityEngine;
 public abstract class Enemy_Core : Character_Core
 {
     //--Variables--//
+    [SerializeField] private EEnemySpawnableType m_enemyType = EEnemySpawnableType.MAX;
     protected Character_Core m_targetCharacter = null;
     [SerializeField] private float m_meleeDamage = 1.0f;
     [SerializeField] private float m_minDistanceToAttack = 0.8f;
@@ -24,6 +25,8 @@ public abstract class Enemy_Core : Character_Core
     protected override void Start()
     {
         base.Start();
+
+        Debug.Assert(m_enemyType != EEnemySpawnableType.MAX, "Enemy Type Not Set! : " + gameObject.name);
 
         //Debug.Assert(m_targetCharacter, "Missing Target Character, should be set when enemy is spawned!");
         m_characterAimer.Init(m_targetCharacter.transform);
@@ -53,6 +56,11 @@ public abstract class Enemy_Core : Character_Core
                 m_floatingHealthBar.SetHealthBarOffset(new Vector3(0,m_floatingHealthbarHeight,0));
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        DestroyHealthbar();
     }
 
     public void DisableAggro() { m_aggro = false; }
@@ -146,8 +154,7 @@ public abstract class Enemy_Core : Character_Core
 
         GamePlayManager.Instance.AddScrap((int)m_scrapDrop);
 
-        Destroy(m_floatingHealthBar.gameObject);
-        m_floatingHealthBar = null;
+        DestroyHealthbar();
 
         base.Die();
     }
@@ -176,5 +183,26 @@ public abstract class Enemy_Core : Character_Core
                 ++i;
             }
         }
+    }
+
+    public GameObject[] GetItemDrops()
+    {
+        return m_itemDrops;
+    }
+
+    public void SetItemDrops(GameObject[] newItemDrops)
+    {
+        m_itemDrops = newItemDrops;
+    }
+
+    public EEnemySpawnableType GetEnemyType() { return m_enemyType; }
+
+    private void DestroyHealthbar()
+    {
+        if(m_floatingHealthBar)
+        {
+            Destroy(m_floatingHealthBar.gameObject);
+        }
+        m_floatingHealthBar = null;
     }
 }
