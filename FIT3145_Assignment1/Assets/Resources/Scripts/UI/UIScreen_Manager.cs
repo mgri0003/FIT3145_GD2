@@ -47,6 +47,7 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
     public void GoToUIScreen(in EUIScreen newScreen)
     {
         DisableAllScreens();
+        CleanUpTooltips();
         EnableScreen(newScreen);
     }
 
@@ -78,6 +79,22 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
                 Cursor.lockState = CursorLockMode.None;
             }
             break;
+        }
+    }
+
+    private void CleanUpTooltips()
+    {
+        UI_ItemToolTip[] tooltips = FindObjectsOfType<UI_ItemToolTip>();
+        if(tooltips != null)
+        {
+            for(uint i = 0; i < tooltips.Length; ++i)
+            {
+                if(tooltips[i] != null)
+                {
+                    //Debug.Log(tooltips[i].name + " forcibly destroyed!");
+                    Destroy(tooltips[i].gameObject);
+                }
+            }
         }
     }
 
@@ -139,7 +156,6 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
 
     public void DestroyItemToolTip(UI_DragableItem dragableItem, PointerEventData eventData)
     {
-        //Debug.Log("Tooltip Destroyed");
         dragableItem.DestroyToolTip();
     }
 }

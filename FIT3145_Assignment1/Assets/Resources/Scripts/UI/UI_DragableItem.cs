@@ -98,7 +98,7 @@ public class UI_DragableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private void OnDestroy()
     {
-        UIScreen_Manager.Instance.DestroyItemToolTip(this, null);
+        DestroyToolTip();
     }
 
 }
