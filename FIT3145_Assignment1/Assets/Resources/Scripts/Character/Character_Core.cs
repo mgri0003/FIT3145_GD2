@@ -148,6 +148,7 @@ public abstract class Character_Core : MonoBehaviour
     {
         //Debug.Log(transform.name + " has died");
         m_animator.Play("Death", 0, 0.0f);
+        ResetHandAnimations();
     }
 
     public bool IsDead()
@@ -156,4 +157,10 @@ public abstract class Character_Core : MonoBehaviour
     }
 
     protected abstract void SendMeleeAttack(in int AE_handIndex);
+
+    public void ResetHandAnimations()
+    {
+        m_animator.Play("EMPTY", 1, 0.0f);
+        m_animator.Play("EMPTY", 2, 0.0f);
+    }
 }
