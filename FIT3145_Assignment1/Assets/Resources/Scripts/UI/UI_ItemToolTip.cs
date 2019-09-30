@@ -11,6 +11,7 @@ public class UI_ItemToolTip : MonoBehaviour
     [SerializeField] private Text m_typeText;
     [SerializeField] private Text m_typeDescriptionText;
     [SerializeField] private Text m_descriptionText;
+    [SerializeField] private Text m_upgradeText;
     private Item m_parentItem;
     //private Vector2 m_offset = new Vector2(0,0);
 
@@ -20,7 +21,7 @@ public class UI_ItemToolTip : MonoBehaviour
     {
         Debug.Assert(m_parentItem, "Parent item Not Assigned to ItemToolTip!");
 
-        RefreshDescription();
+        RefreshTooltipData();
     }
 
     // Update is called once per frame
@@ -29,7 +30,7 @@ public class UI_ItemToolTip : MonoBehaviour
         transform.localPosition = GetDesiredPosition();
     }
 
-    void RefreshDescription()
+    void RefreshTooltipData()
     {
         //reset texts
         m_nameText.text = "";
@@ -74,6 +75,15 @@ public class UI_ItemToolTip : MonoBehaviour
         m_typeDescriptionText.text = m_parentItem.GetItemTypeDescription();
 
         m_descriptionText.text = m_parentItem.GetItemDescription();
+
+        if(m_parentItem.GetItemType() == EItemType.WEAPON)
+        {
+            m_upgradeText.enabled = true;
+        }
+        else
+        {
+            m_upgradeText.enabled = false;
+        }
     }
 
     public Vector3 GetDesiredPosition()
