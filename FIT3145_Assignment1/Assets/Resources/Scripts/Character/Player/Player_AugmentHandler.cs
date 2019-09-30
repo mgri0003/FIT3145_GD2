@@ -89,8 +89,30 @@ public class Player_AugmentHandler : MonoBehaviour
 
         bool validSlotForActive = ((int)augmentSlot < (int)EAugmentSlot.PASSIVE_1) && (aug.GetAugmentType() == EAugmentType.ACTIVE);
         bool validSlotForPassive = ((int)augmentSlot >= (int)EAugmentSlot.PASSIVE_1) && (aug.GetAugmentType() == EAugmentType.PASSIVE);
+        bool validAugmentType = (validSlotForActive || validSlotForPassive);
 
-        return !HasAugment(augmentSlot) && (validSlotForActive || validSlotForPassive);
+        bool validDuplicate = CheckAugmentDuplicateAttached(aug);
+
+
+        return !HasAugment(augmentSlot) && validAugmentType && validDuplicate;
+    }
+
+    public bool CheckAugmentDuplicateAttached(in Augment aug)
+    {
+        bool retval = true;
+        foreach (Augment playerAug in m_augments)
+        {
+            if (playerAug)
+            {
+                //if the augment name is the same, its probs the same :P
+                if(playerAug.GetItemName() == aug.GetItemName())
+                {
+                    retval = false;
+                }
+            }
+        }
+
+        return retval;
     }
 
     public void CallOnAllAugments_AugmentOnDeath()
