@@ -83,6 +83,9 @@ MonoBehaviour:
   m_itemDescription: Come to life once more...
   m_maxCooldown: 300
   m_augmentType: 1
+  m_augmentLocation: 0
+  m_positionOffset: {x: 0, y: 0.1, z: 0}
+  m_rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &8747391768867012450
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -165,17 +168,17 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.4
       objectReference: {fileID: 0}
+    - target: {fileID: -1041727522481752256, guid: e8c586eb5319a0d4c9443cb54446738a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -6193049039780272913, guid: e8c586eb5319a0d4c9443cb54446738a,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7791558000611036230, guid: e8c586eb5319a0d4c9443cb54446738a,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -1041727522481752256, guid: e8c586eb5319a0d4c9443cb54446738a,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0

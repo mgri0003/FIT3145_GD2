@@ -13,10 +13,12 @@ public enum EAugmentSlot
     MAX
 }
 
+
 public class Player_AugmentHandler : MonoBehaviour
 {
     //--variables--//
     private Augment[] m_augments = new Augment[(int)EAugmentSlot.MAX];
+    [SerializeField] private Transform[] m_augmentLocationTransforms = new Transform[(int)EAugmentLocation.MAX];
 
     //--Methods--//
     public Augment GetAugment(in EAugmentSlot augmentSlot)
@@ -62,6 +64,7 @@ public class Player_AugmentHandler : MonoBehaviour
             m_augments[(int)augmentSlot] = newAugment;
             m_augments[(int)augmentSlot].SetAugmentActive(true);
             m_augments[(int)augmentSlot].SetPlayer(GetComponent<Player_Core>());
+            m_augments[(int)augmentSlot].SetAttachedTransform(m_augmentLocationTransforms[(int)m_augments[(int)augmentSlot].GetAugmentLocation()]);
             return true;
         }
 
@@ -73,6 +76,7 @@ public class Player_AugmentHandler : MonoBehaviour
         Debug.Assert(augmentSlot != EAugmentSlot.MAX, "Invalid Augment Slot Value");
         if (HasAugment(augmentSlot))
         {
+            m_augments[(int)augmentSlot].SetAttachedTransform(null);
             m_augments[(int)augmentSlot].SetAugmentActive(false);
             m_augments[(int)augmentSlot].SetPlayer(null);
             m_augments[(int)augmentSlot] = null;
