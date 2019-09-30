@@ -205,7 +205,10 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     void OnGameplayUpdate()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            EndGame();
+        }
     }
 
     public void OnPlayerDeath()
@@ -220,13 +223,19 @@ public class GamePlayManager : Singleton<GamePlayManager>
         {
             m_gameplayActive = false;
 
-            m_current_mainPlayer = null;
-            m_current_inventoryZone = null;
+            ResetGameplayData();
 
             SceneManager.LoadScene("MainMenu");
 
             UIScreen_Manager.Instance.GoToUIScreen(EUIScreen.TITLESCREEN_MENU);
         }
+    }
+
+    private void ResetGameplayData()
+    {
+        m_current_mainPlayer = null;
+        m_current_inventoryZone = null;
+        SetScrap(0);
     }
 
     public bool IsGameplayActive()
