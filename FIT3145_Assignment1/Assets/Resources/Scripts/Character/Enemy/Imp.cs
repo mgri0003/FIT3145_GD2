@@ -61,7 +61,8 @@ public class Imp : Enemy_Core
                     }
                 }
             }
-            else
+            
+            if(!IsCloseEnoughToAttack())
             {
                 Vector3 vecToTarget = GetDirectionToTarget();
                 vecToTarget.y = 0;

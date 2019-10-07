@@ -148,8 +148,8 @@ MonoBehaviour:
   m_enemyType: 3
   m_meleeDamage: 8
   m_minDistanceToAttack: 1.5
-  m_minDistanceToSpecial: 6
-  m_minDistanceToMove: 7
+  m_minDistanceToSpecial: 8
+  m_minDistanceToMove: 11
   m_itemDrops: []
   m_isFlyingEnemy: 1
   m_scrapDrop: 40
@@ -239,7 +239,7 @@ MonoBehaviour:
     m_current: 70
     m_max: 70
   m_movementSpeed:
-    m_current: 1
+    m_current: 1.5
     m_max: -1
 --- !u!1001 &8974399489779136477
 PrefabInstance:
@@ -248,11 +248,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9021515621221279525}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: c421fb4302581344e97d919cb58e1d94,
-        type: 3}
-      propertyPath: m_Name
-      value: Model_Imp
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c421fb4302581344e97d919cb58e1d94,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -307,6 +302,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: c421fb4302581344e97d919cb58e1d94,
+        type: 3}
+      propertyPath: m_Name
+      value: Model_Imp
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -6057140222963153312, guid: c421fb4302581344e97d919cb58e1d94, type: 3}

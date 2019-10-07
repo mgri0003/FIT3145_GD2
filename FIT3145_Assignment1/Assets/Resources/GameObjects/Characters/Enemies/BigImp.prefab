@@ -150,8 +150,8 @@ MonoBehaviour:
   m_enemyType: 4
   m_meleeDamage: 25
   m_minDistanceToAttack: 1.5
-  m_minDistanceToSpecial: 6
-  m_minDistanceToMove: 7
+  m_minDistanceToSpecial: 9
+  m_minDistanceToMove: 10
   m_itemDrops:
   - {fileID: 8754039348771881063, guid: d00cc7f2b1a725441b18049b1215cb19, type: 3}
   - {fileID: 1725078717245774645, guid: 544f002000d13a8448aca65859a1cc1f, type: 3}
@@ -164,8 +164,8 @@ MonoBehaviour:
     type: 3}
   m_firingTransform: {fileID: 6028872282432774900}
   m_FIREBALL_MAX_COOLDOWN: 6
-  m_FIREBALL_DAMAGE: 40
-  m_FIREBALL_SPEED: 2.5
+  m_FIREBALL_DAMAGE: 30
+  m_FIREBALL_SPEED: 6
   m_FIREBALL_LIFETIME: 5
 --- !u!95 &3011257416459508142
 Animator:
@@ -243,7 +243,7 @@ MonoBehaviour:
     m_current: 300
     m_max: 300
   m_movementSpeed:
-    m_current: 1
+    m_current: 1.5
     m_max: -1
 --- !u!114 &-2431757268461558806
 MonoBehaviour:
@@ -9772,11 +9772,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9021515621221279525}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: c421fb4302581344e97d919cb58e1d94,
-        type: 3}
-      propertyPath: m_Name
-      value: Model_Imp
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c421fb4302581344e97d919cb58e1d94,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9831,6 +9826,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: c421fb4302581344e97d919cb58e1d94,
+        type: 3}
+      propertyPath: m_Name
+      value: Model_Imp
       objectReference: {fileID: 0}
     - target: {fileID: 4528387467374286826, guid: c421fb4302581344e97d919cb58e1d94,
         type: 3}
