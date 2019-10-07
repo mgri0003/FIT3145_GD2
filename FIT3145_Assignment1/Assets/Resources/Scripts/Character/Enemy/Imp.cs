@@ -33,32 +33,7 @@ public class Imp : Enemy_Core
                     m_fireballCooldown = m_FIREBALL_MAX_COOLDOWN;
 
                     //SHOOT FIREBALL!
-                    Debug.Assert(m_fireballProjectile, "missing fireball projectile for IMP");
-                    if (m_fireballProjectile)
-                    {
-                        //create the projectile GameObject
-                        GameObject newProjectileGO = Instantiate(m_fireballProjectile, m_firingTransform.position, m_firingTransform.rotation);
-                        Debug.Assert(newProjectileGO, "Failed to instantiate Projectile???");
-                        if (newProjectileGO)
-                        {
-                            //get the projectile class and initialise it!
-                            Weapon_Projectile projectile = newProjectileGO.GetComponent<Weapon_Projectile>();
-                            Debug.Assert(projectile, "Projectile Objects Does not have projectile Component???");
-                            if (projectile)
-                            {
-                                //initialise the projectile (and off it goes!)
-                                Vector3 firingDir = GetDirectionToTarget();
-                                
-                                projectile.Init(
-                                    m_FIREBALL_DAMAGE,
-                                    m_FIREBALL_SPEED,
-                                    m_FIREBALL_LIFETIME,
-                                    firingDir.normalized);
-
-                                projectile.SetOwner(gameObject);
-                            }
-                        }
-                    }
+                    m_animator.Play("Fireball", 0, 0.0f);
                 }
             }
             
@@ -75,5 +50,35 @@ public class Imp : Enemy_Core
         m_fireballCooldown = Mathf.Clamp(m_fireballCooldown, 0, m_FIREBALL_MAX_COOLDOWN);
 
         return retval;
+    }
+
+    private void ShootFireball()
+    {
+        Debug.Assert(m_fireballProjectile, "missing fireball projectile for IMP");
+        if (m_fireballProjectile)
+        {
+            //create the projectile GameObject
+            GameObject newProjectileGO = Instantiate(m_fireballProjectile, m_firingTransform.position, m_firingTransform.rotation);
+            Debug.Assert(newProjectileGO, "Failed to instantiate Projectile???");
+            if (newProjectileGO)
+            {
+                //get the projectile class and initialise it!
+                Weapon_Projectile projectile = newProjectileGO.GetComponent<Weapon_Projectile>();
+                Debug.Assert(projectile, "Projectile Objects Does not have projectile Component???");
+                if (projectile)
+                {
+                    //initialise the projectile (and off it goes!)
+                    Vector3 firingDir = GetDirectionToTarget();
+
+                    projectile.Init(
+                        m_FIREBALL_DAMAGE,
+                        m_FIREBALL_SPEED,
+                        m_FIREBALL_LIFETIME,
+                        firingDir.normalized);
+
+                    projectile.SetOwner(gameObject);
+                }
+            }
+        }
     }
 }
