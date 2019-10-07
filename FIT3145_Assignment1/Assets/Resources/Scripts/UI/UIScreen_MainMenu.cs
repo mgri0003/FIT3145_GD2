@@ -15,6 +15,12 @@ public class UIScreen_MainMenu : UIScreenBase
     [SerializeField] private Button m_quitButton;
     [SerializeField] private UI_Fader m_fader;
 
+    //other elements
+    GameObject m_mainMenuModel = null;
+
+    //states
+    bool m_gameStartRequested = false;
+
 
     protected override void RegisterMethods()
     {
@@ -26,6 +32,7 @@ public class UIScreen_MainMenu : UIScreenBase
 
     protected override void OnEnable()
     {
+        m_gameStartRequested = false;
         m_fader.Reset();
         Invoke("StartMainScreenFadeOut", 0.5f);
     }
@@ -46,6 +53,28 @@ public class UIScreen_MainMenu : UIScreenBase
     }
 
     void OnStartGamePressed()
+    {
+        if(!m_gameStartRequested)
+        {
+            m_gameStartRequested = true;
+
+            m_mainMenuModel = GameObject.Find("MainMenuModel") as GameObject;
+            if (m_mainMenuModel)
+            {
+                m_mainMenuModel.GetComponent<Animator>().Play("Anim_SpaceShipStart");
+            }
+
+            Invoke("RequestStartGame", 4.0f);
+        }
+    }
+
+    void RequestStartGame()
+    {
+        UIScreen_Manager.Instance.StartTransition();
+        Invoke("DoActualStartGame", 1.5f);
+    }
+
+    void DoActualStartGame()
     {
         SceneManager.LoadScene("Bridge_HUB");
         SceneManager.sceneLoaded += GamePlayManager.Instance.OnSceneLoadedToGameplay;

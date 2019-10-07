@@ -78,6 +78,7 @@ public class GamePlayManager : Singleton<GamePlayManager>
         GamePlayManager.Instance.SetupInGame();
         SceneManager.sceneLoaded -= GamePlayManager.Instance.OnSceneLoadedToGameplay;
         UIScreen_Manager.Instance.GetCanvasManager().Init();
+        UIScreen_Manager.Instance.EndTransition();
     }
 
     public void SetupInGame()

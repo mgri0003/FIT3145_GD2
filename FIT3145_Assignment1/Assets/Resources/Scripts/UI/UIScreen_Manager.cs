@@ -24,6 +24,7 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
     [SerializeField] public UIScreenBase[] m_UIScreens = new UIScreenBase[(int)EUIScreen.MAX - 1];
     EUIScreen m_currentUIScreen = EUIScreen.NONE;
     private UI_CanvasManager m_canvasManager = null;
+    [SerializeField] private Animator m_transitionAnimator = null;
 
     //spawnables
     [SerializeField] private GameObject m_spawnable_itemToolTip;
@@ -35,6 +36,9 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
 
         m_canvasManager = GetComponent<UI_CanvasManager>();
         Debug.Assert(m_canvasManager, "Missing Canvas Manager");
+        Debug.Assert(m_transitionAnimator, "Missing transition Animator");
+
+        m_transitionAnimator.gameObject.SetActive(true);
 
         DisableAllScreens();
 
@@ -157,5 +161,16 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
     public void DestroyItemToolTip(UI_DragableItem dragableItem, PointerEventData eventData)
     {
         dragableItem.DestroyToolTip();
+    }
+
+    public Animator GetTransitionAnimator() { return m_transitionAnimator; }
+    public void StartTransition()
+    {
+        GetTransitionAnimator().Play("transitionSlideLeft");
+
+    }
+    public void EndTransition()
+    {
+        GetTransitionAnimator().Play("transitionSlideMiddleToLeft");
     }
 }
