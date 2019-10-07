@@ -39,8 +39,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
 
     //Spawnables (Do not change values in these objects)
     [SerializeField] private GameObject m_spawnable_mainPlayer = null;
-    //[SerializeField] private GameObject m_spawnable_enemy = null;
-    //[SerializeField] private GameObject m_spawnable_enemyDemo = null;
     [SerializeField] private GameObject m_spawnable_inventoryZone = null;
 
     //InGame GameObjects
@@ -59,8 +57,6 @@ public class GamePlayManager : Singleton<GamePlayManager>
     void Start()
     {
         Debug.Assert(m_spawnable_mainPlayer, "Main Player Is Null");
-        //Debug.Assert(m_spawnable_enemy, "Enemy Is Null");
-        //Debug.Assert(m_spawnable_enemyDemo, "Enemy Demo Is Null");
         Debug.Assert(m_spawnable_inventoryZone, "Inventory Zone Is Null");
     }
 
@@ -148,6 +144,18 @@ public class GamePlayManager : Singleton<GamePlayManager>
             Destroy(allEnemies[i].gameObject);
         }
         allEnemies = null;
+    }
+
+    public void AggroNearbyEnemies(Enemy_Core enemy, in float distance)
+    {
+        Enemy_Core[] allEnemies = GetAllEnemiesInScene();
+        for (int i = 0; i < allEnemies.Length; ++i)
+        {
+            if(Vector3.Distance(enemy.transform.position, allEnemies[i].transform.position) < distance)
+            {
+                allEnemies[i].TriggerAggro();
+            }
+        }
     }
 
     private void GenerateSpawnData()

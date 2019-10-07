@@ -20,6 +20,7 @@ public abstract class Enemy_Core : Character_Core
     private FloatingHealthbar m_floatingHealthBar;
     [SerializeField] private GameObject m_spawnable_floatingHealthBar;
     [SerializeField] private float m_floatingHealthbarHeight = 0.0f;
+    private const float m_AGGRO_RADIUS = 15.0f;
 
     //--Methods--//
     protected override void Start()
@@ -164,6 +165,7 @@ public abstract class Enemy_Core : Character_Core
         base.ReceiveHit(damage, effectsToApply);
 
         TriggerAggro();
+        GamePlayManager.Instance.AggroNearbyEnemies(this, m_AGGRO_RADIUS);
     }
 
     private void OnDeathComplete()
