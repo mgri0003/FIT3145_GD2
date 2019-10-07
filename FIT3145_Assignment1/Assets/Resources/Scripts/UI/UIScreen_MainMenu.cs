@@ -14,6 +14,10 @@ public class UIScreen_MainMenu : UIScreenBase
     [SerializeField] private Button m_controlsButton;
     [SerializeField] private Button m_quitButton;
     [SerializeField] private UI_Fader m_fader;
+    [SerializeField] private Image m_title;
+    [SerializeField] private Image m_cutscene_top;
+    [SerializeField] private Image m_cutscene_bottom;
+
 
     //other elements
     GameObject m_mainMenuModel = null;
@@ -32,6 +36,11 @@ public class UIScreen_MainMenu : UIScreenBase
 
     protected override void OnEnable()
     {
+        m_title.color = new Color(1, 1, 1, 1);
+
+       m_cutscene_top.color = new Color(1,1, 1, 0);
+       m_cutscene_bottom.color = new Color(1, 1, 1, 0);
+
         m_gameStartRequested = false;
         m_fader.Reset();
         Invoke("StartMainScreenFadeOut", 0.5f);
@@ -63,6 +72,11 @@ public class UIScreen_MainMenu : UIScreenBase
             {
                 m_mainMenuModel.GetComponent<Animator>().Play("Anim_SpaceShipStart");
             }
+
+            m_title.color = new Color(1, 1, 1, 0);
+
+            m_cutscene_top.color = new Color(1, 1, 1, 1);
+            m_cutscene_bottom.color = new Color(1, 1, 1, 1);
 
             Invoke("RequestStartGame", 4.0f);
         }
