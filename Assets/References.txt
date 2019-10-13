@@ -1,4 +1,21 @@
 https://wiki.unity3d.com/index.php/Singleton - Singletons with Unity C#
 https://github.com/marijnz/unity-toolbar-extender - UI Editor Extensions
-https://freesound.org/people/cylon8472/sounds/249686/ - Cuthulu Sound
 https://wiki.unity3d.com/index.php/CameraFacingBillboard - billboarding for healthbars
+
+------------Audio-------------------------------
+https://freesound.org/people/cylon8472/sounds/249686/ - Cuthulu growl
+https://freesound.org/people/michorvath/sounds/427598/ - Pistol shot 
+https://freesound.org/people/Michel88/sounds/76965/ - Trog hurt 
+https://freesound.org/people/Michel88/sounds/76957/ - Trog death
+https://freesound.org/people/Michel88/sounds/76966/ - Imp hurt
+https://freesound.org/people/Michel88/sounds/76958/ - Imp death
+https://freesound.org/people/LeMudCrab/sounds/163455/ - Shotgun shot
+https://freesound.org/people/micahlg/sounds/413176/ - Player hurt 1
+https://freesound.org/people/thecheeseman/sounds/44428/ - Player hurt 2
+https://freesound.org/people/Michel88/sounds/76960/ - Player death
+https://freesound.org/people/yutface/sounds/257015/ - Melee swing-woosh
+
+
+
+
+
