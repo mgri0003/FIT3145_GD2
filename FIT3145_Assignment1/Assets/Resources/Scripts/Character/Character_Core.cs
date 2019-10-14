@@ -13,6 +13,12 @@ public abstract class Character_Core : MonoBehaviour
 
     private List<Effect> m_currentEffects = new List<Effect>();
 
+    //Audio
+    private AudioSource m_audioSource = null;
+    [SerializeField] private AudioClip m_audio_hurt;
+    [SerializeField] private AudioClip m_audio_death;
+
+
     //--Methods--//
 
     protected virtual void Update()
@@ -94,6 +100,10 @@ public abstract class Character_Core : MonoBehaviour
         m_characterAimer = GetComponent<Character_Aimer>();
         Debug.Assert(m_characterAimer != null, "Character Aimer Is Null");
 
+
+        m_audioSource = GetComponent<AudioSource>();
+        Debug.Assert(m_audioSource != null, "AudioSource Is Null");
+
         //Error Check Additional Stuff
         Debug.Assert(m_MeleeHitbox, "Hitbox unassigned!?!?/");
     }
@@ -130,6 +140,16 @@ public abstract class Character_Core : MonoBehaviour
             FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.HIT, transform.position);
 
             m_animator.Play("HitStun", 0, 0.0f);
+
+            //play hurt sound
+            if(m_audioSource)
+            {
+                m_audioSource.clip = m_audio_hurt;
+                if(m_audioSource.clip)
+                {
+                    m_audioSource.Play();
+                }
+            }
 
             if (m_characterStats.AccessHealthStat().GetCurrent() == 0)
             {
