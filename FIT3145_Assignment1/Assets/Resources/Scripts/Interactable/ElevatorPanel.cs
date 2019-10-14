@@ -10,8 +10,11 @@ public class ElevatorPanel : Interactable
     [SerializeField] public uint m_levelFrom = 0;
     [SerializeField] private Transform m_playerTeleportTransform;
 
+
     public override void Interact()
     {
+        PlayInteractionSound();
+
         GamePlayManager.Instance.MovePlayerToLevel(m_levelToMoveTo);
 
         FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.ELEVATOR_TELEPORT, GamePlayManager.Instance.GetElevatorPanelLocation(m_levelToMoveTo));
