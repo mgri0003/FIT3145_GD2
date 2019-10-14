@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 1295313564781236068}
   - component: {fileID: 5961892357635601912}
   - component: {fileID: 3260430332338996737}
+  - component: {fileID: -55502621112503005}
   m_Layer: 0
   m_Name: Shotgun
   m_TagString: Item
@@ -252,9 +253,107 @@ MonoBehaviour:
   m_weaponHoldOffset: {x: 0.1290123, y: 0.01199647, z: 0.0570095}
   m_upgradeBalanceScale: 0.2
   m_autoUseAllowed: 0
+  m_audio_shoot: {fileID: 8300000, guid: 32849a82f6c2f4c4187c717eecae79d2, type: 3}
   m_projectile: {fileID: 604645328828819334, guid: 66a13259f93288a4e8682c05d9763072,
     type: 3}
   m_firingTransform: {fileID: 9044369817375108693}
+--- !u!82 &-55502621112503005
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8754039348771881063}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 7689092007559775879, guid: f939d71c0bf8413418fe364dde4d4ad3,
+    type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &2674131812334628317
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -262,11 +361,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5534518717771857130}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: a7283350dcc0f774aa9b606130a2a2bf,
-        type: 3}
-      propertyPath: m_Name
-      value: Model_Shotgun
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a7283350dcc0f774aa9b606130a2a2bf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -336,6 +430,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2.29713
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: a7283350dcc0f774aa9b606130a2a2bf,
+        type: 3}
+      propertyPath: m_Name
+      value: Model_Shotgun
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7283350dcc0f774aa9b606130a2a2bf, type: 3}

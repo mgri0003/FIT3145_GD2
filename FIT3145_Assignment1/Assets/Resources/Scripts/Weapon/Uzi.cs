@@ -7,5 +7,6 @@ public class Uzi : Weapon_Ranged
     protected override void FireRangedWeapon()
     {
         FireSingleProjectile();
+        PlayShootSound();
     }
 }

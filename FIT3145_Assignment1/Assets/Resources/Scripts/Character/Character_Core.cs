@@ -13,6 +13,12 @@ public abstract class Character_Core : MonoBehaviour
 
     private List<Effect> m_currentEffects = new List<Effect>();
 
+    //Audio
+    private AudioSource m_audioSource = null;
+    [SerializeField] private AudioClip m_audio_hurt;
+    [SerializeField] private AudioClip m_audio_death;
+
+
     //--Methods--//
 
     protected virtual void Update()
@@ -94,6 +100,10 @@ public abstract class Character_Core : MonoBehaviour
         m_characterAimer = GetComponent<Character_Aimer>();
         Debug.Assert(m_characterAimer != null, "Character Aimer Is Null");
 
+
+        m_audioSource = GetComponent<AudioSource>();
+        Debug.Assert(m_audioSource != null, "AudioSource Is Null");
+
         //Error Check Additional Stuff
         Debug.Assert(m_MeleeHitbox, "Hitbox unassigned!?!?/");
     }
@@ -131,6 +141,16 @@ public abstract class Character_Core : MonoBehaviour
 
             m_animator.Play("HitStun", 0, 0.0f);
 
+            //play hurt sound
+            if(m_audioSource)
+            {
+                m_audioSource.clip = m_audio_hurt;
+                if(m_audioSource.clip)
+                {
+                    m_audioSource.Play();
+                }
+            }
+
             if (m_characterStats.AccessHealthStat().GetCurrent() == 0)
             {
                 Die();
@@ -149,6 +169,15 @@ public abstract class Character_Core : MonoBehaviour
         //Debug.Log(transform.name + " has died");
         m_animator.Play("Death", 0, 0.0f);
         ResetHandAnimations();
+
+        if (m_audioSource)
+        {
+            m_audioSource.clip = m_audio_death;
+            if (m_audioSource.clip)
+            {
+                m_audioSource.Play();
+            }
+        }
     }
 
     public bool IsDead()

@@ -5,6 +5,8 @@ using UnityEngine;
 public abstract class Weapon_Ranged : Weapon_Base
 {
     //--Variables--
+    private AudioSource m_audioSource = null;
+    [SerializeField] private AudioClip m_audio_shoot = null;
     [SerializeField] private GameObject m_projectile = null;
     [SerializeField] private Transform m_firingTransform = null;
     private Vector3 m_lookAtPos = Vector3.zero;
@@ -15,7 +17,24 @@ public abstract class Weapon_Ranged : Weapon_Base
     private float m_currentFireRateCooldown = 0;
 
     //--Methods--
+    void Awake()
+    {
+        m_audioSource = GetComponent<AudioSource>();
+    }
+
     protected abstract void FireRangedWeapon();
+
+    protected void PlayShootSound()
+    {
+        if (m_audioSource)
+        {
+            m_audioSource.clip = m_audio_shoot;
+            if (m_audioSource.clip)
+            {
+                m_audioSource.Play();
+            }
+        }
+    }
 
     public override bool Use()
     {
