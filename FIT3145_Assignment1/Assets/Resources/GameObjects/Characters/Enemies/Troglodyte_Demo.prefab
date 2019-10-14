@@ -115,8 +115,8 @@ MonoBehaviour:
   m_rigidbody: {fileID: 0}
   m_characterAimer: {fileID: 0}
   m_MeleeHitbox: {fileID: 4751069298201004492}
-  m_audio_hurt: {fileID: 0}
-  m_audio_death: {fileID: 0}
+  m_audio_hurt: {fileID: 8300000, guid: e3519d1ab344f2c4bb22320dc7f45447, type: 3}
+  m_audio_death: {fileID: 8300000, guid: 0b776439969806845a5547184ccb9cc0, type: 3}
   m_enemyType: 1
   m_meleeDamage: 12
   m_minDistanceToAttack: 0.8
@@ -218,7 +218,8 @@ AudioSource:
   m_GameObject: {fileID: 5342489822327469273}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -2166973558165118424, guid: f939d71c0bf8413418fe364dde4d4ad3,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1

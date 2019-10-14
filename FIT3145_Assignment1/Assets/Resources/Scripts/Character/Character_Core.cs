@@ -169,6 +169,15 @@ public abstract class Character_Core : MonoBehaviour
         //Debug.Log(transform.name + " has died");
         m_animator.Play("Death", 0, 0.0f);
         ResetHandAnimations();
+
+        if (m_audioSource)
+        {
+            m_audioSource.clip = m_audio_death;
+            if (m_audioSource.clip)
+            {
+                m_audioSource.Play();
+            }
+        }
     }
 
     public bool IsDead()
