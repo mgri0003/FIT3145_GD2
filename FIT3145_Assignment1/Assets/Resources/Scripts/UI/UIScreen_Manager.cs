@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 #pragma warning disable 649
 
@@ -25,6 +26,8 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
     EUIScreen m_currentUIScreen = EUIScreen.NONE;
     private UI_CanvasManager m_canvasManager = null;
     [SerializeField] private Animator m_transitionAnimator = null;
+    [SerializeField] private Text m_transitionText = null;
+    [SerializeField] private AudioSource m_as_transitionTitle = null;
 
     //spawnables
     [SerializeField] private GameObject m_spawnable_itemToolTip;
@@ -167,10 +170,27 @@ public class UIScreen_Manager : Singleton<UIScreen_Manager>
     public void StartTransition()
     {
         GetTransitionAnimator().Play("transitionSlideLeft");
-
+        Invoke("DisplayTransitionTitle", 1.0f);
     }
+
     public void EndTransition()
     {
+        Invoke("DoActualEndTransition", 1.0f);
+    }
+
+    void DoActualEndTransition()
+    {
         GetTransitionAnimator().Play("transitionSlideMiddleToLeft");
+        HideTransitionTitle();
+    }
+
+    private void DisplayTransitionTitle()
+    {
+        m_transitionText.enabled = true;
+        m_as_transitionTitle.Play();
+    }
+    private void HideTransitionTitle()
+    {
+        m_transitionText.enabled = false;
     }
 }
