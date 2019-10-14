@@ -5364,7 +5364,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7331508010006473102
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8011,7 +8011,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8705706598176260135
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14379,6 +14379,7 @@ MonoBehaviour:
   - {fileID: 1002003209041692074}
   - {fileID: 6880110660202118208}
   m_transitionAnimator: {fileID: 3551404098922388644}
+  m_transitionText: {fileID: 0}
   m_spawnable_itemToolTip: {fileID: 1456024466520249464, guid: 7af59148fdbd81f41bd9e657531e0099,
     type: 3}
 --- !u!114 &5706294444507257606
@@ -15449,7 +15450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3088126327027142265
 RectTransform:
   m_ObjectHideFlags: 0
