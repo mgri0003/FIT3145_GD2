@@ -8,6 +8,7 @@ public class SecondWind : Augment
     {
         if(m_player.IsDead())
         {
+            PlayAugmentSound();
             m_player.Revive();
             m_player.m_characterStats.AccessHealthStat().SetCurrent(m_player.m_characterStats.AccessHealthStat().GetMax() / 2);
             FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.SECOND_WIND, m_player.transform.position);

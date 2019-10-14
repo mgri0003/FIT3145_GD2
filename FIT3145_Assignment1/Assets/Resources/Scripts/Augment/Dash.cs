@@ -39,7 +39,7 @@ public class Dash : Augment
                 m_player.m_animator.Play("Dash_Left", 0, 0.0f);
             }
 
-
+            PlayAugmentSound();
 
             return true;
         }

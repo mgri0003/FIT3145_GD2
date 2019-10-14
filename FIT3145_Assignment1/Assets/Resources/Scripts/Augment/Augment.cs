@@ -31,9 +31,23 @@ public abstract class Augment : Item
     [SerializeField] private Vector3 m_positionOffset = Vector3.zero;
     [SerializeField] private Vector3 m_rotationOffset = Vector3.zero;
     private Transform m_attachedTransform = null;
+    private AudioSource m_audioSource = null;
 
 
     //--Methods--//
+    void Awake()
+    {
+        m_audioSource = GetComponent<AudioSource>();
+    }
+
+    protected void PlayAugmentSound()
+    {
+        if(m_audioSource)
+        {
+            m_audioSource.Play();
+        }
+    }
+
     protected abstract void AugmentUpdate();
     protected abstract bool AugmentAbility();
     public abstract void AugmentOnDeath();
