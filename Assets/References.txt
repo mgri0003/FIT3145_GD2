@@ -14,6 +14,9 @@ https://freesound.org/people/micahlg/sounds/413176/ - Player hurt 1
 https://freesound.org/people/thecheeseman/sounds/44428/ - Player hurt 2
 https://freesound.org/people/Michel88/sounds/76960/ - Player death
 https://freesound.org/people/yutface/sounds/257015/ - Melee swing-woosh
+https://freesound.org/people/GameAudio/sounds/220191/ - Dash swoosh
+https://freesound.org/people/Suburbanwizard/sounds/454683/ - Teleport warp
+https://freesound.org/people/shyguy014/sounds/458533/ - Revive
 
 
 
