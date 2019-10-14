@@ -7,5 +7,6 @@ public class Pistol : Weapon_Ranged
     protected override void FireRangedWeapon()
     {
         FireSingleProjectile();
+        PlayShootSound();
     }
 }

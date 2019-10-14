@@ -16,5 +16,7 @@ public class Shotgun : Weapon_Ranged
         }
 
         AddCurrentAmmo(-1);
+
+        PlayShootSound();
     }
 }
