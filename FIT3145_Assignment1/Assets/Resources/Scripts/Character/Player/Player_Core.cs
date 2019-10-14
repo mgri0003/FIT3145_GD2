@@ -361,4 +361,16 @@ public class Player_Core : Character_Core
             }
         }
     }
+
+    protected override void PlayMeleeAttackSound(in int AE_handIndex)
+    {
+        if(m_playerWeaponHolder.IsHoldingWeaponInHandOfType((EPlayerHand)AE_handIndex, EWeaponType.MELEE))
+        {
+            Weapon_Melee meleeWeapon = m_playerWeaponHolder.GetWeaponInHand((EPlayerHand)AE_handIndex) as Weapon_Melee;
+            if(meleeWeapon)
+            {
+                meleeWeapon.PlaySwingSound();
+            }
+        }
+    }
 }

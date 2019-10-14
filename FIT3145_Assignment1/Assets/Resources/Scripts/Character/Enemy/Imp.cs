@@ -12,6 +12,11 @@ public class Imp : Enemy_Core
     [SerializeField] private float m_FIREBALL_LIFETIME = 2.0f;
     private float m_fireballCooldown = 0.0f;
 
+    protected override void PlayMeleeAttackSound(in int AE_handIndex)
+    {
+        
+    }
+
     protected override bool UpdateEnemyAct()
     {
         bool retval = false;

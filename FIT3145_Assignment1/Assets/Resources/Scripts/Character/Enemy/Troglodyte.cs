@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Troglodyte : Enemy_Core
 {
+    protected override void PlayMeleeAttackSound(in int AE_handIndex)
+    {
+        
+    }
+
     protected override bool UpdateEnemyAct()
     {
         bool retval = false;

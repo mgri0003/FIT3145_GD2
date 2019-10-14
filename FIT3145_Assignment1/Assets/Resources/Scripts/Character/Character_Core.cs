@@ -186,6 +186,7 @@ public abstract class Character_Core : MonoBehaviour
     }
 
     protected abstract void SendMeleeAttack(in int AE_handIndex);
+    protected abstract void PlayMeleeAttackSound(in int AE_handIndex);
 
     public void ResetHandAnimations()
     {
