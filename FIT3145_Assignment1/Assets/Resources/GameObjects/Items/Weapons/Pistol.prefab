@@ -218,7 +218,7 @@ MonoBehaviour:
     m_max: -1
   - m_current: 0.4
     m_max: -1
-  - m_current: 5
+  - m_current: 0.7
     m_max: -1
   m_improvementPath:
     m_improvementSegments:
