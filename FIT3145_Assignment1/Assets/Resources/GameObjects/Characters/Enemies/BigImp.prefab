@@ -166,7 +166,7 @@ MonoBehaviour:
   m_fireballProjectile: {fileID: 604645328828819334, guid: 93df7d5fca0fcc44f9393bda5e18f997,
     type: 3}
   m_firingTransform: {fileID: 6028872282432774900}
-  m_FIREBALL_MAX_COOLDOWN: 6
+  m_FIREBALL_MAX_COOLDOWN: 3
   m_FIREBALL_DAMAGE: 30
   m_FIREBALL_SPEED: 6
   m_FIREBALL_LIFETIME: 5
