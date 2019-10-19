@@ -25,6 +25,19 @@ public class Player_Rotator : MonoBehaviour
     public void SetDisabledRotation(bool val) { m_disableRotation = val; GetComponent<Character_Aimer>().SetEnabled(!val); }
     public bool GetDisabledRotation() { return m_disableRotation; }
 
+    public void SetDesiredRotation(in float rotationVal)
+    {
+        m_desiredRotation = rotationVal;
+        if (m_desiredRotation > 360)
+        {
+            m_desiredRotation = 0;
+        }
+        else if (m_desiredRotation < 0)
+        {
+            m_desiredRotation = 360;
+        }
+    }
+
     public void AddDesiredRotation(in float rotationVal)
     {
         m_desiredRotation += rotationVal;
