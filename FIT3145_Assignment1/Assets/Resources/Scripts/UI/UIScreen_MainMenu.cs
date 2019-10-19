@@ -17,7 +17,6 @@ public class UIScreen_MainMenu : UIScreenBase
     [SerializeField] private Image m_title;
     [SerializeField] private Image m_cutscene_top;
     [SerializeField] private Image m_cutscene_bottom;
-    [SerializeField] private AudioSource m_as_titleScreen;
 
 
     //other elements
@@ -39,19 +38,19 @@ public class UIScreen_MainMenu : UIScreenBase
     {
         m_title.color = new Color(1, 1, 1, 1);
 
-       m_cutscene_top.color = new Color(1,1, 1, 0);
-       m_cutscene_bottom.color = new Color(1, 1, 1, 0);
+        m_cutscene_top.color = new Color(1,1, 1, 0);
+        m_cutscene_bottom.color = new Color(1, 1, 1, 0);
 
         m_gameStartRequested = false;
         m_fader.Reset();
         Invoke("StartMainScreenFadeOut", 0.5f);
 
-        m_as_titleScreen.Play();
+        MusicManager.Instance.PlayMusicTrack(EMusicTrack.TITLE_SCREEN);
     }
 
     protected override void OnDisable()
     {
-        m_as_titleScreen.Stop();
+        //MusicManager.Instance.StopMusic();
     }
 
     protected override void OnGUI()
@@ -83,7 +82,7 @@ public class UIScreen_MainMenu : UIScreenBase
 
             Invoke("RequestStartGame", 4.0f);
 
-            StartCoroutine(IE_AudioFadeOut(m_as_titleScreen, 2.0f));
+            MusicManager.Instance.StopMusic(true);
         }
     }
 
@@ -116,20 +115,5 @@ public class UIScreen_MainMenu : UIScreenBase
     void OnQuitButtonPressed()
     {
         Application.Quit(0);
-    }
-
-    public IEnumerator IE_AudioFadeOut(AudioSource audioSource, float FadeTime)
-    {
-        float startVolume = audioSource.volume;
-
-        while (audioSource.volume > 0)
-        {
-            audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
-            audioSource.volume = Mathf.Clamp(audioSource.volume, 0, 1);
-            yield return null;
-        }
-
-        audioSource.Stop();
-        audioSource.volume = startVolume;
     }
 }

@@ -79,6 +79,8 @@ public class GamePlayManager : Singleton<GamePlayManager>
         SceneManager.sceneLoaded -= GamePlayManager.Instance.OnSceneLoadedToGameplay;
         UIScreen_Manager.Instance.GetCanvasManager().Init();
         UIScreen_Manager.Instance.EndTransition();
+
+        MusicManager.Instance.PlayMusicTrack(EMusicTrack.INGAME, 0.15f);
     }
 
     public void SetupInGame()
