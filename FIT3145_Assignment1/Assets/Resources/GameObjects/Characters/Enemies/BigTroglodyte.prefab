@@ -126,7 +126,7 @@ MonoBehaviour:
   - {fileID: 8754039348771881063, guid: 94d02907726421e40a6041840c616b2b, type: 3}
   - {fileID: 1223309658493280330, guid: 6d4c03265b6375e48938c4ea183ef61c, type: 3}
   m_isFlyingEnemy: 0
-  m_scrapDrop: 150
+  m_scrapDrop: 100
   m_spawnable_floatingHealthBar: {fileID: 3105921162441277294, guid: 9316788c5cd781f4bb8325d66fb84ea5,
     type: 3}
   m_floatingHealthbarHeight: 2

@@ -239,7 +239,7 @@ MonoBehaviour:
       ScrapCost: 60
       UpgradeSlotIncrease: 0
     - StatToImprove: 0
-      Value: 20
+      Value: 5
       ScrapCost: 70
       UpgradeSlotIncrease: 0
     - StatToImprove: 6

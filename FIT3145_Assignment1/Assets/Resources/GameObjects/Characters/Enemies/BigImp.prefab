@@ -159,7 +159,7 @@ MonoBehaviour:
   - {fileID: 8754039348771881063, guid: d00cc7f2b1a725441b18049b1215cb19, type: 3}
   - {fileID: 1725078717245774645, guid: 544f002000d13a8448aca65859a1cc1f, type: 3}
   m_isFlyingEnemy: 1
-  m_scrapDrop: 300
+  m_scrapDrop: 150
   m_spawnable_floatingHealthBar: {fileID: 3105921162441277294, guid: 9316788c5cd781f4bb8325d66fb84ea5,
     type: 3}
   m_floatingHealthbarHeight: 1
@@ -243,8 +243,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_health:
-    m_current: 300
-    m_max: 300
+    m_current: 350
+    m_max: 350
   m_movementSpeed:
     m_current: 1.5
     m_max: -1
