@@ -203,8 +203,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_health:
-    m_current: 200
-    m_max: 200
+    m_current: 500
+    m_max: 500
   m_movementSpeed:
     m_current: 1
     m_max: -1

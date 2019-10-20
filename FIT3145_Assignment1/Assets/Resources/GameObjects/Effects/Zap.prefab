@@ -44,4 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_effectName: Zap
-  m_lifetime: 1
+  m_lifetime: 0
+  m_zapDamage: 10

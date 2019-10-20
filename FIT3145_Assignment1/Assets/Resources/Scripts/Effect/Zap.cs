@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Zap : Effect
 {
-    public float m_zapDamage = 1.0f;
+    [HideInInspector] public float m_zapDamage = 1.0f;
 
     public override void UpdateEffect()
     {

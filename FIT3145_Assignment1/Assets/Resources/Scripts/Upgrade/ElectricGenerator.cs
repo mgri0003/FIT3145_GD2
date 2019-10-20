@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ElectricGenerator : Upgrade
 {
-    private const float m_DefaultOnHitDamage = 20;
+    private const float m_DefaultOnHitDamage = 10;
     public float m_OnHitDamage = m_DefaultOnHitDamage;
 
     public override string GetItemTypeDescription()
