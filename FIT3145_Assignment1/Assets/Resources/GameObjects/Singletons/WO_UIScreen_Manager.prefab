@@ -4327,7 +4327,6 @@ MonoBehaviour:
   m_title: {fileID: 6000518290781416036}
   m_cutscene_top: {fileID: 8297332563321694586}
   m_cutscene_bottom: {fileID: 2154678201856474731}
-  m_as_titleScreen: {fileID: 5244097781492087080}
 --- !u!1 &1826853898079279053
 GameObject:
   m_ObjectHideFlags: 0
@@ -7182,7 +7181,9 @@ MonoBehaviour:
     Toggle Camera Side: Middle Mouse Click
 
 
-    Loadout Menu: Tab'
+    Loadout Menu: Tab
+
+    Interact: F'
 --- !u!1 &3197940347912512157
 GameObject:
   m_ObjectHideFlags: 0
