@@ -206,7 +206,7 @@ MonoBehaviour:
     m_current: 500
     m_max: 500
   m_movementSpeed:
-    m_current: 1
+    m_current: 3
     m_max: -1
 --- !u!82 &2179846924029431877
 AudioSource:
