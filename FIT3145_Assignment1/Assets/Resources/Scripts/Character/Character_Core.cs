@@ -10,6 +10,7 @@ public abstract class Character_Core : MonoBehaviour
     [HideInInspector] public Rigidbody m_rigidbody;
     [HideInInspector] public Character_Aimer m_characterAimer;
     [SerializeField] protected Hitbox m_MeleeHitbox = null;
+    [SerializeField] private bool m_ignoreHitAnimation = false;
 
     private List<Effect> m_currentEffects = new List<Effect>();
 
@@ -139,7 +140,10 @@ public abstract class Character_Core : MonoBehaviour
             m_characterStats.AccessHealthStat().AddCurrent(-damage);
             FX_Manager.Instance.SpawnParticleEffect(EParticleEffect.HIT, transform.position);
 
-            m_animator.Play("HitStun", 0, 0.0f);
+            if(!m_ignoreHitAnimation)
+            {
+                m_animator.Play("HitStun", 0, 0.0f);
+            }
 
             //play hurt sound
             if(m_audioSource)

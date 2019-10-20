@@ -148,6 +148,7 @@ MonoBehaviour:
   m_rigidbody: {fileID: 0}
   m_characterAimer: {fileID: 0}
   m_MeleeHitbox: {fileID: 4751069298201004492}
+  m_ignoreHitAnimation: 1
   m_audio_hurt: {fileID: 8300000, guid: ac9d93e62383930408350ebeb82f96da, type: 3}
   m_audio_death: {fileID: 8300000, guid: 34e4c1c25a8b8be41b1185e19004df12, type: 3}
   m_enemyType: 4
